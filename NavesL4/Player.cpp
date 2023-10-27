@@ -48,9 +48,9 @@ void Player::update() {
 	if (vy > 0) {
 		animation = aRunningDown; 
 	}
-	if (vy == 0) {
+	/*if (vy == 0) {
 		animation = aIdleDown;
-	}
+	}*/
 
 	if (shootTime > 0) {
 		shootTime--;
