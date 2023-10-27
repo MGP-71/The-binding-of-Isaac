@@ -9,20 +9,20 @@ Player::Player(float x, float y, Game* game)
 	aIdleDown = new Animation("res/isaac.png", width, height,
 		138, 46, 20000, 4, game);
 
-	/*aIdleLeft = new Animation("res/isaac_izquierda.png", width, height,
-		132, 39, 20000, 4, game);
+	aIdleLeft = new Animation("res/isaac_left.png", width, height,
+		126, 40, 20000, 4, game);
 	aIdleUp = new Animation("res/isaac_up.png", width, height,
-		138, 46, 20000, 4, game);*/
+		122, 40, 20000, 4, game);
 
 	aRunningRight = new Animation("res/isaac_derecha_movimiento.png", width, height,
 		131, 41, 6, 4, game);
 	aRunningDown = new Animation("res/isaac_down_movimiento.png", width, height,
 		124, 41, 6, 4, game);
 
-	/*aRunningLeft = new Animation("res/isaac_izquierda_movimiento.png", width, height,
-		131, 41, 6, 4, game);
+	aRunningLeft = new Animation("res/isaac_left_movimiento.png", width, height,
+		124, 40, 6, 4, game);
 	aRunningUp = new Animation("res/isaac_up_movimiento.png", width, height,
-		124, 41, 6, 4, game);*/
+		124, 40, 6, 4, game);
 
 	animation = aIdleRight;
 
