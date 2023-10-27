@@ -24,6 +24,7 @@
     <ProjectGuid>{47fb16c5-792e-4e63-8b3b-714d6b85e85f}</ProjectGuid>
     <RootNamespace>NavesL4</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Isaac</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -14,11 +14,21 @@ public:
 	void moveX(float axis);
 	void moveY(float axis);
 	void draw() override; // Va a sobrescribir
-	Animation* aIdleRight;
 	Animation* animation; // Referencia a la animación mostrada
 
 	Audio* audioShoot;
 	int shootCadence = 30;
 	int shootTime = 0;
+
+	Animation* aIdleRight;
+	Animation* aIdleUp;
+	Animation* aIdleDown;
+	Animation* aIdleLeft;
+	Animation* aRunningRight;
+	Animation* aRunningLeft;
+	Animation* aRunningUp;
+	Animation* aRunningDown;
+
+
 };
 

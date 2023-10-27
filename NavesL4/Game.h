@@ -31,4 +31,17 @@ public:
 	SDL_Renderer* renderer; // renderizador
 	bool loopActive; // Juego activo
 	Layer* gameLayer;
+
+	int const stateMoving = 1;
+	int const stateDying = 3;
+	int const stateDead = 4;
+	int const stateShooting = 5;
+
+	int const orientationRight = 1;
+	int const orientationLeft = 2;
+	int const orientationUp = 3;
+	int const orientationDown = 4;
+
+
+
 };
