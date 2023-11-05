@@ -9,4 +9,3 @@ public:
 	Projectile(float x, float y, Game* game);
 	void update();
 };
-

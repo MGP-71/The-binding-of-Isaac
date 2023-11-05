@@ -19,6 +19,10 @@ public:
 	int height;
 	int fileWidth;
 	int fileHeight;
+	bool collisionUp;
+	bool collisionRight;
+	bool collisionDown;
+	bool collisionLeft;
 	Game* game; // referencia al juego
 };
 

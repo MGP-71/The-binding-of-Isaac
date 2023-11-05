@@ -10,6 +10,7 @@
 #include "Tile.h"
 
 #include "Audio.h"
+#include "Space.h"
 
 #include <fstream> // Leer ficheros
 #include <sstream> // Leer líneas / String
@@ -28,10 +29,9 @@ public:
 
 	void loadMap(string name);
 	void loadMapObject(char character, float x, float y);
+
 	int mapWidth;
 	list<Tile*> tiles;
-
-
 	Audio* audioBackground;
 	Text* textPoints;
 	int points;
@@ -41,6 +41,7 @@ public:
 	Actor* backgroundPoints;
 	list<Enemy*> enemies;
 	list<Projectile*> projectiles;
+	Space* space;
 
 	bool controlShoot = false;
 	int controlMoveY = 0;
@@ -48,4 +49,3 @@ public:
 
 
 };
-
