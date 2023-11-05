@@ -79,15 +79,6 @@ void GameLayer::update() {
 		projectile->update();
 	}
 
-	// Generar enemigos
-	newEnemyTime--;
-	if (newEnemyTime <= 0) {
-		int rX = (rand() % (600 - 500)) + 1 + 500;
-		int rY = (rand() % (300 - 60)) + 1 + 60;
-		enemies.push_back(new Enemy(rX, rY, game));
-		newEnemyTime = 110;
-	}
-
 	// Colisiones
 	for (auto const& enemy : enemies) {
 		if (player->isOverlap(enemy)) {
@@ -294,6 +285,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		tiles.push_back(tile);
 		break;
 	}
+			case 'E': {
+		Enemy* enemy = new Enemy(x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		enemy->y = enemy->y - enemy->height / 2;
+		enemies.push_back(enemy);
+		break;
+	}
+
 	}
 }
 
