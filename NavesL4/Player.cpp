@@ -123,8 +123,8 @@ void Player::update() {
 		shootTime--;
 	}
 
-	x = x + vx;
-	y = y + vy;
+	/*x = x + vx;
+	y = y + vy;*/
 }
 
 void Player::draw() {

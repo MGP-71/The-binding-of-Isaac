@@ -60,7 +60,6 @@ void Space::updateMoveRight(Actor* dynamicAct) {
                 if (possibleMovement >= leftStatic - rightDynamic) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
-                    dynamicAct->collisionRight = true;
                     possibleMovement = leftStatic - rightDynamic;
                 }
             }
@@ -70,6 +69,7 @@ void Space::updateMoveRight(Actor* dynamicAct) {
         // Restringir la velocidad actual (opcional)
         dynamicAct->vx = possibleMovement;
     }
+
 
 }
 
@@ -98,7 +98,6 @@ void Space::updateMoveLeft(Actor* dynamicAct) {
                 if (possibleMovement <= rightStatic - leftDynamic) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
-                    dynamicAct->collisionLeft = true;
                     possibleMovement = rightStatic - leftDynamic;
                 }
 
@@ -110,6 +109,8 @@ void Space::updateMoveLeft(Actor* dynamicAct) {
         // Restringir la velocidad actual (opcional)
         dynamicAct->vx = possibleMovement;
     }
+
+
 
 }
 
@@ -140,7 +141,6 @@ void Space::updateMoveUp(Actor* dynamicAct) {
                 if (possibleMovement <= downStatic - topDynamic) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
-                    dynamicAct->collisionUp = true;
                     possibleMovement = downStatic - topDynamic;
                 }
             }
@@ -150,6 +150,8 @@ void Space::updateMoveUp(Actor* dynamicAct) {
         // Restringir la velocidad actual (opcional)
         //dynamicAct->vy = possibleMovement;
     }
+
+
 
 }
 
@@ -180,7 +182,6 @@ void Space::updateMoveDown(Actor* dynamicAct) {
                 if (possibleMovement >= topStatic - downDynamic) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
-                    dynamicAct->collisionDown = true;
                     possibleMovement = topStatic - downDynamic;
                 }
             }
@@ -190,5 +191,6 @@ void Space::updateMoveDown(Actor* dynamicAct) {
         // Restringir la velocidad actual (opcional)
         //dynamicAct->vy = possibleMovement;
     }
+
 
 }
