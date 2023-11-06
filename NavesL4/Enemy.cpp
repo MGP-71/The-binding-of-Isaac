@@ -7,8 +7,8 @@ Enemy::Enemy(float x, float y, Game* game)
 
 	aDying = new Animation("res/enemigo_morir.png", width, height,
 		280, 40, 6, 8, false, game);
-	aMoving = new Animation("res/enemigo_movimiento.png", width, height,
-		108, 40, 6, 3, true, game);
+	aMoving = new Animation("res/enemigos/fatty.png", width, height,
+		175, 56, 6, 4, true, game);
 	animation = aMoving;
 
 	vx = 1;
