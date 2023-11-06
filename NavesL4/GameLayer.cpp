@@ -93,7 +93,7 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies;
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
-		if (projectile->isInRender() == false || projectile->vx == 0) {
+		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0)) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
