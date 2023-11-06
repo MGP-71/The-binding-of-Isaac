@@ -12,16 +12,11 @@ void GameLayer::init() {
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play(); es molesto por ahora
 
-	space = new Space();
+	space = new Space(0);
 
-	points = 0;
-	textPoints = new Text("hola", WIDTH * 0.92, HEIGHT * 0.04, game);
-	textPoints->content = to_string(points);
 
 	background = new Background("res/fondos/catacombs.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
-	backgroundPoints = new Actor("res/icono_puntos.png",
-		WIDTH * 0.85, HEIGHT * 0.05, 24, 24, game);
-
+	
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
 
@@ -40,8 +35,8 @@ void GameLayer::processControls() {
 	if (controlShoot) {
 		Projectile* newProjectile = player->shoot();
 		if (newProjectile != NULL) {
-			projectiles.push_back(newProjectile);
 			space->addDynamicActor(newProjectile);
+			projectiles.push_back(newProjectile);
 		}
 
 	}
@@ -73,11 +68,12 @@ void GameLayer::processControls() {
 }
 
 void GameLayer::update() {
+	space->update();
 	background->update();
 	player->update();
-	space->update();
+	
 	for (auto const& enemy : enemies) {
-		enemy->update(player);
+		enemy->update();
 	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
@@ -96,7 +92,7 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies;
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
-		if (projectile->isInRender() == false) {
+		if (projectile->isInRender() == false || projectile->vx == 0) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
@@ -122,10 +118,6 @@ void GameLayer::update() {
 				}
 
 				enemy->impacted();
-
-				points++;
-				textPoints->content = to_string(points);
-
 
 			}
 		}
@@ -177,9 +169,6 @@ void GameLayer::draw() {
 	for (auto const& enemy : enemies) {
 		enemy->draw();
 	}
-
-	backgroundPoints->draw();
-	textPoints->draw();
 	SDL_RenderPresent(game->renderer); // Renderiza
 }
 
@@ -268,7 +257,7 @@ void GameLayer::loadMap(string name) {
 				loadMapObject(character, x, y);
 			}
 
-			cout << character << endl;
+			//cout << character << endl;
 		}
 	}
 	streamFile.close();

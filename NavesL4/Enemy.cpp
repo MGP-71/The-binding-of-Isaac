@@ -14,7 +14,7 @@ Enemy::Enemy(float x, float y, Game* game)
 	vx = 1;
 }
 
-void Enemy::update(Player* p) {
+void Enemy::update() {
 	// Actualizar la animación
 	bool endAnimation = animation->update();
 
@@ -35,6 +35,7 @@ void Enemy::update(Player* p) {
 	}
 
 	if (state != game->stateDying) {
+		/*
 		float dx = p->x - x;
 		float dy = p->y - y;
 
@@ -43,7 +44,8 @@ void Enemy::update(Player* p) {
 		if (distancia > 0) {
 			x += (dx / distancia) * enemySpeed;
 			y += (dy / distancia) * enemySpeed;
-		}
+		}*/
+		
 	}
 
 

@@ -5,7 +5,7 @@
 class Space
 {
 public:
-	Space();
+	Space(float gravity);
 	void addDynamicActor(Actor* actor);
 	void addStaticActor(Actor* actor);
 	void removeDynamicActor(Actor* actor);
@@ -13,9 +13,9 @@ public:
 	void update();
 	void updateMoveRight(Actor* dynamicAct);
 	void updateMoveLeft(Actor* dynamicAct);
-	void updateMoveUp(Actor* dynamicAct);
+	void updateMoveTop(Actor* dynamicAct);
 	void updateMoveDown(Actor* dynamicAct);
-
+	float gravity;
 	list<Actor*> dynamicActors;
 	list<Actor*> staticActors;
 };

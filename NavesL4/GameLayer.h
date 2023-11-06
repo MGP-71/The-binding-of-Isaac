@@ -33,12 +33,9 @@ public:
 	int mapWidth;
 	list<Tile*> tiles;
 	Audio* audioBackground;
-	Text* textPoints;
-	int points;
 	int newEnemyTime = 0;
 	Player* player;
 	Background* background;
-	Actor* backgroundPoints;
 	list<Enemy*> enemies;
 	list<Projectile*> projectiles;
 	Space* space;

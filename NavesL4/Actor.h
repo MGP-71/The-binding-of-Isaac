@@ -23,6 +23,8 @@ public:
 	bool collisionRight;
 	bool collisionDown;
 	bool collisionLeft;
+	bool outRight;
+	bool outLeft;
 	Game* game; // referencia al juego
 };
 
