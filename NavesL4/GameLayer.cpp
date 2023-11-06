@@ -69,9 +69,10 @@ void GameLayer::processControls() {
 
 void GameLayer::update() {
 	space->update();
+
 	background->update();
 	player->update();
-	
+	space->update();
 	for (auto const& enemy : enemies) {
 		enemy->update();
 	}
@@ -288,6 +289,38 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		enemy->y = enemy->y - enemy->height / 2;
 		enemies.push_back(enemy);
 		space->addDynamicActor(enemy);
+		break;
+	}
+	case 'P': {
+		Tile* door = new Tile("res/puerta_up_cerrada.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		tiles.push_back(door);
+		space->addStaticActor(door);
+		break;
+	}
+	case 'L': {
+		Tile* door = new Tile("res/puerta_izquierda_cerrada.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		tiles.push_back(door);
+		space->addStaticActor(door);
+		break;
+	}
+	case 'R': {
+		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		tiles.push_back(door);
+		space->addStaticActor(door);
+		break;
+	}
+	case 'D': {
+		Tile* door = new Tile("res/puerta_abajo_cerrada.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		tiles.push_back(door);
+		space->addStaticActor(door);
 		break;
 	}
 

@@ -63,6 +63,7 @@ void Space::updateMoveRight(Actor* dynamicAct) {
         dynamicAct->vx = possibleMovement;
     }
 
+
 }
 
 void Space::updateMoveLeft(Actor* dynamicAct) {
@@ -101,6 +102,8 @@ void Space::updateMoveLeft(Actor* dynamicAct) {
         // Restringir la velocidad actual (opcional)
         dynamicAct->vx = possibleMovement;
     }
+
+
 
 }
 
@@ -142,6 +145,7 @@ void Space::updateMoveTop(Actor* dynamicAct) {
     }
 
 
+
 }
 
 void Space::updateMoveDown(Actor* dynamicAct) {
@@ -171,16 +175,8 @@ void Space::updateMoveDown(Actor* dynamicAct) {
                 if (possibleMovement >= topStatic - downDynamic) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
-                    possibleMovement = topStatic - downDynamic;
                     dynamicAct->collisionDown = true;
-
-                    if (rightDynamic <= rightStatic) {
-                        dynamicAct->outRight = false;
-                    }
-                    if (leftDynamic >= leftStatic) {
-                        dynamicAct->outLeft = false;
-                    }
-
+                    possibleMovement = topStatic - downDynamic;
                 }
             }
         }
@@ -204,6 +200,4 @@ void Space::removeDynamicActor(Actor* actor) {
     dynamicActors.remove(actor);
 }
 
-void Space::removeStaticActor(Actor* actor) {
-    staticActors.remove(actor);
 }
