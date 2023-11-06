@@ -36,9 +36,6 @@
     <ClCompile Include="Layer.cpp">
       <Filter>Archivos de origen\layers</Filter>
     </ClCompile>
-    <ClCompile Include="GameLayer.cpp">
-      <Filter>Archivos de origen\layers</Filter>
-    </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Archivos de origen\actores</Filter>
     </ClCompile>
@@ -63,8 +60,14 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Space.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLayer.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="Tile.cpp">
-      <Filter>Archivos de origen\actores</Filter>
+      <Filter>Archivos de origen\layers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +75,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Layer.h">
-      <Filter>Archivos de encabezado\layers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameLayer.h">
       <Filter>Archivos de encabezado\layers</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h">
@@ -101,8 +101,14 @@
     <ClInclude Include="Audio.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Space.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLayer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>Archivos de encabezado\actores</Filter>
+      <Filter>Archivos de encabezado\layers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

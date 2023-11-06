@@ -23,17 +23,17 @@ Player::Player(float x, float y, Game* game)
 		138, 40, 20000, 4, true, game);
 
 	aIdleLeft = new Animation("res/isaac_left.png", width, height,
-		126, 40, 20000, 4, true,game);
+		126, 40, 20000, 4, true, game);
 	aIdleUp = new Animation("res/isaac_up.png", width, height,
 		122, 40, 20000, 4, true, game);
 
 	aRunningRight = new Animation("res/isaac_derecha_movimiento.png", width, height,
-		131, 41, 6, 4, true,game);
+		131, 41, 6, 4, true, game);
 	aRunningDown = new Animation("res/isaac_down_movimiento.png", width, height,
 		124, 41, 6, 4, true, game);
 
 	aRunningLeft = new Animation("res/isaac_left_movimiento.png", width, height,
-		124, 40, 6, 4, true,game);
+		124, 40, 6, 4, true, game);
 	aRunningUp = new Animation("res/isaac_up_movimiento.png", width, height,
 		124, 40, 6, 4, true, game);
 
@@ -67,7 +67,7 @@ void Player::update() {
 	}
 	if (vy < 0) {
 		orientation = game->orientationUp;
-	}	
+	}
 
 
 	// Selección de animación basada en estados
@@ -94,7 +94,7 @@ void Player::update() {
 				animation = aRunningLeft;
 			}
 		}
-		
+
 		if (vx == 0) {
 			if (orientation == game->orientationRight) {
 				animation = aIdleRight;
@@ -143,7 +143,7 @@ Projectile* Player::shoot() {
 
 	if (shootTime == 0) {
 		state = game->stateShooting;
-		audioShoot->play();
+		//audioShoot->play();
 		shootTime = shootCadence;
 		aShootingLeft->currentFrame = 0; //"Rebobinar" animación
 		aShootingRight->currentFrame = 0; //"Rebobinar" 

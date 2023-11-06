@@ -10,7 +10,9 @@ void GameLayer::init() {
 	tiles.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	audioBackground->play();
+	//audioBackground->play(); es molesto por ahora
+
+	space = new Space();
 
 	points = 0;
 	textPoints = new Text("hola", WIDTH * 0.92, HEIGHT * 0.04, game);
@@ -39,6 +41,7 @@ void GameLayer::processControls() {
 		Projectile* newProjectile = player->shoot();
 		if (newProjectile != NULL) {
 			projectiles.push_back(newProjectile);
+			space->addDynamicActor(newProjectile);
 		}
 
 	}
@@ -72,20 +75,12 @@ void GameLayer::processControls() {
 void GameLayer::update() {
 	background->update();
 	player->update();
+	space->update();
 	for (auto const& enemy : enemies) {
-		enemy->update();
+		enemy->update(player);
 	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
-	}
-
-	// Generar enemigos
-	newEnemyTime--;
-	if (newEnemyTime <= 0) {
-		int rX = (rand() % (600 - 500)) + 1 + 500;
-		int rY = (rand() % (300 - 60)) + 1 + 60;
-		enemies.push_back(new Enemy(rX, rY, game));
-		newEnemyTime = 110;
 	}
 
 	// Colisiones
@@ -151,11 +146,13 @@ void GameLayer::update() {
 
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
+		space->removeDynamicActor(delEnemy);
 	}
 	deleteEnemies.clear();
 
 	for (auto const& delProjectile : deleteProjectiles) {
 		projectiles.remove(delProjectile);
+		space->removeDynamicActor(delProjectile);
 		delete delProjectile;
 	}
 	deleteProjectiles.clear();
@@ -285,6 +282,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		player = new Player(x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		player->y = player->y - player->height / 2;
+		space->addDynamicActor(player);
 		break;
 	}
 	case '#': {
@@ -292,11 +290,17 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
+		space->addStaticActor(tile);
 		break;
 	}
+	case 'E': {
+		Enemy* enemy = new Enemy(x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		enemy->y = enemy->y - enemy->height / 2;
+		enemies.push_back(enemy);
+		space->addDynamicActor(enemy);
+		break;
+	}
+
 	}
 }
-
-
-
-
