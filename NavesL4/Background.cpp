@@ -15,21 +15,21 @@ Background::Background(string filename, float x, float y, float vx, Game* game)
 }
 
 void Background::update() {
-	//if (vx != 0) {
-	//	x = x + vx;
+	if (vx != 0) {
+		x = x + vx;
 
-	//	// se salio por la izquierda
-	//	if (x + width / 2 < 0) {
-	//		// vuelve a aparecer por la derecha
-	//		x = WIDTH + width / 2;
-	//	}
-	//	// se salio por la derecha
-	//	if (x - width / 2 > WIDTH) {
-	//		// vuelve por la izquierda
-	//		x = 0 - width / 2;
-	//	}
+		// se salio por la izquierda
+		if (x + width / 2 < 0) {
+			// vuelve a aparecer por la derecha
+			x = WIDTH + width / 2;
+		}
+		// se salio por la derecha
+		if (x - width / 2 > WIDTH) {
+			// vuelve por la izquierda
+			x = 0 - width / 2;
+		}
 
-	//}
+	}
 }
 
 void Background::draw() {

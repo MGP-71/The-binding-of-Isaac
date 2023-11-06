@@ -12,6 +12,8 @@ Enemy::Enemy(float x, float y, Game* game)
 	animation = aMoving;
 
 	vx = 1;
+	vxIntelligence = -1;
+	vx = vxIntelligence;
 }
 
 void Enemy::update() {
@@ -34,18 +36,38 @@ void Enemy::update() {
 		animation = aDying;
 	}
 
+	if (state == game->stateMoving) {
+		animation = aMoving;
+	}
+	if (state == game->stateDying) {
+		animation = aDying;
+	}
+
+	// Establecer velocidad
 	if (state != game->stateDying) {
-		/*
-		float dx = p->x - x;
-		float dy = p->y - y;
+		// no está muerto y se ha quedado parado
+		if (vx == 0) {
+			vxIntelligence = vxIntelligence * -1;
+			vx = vxIntelligence;
+		}
+		if (outRight) {
+			// mover hacia la izquierda vx tiene que ser negativa
+			if (vxIntelligence > 0) {
+				vxIntelligence = vxIntelligence * -1;
+			}
+			vx = vxIntelligence;
+		}
+		if (outLeft) {
+			// mover hacia la derecha vx tiene que ser positiva
+			if (vxIntelligence < 0) {
+				vxIntelligence = vxIntelligence * -1;
+			}
+			vx = vxIntelligence;
+		}
 
-		float distancia = std::sqrt(dx * dx + dy * dy);
-
-		if (distancia > 0) {
-			x += (dx / distancia) * enemySpeed;
-			y += (dy / distancia) * enemySpeed;
-		}*/
-		
+	}
+	else {
+		vx = 0;
 	}
 
 

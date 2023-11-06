@@ -15,5 +15,6 @@ public:
 	void impacted(); // Recibe impacto y pone animación de morir
 	int state;
 	Animation* aDying;
+	float vxIntelligence;
 	float enemySpeed = 1.5f;
 };

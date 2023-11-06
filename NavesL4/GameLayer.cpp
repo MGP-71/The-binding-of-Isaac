@@ -7,12 +7,13 @@ GameLayer::GameLayer(Game* game)
 }
 
 void GameLayer::init() {
+	space = new Space(0);
 	tiles.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play(); es molesto por ahora
 
-	space = new Space(0);
+	
 
 
 	background = new Background("res/fondos/catacombs.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -69,10 +70,9 @@ void GameLayer::processControls() {
 
 void GameLayer::update() {
 	space->update();
-
 	background->update();
 	player->update();
-	space->update();
+
 	for (auto const& enemy : enemies) {
 		enemy->update();
 	}

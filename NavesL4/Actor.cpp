@@ -1,7 +1,7 @@
 #include "Actor.h"
 
 Actor::~Actor() {
-	
+
 }
 
 Actor::Actor(string filename, float x, float y, int width, int height, Game* game) {
@@ -57,4 +57,12 @@ bool Actor::isInRender() {
 	return false;
 }
 
-
+bool Actor::containsPoint(int pointX, int pointY) {
+	if (pointY >= y - height / 2 &&
+		pointY <= y + height / 2 &&
+		pointX <= x + width / 2 &&
+		pointX >= x - width / 2) {
+		return true;
+	}
+	return false;
+}

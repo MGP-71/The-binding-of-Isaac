@@ -10,6 +10,7 @@ public:
 	virtual void draw();
 	bool isOverlap(Actor* actor);
 	bool isInRender();
+	bool containsPoint(int pointX, int pointY); // contiene punto
 	SDL_Texture* texture;
 	int x;
 	int y;
@@ -19,7 +20,7 @@ public:
 	int height;
 	int fileWidth;
 	int fileHeight;
-	bool collisionUp;
+	bool collisionTop;
 	bool collisionRight;
 	bool collisionDown;
 	bool collisionLeft;
