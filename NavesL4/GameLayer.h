@@ -32,6 +32,8 @@ public:
 
 	int mapWidth;
 	list<Tile*> tiles;
+	list<Tile*> doors;
+
 	Audio* audioBackground;
 	int newEnemyTime = 0;
 	Player* player;
@@ -44,5 +46,8 @@ public:
 	int controlMoveY = 0;
 	int controlMoveX = 0;
 
+
+	//para saber si las puertas están abiertas
+	bool puertasAbiertas;
 
 };

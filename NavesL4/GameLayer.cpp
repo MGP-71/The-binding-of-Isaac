@@ -88,6 +88,7 @@ void GameLayer::update() {
 		}
 	}
 	if (allDead) {
+		puertasAbiertas = true;
 		for (auto const& door : space->staticActors) {
 			if (door->filename.compare("res/puerta_up_cerrada.png") == 0) {
 				door->filename = "res/puerta_up_abierta.png";
@@ -112,6 +113,34 @@ void GameLayer::update() {
 		if (player->isOverlap(enemy)) {
 			init();
 			return; // Cortar el for
+		}
+	}
+
+	//Colisiones Puerta-Personaje
+	for (auto const& tile : doors) {
+		//si el personaje overlapea la puerta
+		if (tile->isOverlap(player)) {
+			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
+			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
+				cout << "pasa" << endl;
+			
+			}
+			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
+			if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
+				cout << "pasa" << endl;
+
+			}
+
+			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
+			if (tile->filename.compare("res/puerta_derecha_abierta.png") == 0 && player->orientation == game->orientationRight) {
+				cout << "pasa" << endl;
+
+			}
+			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
+			if (tile->filename.compare("res/puerta_izquierda_abierta.png") == 0 && player->orientation == game->orientationLeft) {
+				cout << "pasa" << endl;
+
+			}
 		}
 	}
 
@@ -323,6 +352,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		tiles.push_back(door);
+		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
@@ -331,6 +361,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		tiles.push_back(door);
+		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
@@ -339,6 +370,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		tiles.push_back(door);
+		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
@@ -347,6 +379,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		tiles.push_back(door);
+		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
