@@ -11,12 +11,15 @@ Enemy::Enemy(float x, float y, Game* game)
 		175, 56, 6, 4, true, game);
 	animation = aMoving;
 
-	vx = 1;
-	vxIntelligence = -1;
+	vx = enemySpeed;
+	/*
+	* vxIntelligence = -1;
 	vx = vxIntelligence;
+	*/
+	
 }
 
-void Enemy::update() {
+void Enemy::update(Player* p) {
 	// Actualizar la animación
 	bool endAnimation = animation->update();
 
@@ -42,35 +45,21 @@ void Enemy::update() {
 	if (state == game->stateDying) {
 		animation = aDying;
 	}
-
-	// Establecer velocidad
+	
+	 
 	if (state != game->stateDying) {
-		// no está muerto y se ha quedado parado
-		if (vx == 0) {
-			vxIntelligence = vxIntelligence * -1;
-			vx = vxIntelligence;
-		}
-		if (outRight) {
-			// mover hacia la izquierda vx tiene que ser negativa
-			if (vxIntelligence > 0) {
-				vxIntelligence = vxIntelligence * -1;
-			}
-			vx = vxIntelligence;
-		}
-		if (outLeft) {
-			// mover hacia la derecha vx tiene que ser positiva
-			if (vxIntelligence < 0) {
-				vxIntelligence = vxIntelligence * -1;
-			}
-			vx = vxIntelligence;
-		}
-
+		if (x > p->x)
+			vx = -enemySpeed;
+		else
+			vx = enemySpeed;
+		if (y > p->y)
+			vy = -enemySpeed;
+		else
+			vy = enemySpeed;
 	}
 	else {
 		vx = 0;
 	}
-
-
 }
 
 void Enemy::draw() {

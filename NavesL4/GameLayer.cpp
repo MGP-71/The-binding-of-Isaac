@@ -74,7 +74,7 @@ void GameLayer::update() {
 	player->update();
 
 	for (auto const& enemy : enemies) {
-		enemy->update();
+		enemy->update(player);
 	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
