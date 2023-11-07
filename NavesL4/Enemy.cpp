@@ -47,7 +47,7 @@ void Enemy::update(Player* p) {
 	}
 	
 	 
-	if (state != game->stateDying) {
+	if (state == game->stateMoving) {
 		if (x > p->x)
 			vx = -enemySpeed;
 		else
@@ -59,6 +59,7 @@ void Enemy::update(Player* p) {
 	}
 	else {
 		vx = 0;
+		vy = 0;
 	}
 }
 
