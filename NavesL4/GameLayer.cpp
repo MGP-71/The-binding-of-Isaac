@@ -80,6 +80,33 @@ void GameLayer::update() {
 		projectile->update();
 	}
 
+	//Abrir puertas
+	bool allDead = true;
+	for (auto const& enemy : enemies) {
+		if (enemy->state != game->stateDead) {
+			allDead = false;
+		}
+	}
+	if (allDead) {
+		for (auto const& door : space->staticActors) {
+			if (door->filename.compare("res/puerta_up_cerrada.png") == 0) {
+				door->filename = "res/puerta_up_abierta.png";
+				door->texture = game->getTexture(door->filename);
+			}
+			else if (door->filename.compare("res/puerta_izquierda_cerrada.png") == 0) {
+				door->filename = "res/puerta_izquierda_abierta.png";
+				door->texture = game->getTexture(door->filename);
+			}
+			else if (door->filename.compare("res/puerta_derecha_cerrada.png") == 0) {
+				door->filename = "res/puerta_derecha_abierta.png";
+				door->texture = game->getTexture(door->filename);
+			}
+			else if (door->filename.compare("res/puerta_abajo_cerrada.png") == 0) {
+				door->filename = "res/puerta_abajo_abierta.png";
+				door->texture = game->getTexture(door->filename);
+			}
+		}
+	}
 	// Colisiones
 	for (auto const& enemy : enemies) {
 		if (player->isOverlap(enemy)) {

@@ -150,7 +150,6 @@ Projectile* Player::shoot() {
 		if (orientation == game->orientationUp) {
 			projectile->vx = 0;
 			projectile->vy = -9;
-			cout << "AAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
 		}
 		if (orientation == game->orientationDown) {
 			projectile->vx = 0;

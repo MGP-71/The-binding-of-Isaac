@@ -14,6 +14,7 @@ public:
 	SDL_Texture* texture;
 	int x;
 	int y;
+	string filename;
 	float vx;
 	float vy;
 	int width;
