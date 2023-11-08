@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float x, float y, Game* game)
-	: Actor("res/enemigos/fatty.png", x, y, 43, 56, game) {
+Enemy::Enemy(string filename, float x, float y, Game* game)
+	: Actor(filename, x, y, 43, 56, game) {
 
 	state = game->stateMoving;
 
@@ -12,10 +12,7 @@ Enemy::Enemy(float x, float y, Game* game)
 	animation = aMoving;
 
 	vx = enemySpeed;
-	/*
-	* vxIntelligence = -1;
-	vx = vxIntelligence;
-	*/
+
 	
 }
 

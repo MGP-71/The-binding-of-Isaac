@@ -1,4 +1,6 @@
 #include "GameLayer.h"
+#include "Horf.h"
+#include "Fatty.h"
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) {
@@ -378,8 +380,16 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		space->addStaticActor(tile);
 		break;
 	}
-	case 'E': {
-		Enemy* enemy = new Enemy(x, y, game);
+	case 'F': {
+		Fatty* enemy = new Fatty( x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		enemy->y = enemy->y - enemy->height / 2;
+		enemies.push_back(enemy);
+		space->addDynamicActor(enemy);
+		break;
+	}
+	case 'H': {
+		Horf* enemy = new Horf(x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		enemy->y = enemy->y - enemy->height / 2;
 		enemies.push_back(enemy);
