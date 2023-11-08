@@ -10,6 +10,7 @@ Fatty::Fatty(float x, float y, Game* game)
 		175, 56, 6, 4, true, game);
 	animation = aMoving;
 
+	enemySpeed = 1;
 	vx = enemySpeed;
 	/*
 	* vxIntelligence = -1;

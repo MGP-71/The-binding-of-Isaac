@@ -78,6 +78,9 @@
     <ClCompile Include="Fatty.cpp">
       <Filter>Archivos de origen\actores</Filter>
     </ClCompile>
+    <ClCompile Include="Monoojo.cpp">
+      <Filter>Archivos de origen\actores</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -126,6 +129,9 @@
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
     <ClInclude Include="Fatty.h">
+      <Filter>Archivos de encabezado\actores</Filter>
+    </ClInclude>
+    <ClInclude Include="Monoojo.h">
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
   </ItemGroup>

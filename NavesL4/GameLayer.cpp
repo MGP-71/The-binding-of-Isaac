@@ -1,6 +1,7 @@
 #include "GameLayer.h"
 #include "Horf.h"
 #include "Fatty.h"
+#include "Monoojo.h"
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) {
@@ -382,6 +383,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	}
 	case 'F': {
 		Fatty* enemy = new Fatty( x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		enemy->y = enemy->y - enemy->height / 2;
+		enemies.push_back(enemy);
+		space->addDynamicActor(enemy);
+		break;
+	}
+	case 'M': {
+		Monoojo* enemy = new Monoojo(x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		enemy->y = enemy->y - enemy->height / 2;
 		enemies.push_back(enemy);

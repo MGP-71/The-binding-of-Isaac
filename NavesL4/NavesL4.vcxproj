@@ -172,6 +172,7 @@
     <ClCompile Include="Horf.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Monoojo.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="GameLayer.h" />
     <ClInclude Include="Horf.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="Monoojo.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Space.h" />
