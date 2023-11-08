@@ -13,7 +13,7 @@ void GameLayer::init() {
 	tiles.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	//audioBackground->play(); es molesto por ahora
+	audioBackground->play();
 
 	
 
