@@ -27,10 +27,13 @@ public:
 	void draw() override;
 	void keysToControls(SDL_Event event);
 
+	void calculateScroll();
+
 	void loadMap(string name);
 	void loadMapObject(char character, float x, float y);
 
 	int mapWidth;
+	int mapHeight;
 	list<Tile*> tiles;
 	list<Tile*> doors;
 
@@ -41,6 +44,8 @@ public:
 	list<Enemy*> enemies;
 	list<Projectile*> projectiles;
 	Space* space;
+	float scrollX;
+	float scrollY;
 
 	bool controlShoot = false;
 	int controlMoveY = 0;

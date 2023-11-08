@@ -43,6 +43,12 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
+
+	if (x + vx < 10 || x + vx > 840)
+		moveX(0);
+	if (y + vy < 20 || y + vy > 690)
+		moveY(0);
+
 	bool endAnimation = animation->update();
 
 	// Acabo la animación, no sabemos cual
@@ -124,16 +130,16 @@ void Player::update() {
 	}
 }
 
-void Player::draw() {
-	animation->draw(x, y);
+void Player::draw(float scrollX, float scrollY) {
+	animation->draw(x - scrollX, y - scrollY);
 }
 
 void Player::moveX(float axis) {
-	vx = axis * 3;
+	vx = axis * playerSpeed;
 }
 
 void Player::moveY(float axis) {
-	vy = axis * 3;
+	vy = axis * playerSpeed;
 }
 
 Projectile* Player::shoot() {

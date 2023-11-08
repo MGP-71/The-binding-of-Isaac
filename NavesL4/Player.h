@@ -13,12 +13,13 @@ public:
 	void update();
 	void moveX(float axis);
 	void moveY(float axis);
-	void draw() override; // Va a sobrescribir
+	void draw(float scrollX = 0, float scrollY = 0) override; // Va a sobrescribir
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;
 	int shootCadence = 30;
 	int shootTime = 0;
+	float playerSpeed = 6.0;
 
 	Animation* aIdleRight;
 	Animation* aIdleUp;

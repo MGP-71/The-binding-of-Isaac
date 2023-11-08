@@ -8,6 +8,8 @@ GameLayer::GameLayer(Game* game)
 
 void GameLayer::init() {
 	space = new Space(0);
+	scrollX = 0;
+	scrollY = 0;
 	tiles.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
@@ -44,10 +46,12 @@ void GameLayer::processControls() {
 
 	// Eje X
 	if (controlMoveX > 0) {
-		player->moveX(1);
+		if (player->x < 840)
+			player->moveX(1);
 	}
 	else if (controlMoveX < 0) {
-		player->moveX(-1);
+		if (player->x > 20)
+			player->moveX(-1);
 	}
 	else {
 		player->moveX(0);
@@ -55,10 +59,13 @@ void GameLayer::processControls() {
 
 	// Eje Y
 	if (controlMoveY > 0) {
-		player->moveY(1);
+		if (player->y < 690)
+			player->moveY(1);
+
 	}
 	else if (controlMoveY < 0) {
-		player->moveY(-1);
+		if (player->y > 20)
+			player->moveY(-1);
 	}
 	else {
 		player->moveY(0);
@@ -149,7 +156,7 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies;
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
-		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0)) {
+		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
@@ -210,21 +217,52 @@ void GameLayer::update() {
 	cout << "update GameLayer" << endl;
 }
 
+void GameLayer::calculateScroll() {
+	// limite izquierda
+	if (player->x > WIDTH * 0.4) {
+		if (player->x - scrollX < WIDTH * 0.4) {
+			scrollX = player->x - WIDTH * 0.4;
+		}
+	}
+
+	// limite derecha
+	if (player->x < mapWidth - WIDTH * 0.4) {
+		if (player->x - scrollX > WIDTH * 0.6) {
+			scrollX = player->x - WIDTH * 0.6;
+		}
+	}
+	
+	// limite izquierda
+	if (player->y > HEIGHT * 0.4) {
+		if (player->y - scrollY < HEIGHT * 0.4) {
+			scrollY = player->y - HEIGHT * 0.4;
+		}
+	}
+
+	// limite derecha
+	if (player->y < mapHeight - HEIGHT * 0.4) {
+		if (player->y - scrollY > HEIGHT * 0.6) {
+			scrollY = player->y - HEIGHT * 0.6;
+		}
+	}
+}
+
 void GameLayer::draw() {
+	calculateScroll();
 	background->draw();
 
 	for (auto const& tile : tiles) {
-		tile->draw();
+		tile->draw(scrollX, scrollY);
 	}
 
 
 	for (auto const& projectile : projectiles) {
-		projectile->draw();
+		projectile->draw(scrollX, scrollY);
 	}
 
-	player->draw();
+	player->draw(scrollX, scrollY);
 	for (auto const& enemy : enemies) {
-		enemy->draw();
+		enemy->draw(scrollX, scrollY);
 	}
 	SDL_RenderPresent(game->renderer); // Renderiza
 }
@@ -315,6 +353,7 @@ void GameLayer::loadMap(string name) {
 			}
 
 			//cout << character << endl;
+			mapHeight = i * 33;
 		}
 	}
 	streamFile.close();

@@ -63,8 +63,8 @@ void Enemy::update(Player* p) {
 	}
 }
 
-void Enemy::draw() {
-	animation->draw(x, y);
+void Enemy::draw(float scrollX, float scrollY) {
+	animation->draw(x - scrollX, y - scrollY);
 }
 
 void Enemy::impacted() {

@@ -11,7 +11,7 @@ using namespace std;
 
 // Valores generales
 #define WIDTH 600
-#define HEIGHT 450
+#define HEIGHT 400
 
 #include "Layer.h"
 class Layer;
