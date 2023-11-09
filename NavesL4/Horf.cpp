@@ -71,17 +71,34 @@ void Horf::update(Player* p) {
 	
 }
 
-ProjectileEnemy* Horf::shoot() {
+
+ProjectileEnemy* Horf::shoot(Player* p) {
+	
 	if (shootTime == 0) {
+
 		cout << "disparando" << endl;
 		shootTime = shootCadence;
-		ProjectileEnemy* projectile;
-		if (vx > 0) {
-			projectile = new ProjectileEnemy(1, x, y, game);
-		}
-		else {
-			projectile = new ProjectileEnemy(-1, x, y, game);
-		}
+
+		// Calcular la dirección hacia el jugador
+		float directionX = p->x - x;
+		float directionY = p->y - y;
+
+		// Normalizar la dirección para obtener un vector de longitud 1
+		float length = sqrt(directionX * directionX + directionY * directionY);
+		directionX /= length;
+		directionY /= length;
+
+		// Crear el proyectil con la dirección ajustada hacia el jugador
+		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);
+		if (projectile->x > p->x)
+			projectile->vx = -projectile->vx;
+		else
+			projectile->vx = projectile->vx;
+		if (projectile->y > p->y)
+			projectile->vy = -projectile->vy;
+		else
+			projectile->vy = projectile->vy;
+
 		return projectile;
 	}
 	else {

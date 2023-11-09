@@ -101,7 +101,7 @@ void GameLayer::update() {
 	}
 
 	for (auto const& enemyS : horfEnemies) {
-		ProjectileEnemy* newProjectile = enemyS->shoot();
+		ProjectileEnemy* newProjectile = enemyS->shoot(player);
 		if (newProjectile != NULL) {
 			projectilesHorf.push_back(newProjectile);
 			space->addDynamicActor(newProjectile);
@@ -209,23 +209,6 @@ void GameLayer::update() {
 			}
 		}
 	}
-
-	/*for (auto const& enemy : horfEnemies) {
-		for (auto const& projectile : projectiles) {
-			if (enemy->isOverlap(projectile)) {
-				bool pInList = std::find(deleteProjectiles.begin(),
-					deleteProjectiles.end(),
-					projectile) != deleteProjectiles.end();
-
-				if (!pInList) {
-					deleteProjectiles.push_back(projectile);
-				}
-
-				enemy->impacted();
-
-			}
-		}
-	}*/
 
 	for (auto const& enemy : enemies) {
 		if (enemy->state == game->stateDead) {

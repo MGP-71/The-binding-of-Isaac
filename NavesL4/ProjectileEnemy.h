@@ -6,7 +6,7 @@
 class ProjectileEnemy : public Actor
 {
 public:
-	ProjectileEnemy(int direction, float x, float y, Game* game);
+	ProjectileEnemy(int directionx, int directiony, float x, float y, Game* game);
 	void update();
 };
 
