@@ -25,6 +25,9 @@ void GameLayer::init() {
 	
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
+	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
+	projectilesHorf.clear(); // Vaciar por si reiniciamos el juego
+
 
 	loadMap("res/fondos/catacombs.txt");
 }
@@ -86,8 +89,23 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		enemy->update(player);
 	}
+	for (auto const& enemy : horfEnemies) {
+		enemy->update(player);
+	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
+	}
+
+	for (auto const& projectile : projectilesHorf) {
+		projectile->update();
+	}
+
+	for (auto const& enemyS : horfEnemies) {
+		ProjectileEnemy* newProjectile = enemyS->shoot();
+		if (newProjectile != NULL) {
+			projectilesHorf.push_back(newProjectile);
+			space->addDynamicActor(newProjectile);
+		}
 	}
 
 	//Abrir puertas
@@ -157,6 +175,8 @@ void GameLayer::update() {
 	// Colisiones , Enemy - Projectile
 
 	list<Enemy*> deleteEnemies;
+	list<Horf*> deleteEnemiesHorf;
+
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
 		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
@@ -190,6 +210,23 @@ void GameLayer::update() {
 		}
 	}
 
+	/*for (auto const& enemy : horfEnemies) {
+		for (auto const& projectile : projectiles) {
+			if (enemy->isOverlap(projectile)) {
+				bool pInList = std::find(deleteProjectiles.begin(),
+					deleteProjectiles.end(),
+					projectile) != deleteProjectiles.end();
+
+				if (!pInList) {
+					deleteProjectiles.push_back(projectile);
+				}
+
+				enemy->impacted();
+
+			}
+		}
+	}*/
+
 	for (auto const& enemy : enemies) {
 		if (enemy->state == game->stateDead) {
 			bool eInList = std::find(deleteEnemies.begin(),
@@ -202,12 +239,31 @@ void GameLayer::update() {
 		}
 	}
 
+	for (auto const& enemy : horfEnemies) {
+		if (enemy->state == game->stateDead) {
+			bool eInList = std::find(deleteEnemiesHorf.begin(),
+				deleteEnemiesHorf.end(),
+				enemy) != deleteEnemiesHorf.end();
+
+			if (!eInList) {
+				deleteEnemiesHorf.push_back(enemy);
+			}
+		}
+	}
+
+
+
+	for (auto const& delEnemy : deleteEnemiesHorf) {
+		horfEnemies.remove(delEnemy);
+		space->removeDynamicActor(delEnemy);
+	}
 
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
 		space->removeDynamicActor(delEnemy);
 	}
 	deleteEnemies.clear();
+	deleteEnemiesHorf.clear();
 
 	for (auto const& delProjectile : deleteProjectiles) {
 		projectiles.remove(delProjectile);
@@ -262,11 +318,19 @@ void GameLayer::draw() {
 	for (auto const& projectile : projectiles) {
 		projectile->draw(scrollX, scrollY);
 	}
+	for (auto const& projectile : projectilesHorf) {
+		projectile->draw(scrollX, scrollY);
+	}
 
 	player->draw(scrollX, scrollY);
 	for (auto const& enemy : enemies) {
 		enemy->draw(scrollX, scrollY);
 	}
+
+	//creo que no hace falta porque ya se pinta en enemies
+	/*for (auto const& enemy : horfEnemies) {
+		enemy->draw(scrollX, scrollY);
+	}*/
 	SDL_RenderPresent(game->renderer); // Renderiza
 }
 
@@ -402,6 +466,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		enemy->y = enemy->y - enemy->height / 2;
 		enemies.push_back(enemy);
+		horfEnemies.push_back(enemy);
 		space->addDynamicActor(enemy);
 		break;
 	}

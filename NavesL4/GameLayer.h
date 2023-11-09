@@ -8,6 +8,8 @@
 #include "Projectile.h"
 #include "Text.h"
 #include "Tile.h"
+#include "Horf.h"
+#include "ProjectileEnemy.h"
 
 #include "Audio.h"
 #include "Space.h"
@@ -42,7 +44,10 @@ public:
 	Player* player;
 	Background* background;
 	list<Enemy*> enemies;
+	list<Horf*> horfEnemies;
 	list<Projectile*> projectiles;
+	list<ProjectileEnemy*> projectilesHorf;
+
 	Space* space;
 	float scrollX;
 	float scrollY;

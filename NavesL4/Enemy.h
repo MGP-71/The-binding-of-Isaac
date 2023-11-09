@@ -9,7 +9,7 @@ class Enemy : public Actor
 public:
 	Enemy(string filename, float x, float y, Game* game);
 	void draw(float scrollX = 0, float scrollY = 0) override; // Va a sobrescribir
-	void update(Player* p);
+	virtual void update(Player* p);
 	Animation* aMoving;
 	Animation* animation; // Referencia a la animación mostrada
 	void impacted(); // Recibe impacto y pone animación de morir
