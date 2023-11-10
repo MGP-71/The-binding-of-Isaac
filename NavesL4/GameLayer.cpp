@@ -26,7 +26,8 @@ void GameLayer::init() {
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
 	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
-	projectilesHorf.clear(); // Vaciar por si reiniciamos el juego
+	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
+	monoojoEnemies.clear();
 
 
 	loadMap("res/fondos/catacombs.txt");
@@ -92,18 +93,28 @@ void GameLayer::update() {
 	for (auto const& enemy : horfEnemies) {
 		enemy->update(player);
 	}
+	for (auto const& enemy : monoojoEnemies) {
+		enemy->update(player);
+	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
 	}
 
-	for (auto const& projectile : projectilesHorf) {
+	for (auto const& projectile : projectilesEnemy) {
 		projectile->update();
 	}
 
 	for (auto const& enemyS : horfEnemies) {
 		ProjectileEnemy* newProjectile = enemyS->shoot(player);
 		if (newProjectile != NULL) {
-			projectilesHorf.push_back(newProjectile);
+			projectilesEnemy.push_back(newProjectile);
+			space->addDynamicActor(newProjectile);
+		}
+	}
+	for (auto const& enemyS : monoojoEnemies) {
+		ProjectileEnemy* newProjectile = enemyS->shoot(player);
+		if (newProjectile != NULL) {
+			projectilesEnemy.push_back(newProjectile);
 			space->addDynamicActor(newProjectile);
 		}
 	}
@@ -176,6 +187,7 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies;
 	list<Horf*> deleteEnemiesHorf;
+	list <Monoojo*> deleteEnemiesMonoojo;
 
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
@@ -234,10 +246,26 @@ void GameLayer::update() {
 		}
 	}
 
+	for (auto const& enemy : monoojoEnemies) {
+		if (enemy->state == game->stateDead) {
+			bool eInList = std::find(deleteEnemiesMonoojo.begin(),
+				deleteEnemiesMonoojo.end(),
+				enemy) != deleteEnemiesMonoojo.end();
+
+			if (!eInList) {
+				deleteEnemiesMonoojo.push_back(enemy);
+			}
+		}
+	}
+
 
 
 	for (auto const& delEnemy : deleteEnemiesHorf) {
 		horfEnemies.remove(delEnemy);
+		space->removeDynamicActor(delEnemy);
+	}
+	for (auto const& delEnemy : deleteEnemiesMonoojo) {
+		monoojoEnemies.remove(delEnemy);
 		space->removeDynamicActor(delEnemy);
 	}
 
@@ -247,6 +275,8 @@ void GameLayer::update() {
 	}
 	deleteEnemies.clear();
 	deleteEnemiesHorf.clear();
+	deleteEnemiesMonoojo.clear();
+
 
 	for (auto const& delProjectile : deleteProjectiles) {
 		projectiles.remove(delProjectile);
@@ -301,7 +331,7 @@ void GameLayer::draw() {
 	for (auto const& projectile : projectiles) {
 		projectile->draw(scrollX, scrollY);
 	}
-	for (auto const& projectile : projectilesHorf) {
+	for (auto const& projectile : projectilesEnemy) {
 		projectile->draw(scrollX, scrollY);
 	}
 
@@ -441,6 +471,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		enemy->y = enemy->y - enemy->height / 2;
 		enemies.push_back(enemy);
+		monoojoEnemies.push_back(enemy);
 		space->addDynamicActor(enemy);
 		break;
 	}

@@ -9,6 +9,7 @@
 #include "Text.h"
 #include "Tile.h"
 #include "Horf.h"
+#include "Monoojo.h"
 #include "ProjectileEnemy.h"
 
 #include "Audio.h"
@@ -45,8 +46,9 @@ public:
 	Background* background;
 	list<Enemy*> enemies;
 	list<Horf*> horfEnemies;
+	list<Monoojo*> monoojoEnemies;
 	list<Projectile*> projectiles;
-	list<ProjectileEnemy*> projectilesHorf;
+	list<ProjectileEnemy*> projectilesEnemy;
 
 	Space* space;
 	float scrollX;
