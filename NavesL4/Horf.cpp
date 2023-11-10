@@ -90,14 +90,14 @@ ProjectileEnemy* Horf::shoot(Player* p) {
 
 		// Crear el proyectil con la dirección ajustada hacia el jugador
 		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);
-		if (projectile->x > p->x)
-			projectile->vx = -projectile->vx;
+		if (x > p->x)
+			projectile->vx = -projectile->vx * -directionX * 2;
+		else 
+			projectile->vx = projectile->vx * directionX * 2;
+		if (y > p->y)
+			projectile->vy = -projectile->vy * -directionY * 2;
 		else
-			projectile->vx = projectile->vx;
-		if (projectile->y > p->y)
-			projectile->vy = -projectile->vy;
-		else
-			projectile->vy = projectile->vy;
+			projectile->vy = projectile->vy * directionY * 2;
 
 		return projectile;
 	}
