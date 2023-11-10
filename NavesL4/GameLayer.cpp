@@ -285,7 +285,47 @@ void GameLayer::update() {
 	}
 	deleteProjectiles.clear();
 
+	// Colisiones , Player - Projectile
+	list<ProjectileEnemy*> deleteEnemyProjectiles;
 
+
+	for (auto const& projectile : projectilesEnemy) {
+		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
+
+			bool pInList = std::find(deleteEnemyProjectiles.begin(),
+				deleteEnemyProjectiles.end(),
+				projectile) != deleteEnemyProjectiles.end();
+
+			if (!pInList) {
+				deleteEnemyProjectiles.push_back(projectile);
+			}
+		}
+	}
+	for (auto const& projectile : projectilesEnemy) {
+		if (player->isOverlap(projectile)) {
+			bool pInList = std::find(deleteEnemyProjectiles.begin(),
+				deleteEnemyProjectiles.end(),
+				projectile) != deleteEnemyProjectiles.end();
+
+			if (!pInList) {
+				deleteEnemyProjectiles.push_back(projectile);
+			}
+
+			init();
+			return;
+
+		}
+	}
+
+	for (auto const& delProjectile : deleteEnemyProjectiles) {
+		projectilesEnemy.remove(delProjectile);
+		space->removeDynamicActor(delProjectile);
+		delete delProjectile;
+	}
+	deleteEnemyProjectiles.clear();
+
+
+		
 	cout << "update GameLayer" << endl;
 }
 

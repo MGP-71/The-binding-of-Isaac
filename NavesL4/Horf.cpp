@@ -20,10 +20,7 @@ Horf::Horf(float x, float y, Game* game)
 }
 
 void Horf::update(Player* p) {
-	// Actualizar la animación
-	if (shootTime > 0) {
-		shootTime--;
-	}
+	
 	bool endAnimation = animation->update();
 
 	// Acabo la animación, no sabemos cual
@@ -68,6 +65,11 @@ void Horf::update(Player* p) {
 	else {
 		vx = 0;
 	}
+	// Actualizar la animación
+	if (shootTime > 0) {
+		shootTime--;
+	}
+
 	
 }
 
@@ -90,6 +92,8 @@ ProjectileEnemy* Horf::shoot(Player* p) {
 
 		// Crear el proyectil con la dirección ajustada hacia el jugador
 		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);
+		projectile->vx = 5;
+		projectile->vy = 5;
 		if (x > p->x)
 			projectile->vx = -projectile->vx * -directionX * 2;
 		else 
@@ -98,6 +102,7 @@ ProjectileEnemy* Horf::shoot(Player* p) {
 			projectile->vy = -projectile->vy * -directionY * 2;
 		else
 			projectile->vy = projectile->vy * directionY * 2;
+	
 
 		return projectile;
 	}
