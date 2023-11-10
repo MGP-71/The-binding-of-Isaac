@@ -81,6 +81,8 @@ ProjectileEnemy* Monoojo::shoot(Player* p) {
 
 		// Crear el proyectil con la dirección ajustada hacia el jugador
 		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);
+		projectile->vx = 5;
+		projectile->vy = 5;
 		if (x > p->x)
 			projectile->vx = -projectile->vx * -directionX * 2;
 		else
@@ -89,7 +91,6 @@ ProjectileEnemy* Monoojo::shoot(Player* p) {
 			projectile->vy = -projectile->vy * -directionY * 2;
 		else
 			projectile->vy = projectile->vy * directionY * 2;
-
 		return projectile;
 	}
 	else {

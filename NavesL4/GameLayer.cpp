@@ -16,7 +16,7 @@ void GameLayer::init() {
 	tiles.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	audioBackground->play();
+	//audioBackground->play();
 
 	
 
@@ -104,15 +104,15 @@ void GameLayer::update() {
 		projectile->update();
 	}
 
-	for (auto const& enemyS : horfEnemies) {
-		ProjectileEnemy* newProjectile = enemyS->shoot(player);
+	for (auto const& enemy : horfEnemies) {
+		ProjectileEnemy* newProjectile = enemy->shoot(player);
 		if (newProjectile != NULL) {
 			projectilesEnemy.push_back(newProjectile);
 			space->addDynamicActor(newProjectile);
 		}
 	}
-	for (auto const& enemyS : monoojoEnemies) {
-		ProjectileEnemy* newProjectile = enemyS->shoot(player);
+	for (auto const& enemy : monoojoEnemies) {
+		ProjectileEnemy* newProjectile = enemy->shoot(player);
 		if (newProjectile != NULL) {
 			projectilesEnemy.push_back(newProjectile);
 			space->addDynamicActor(newProjectile);
@@ -188,8 +188,8 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies;
 	list<Horf*> deleteEnemiesHorf;
 	list <Monoojo*> deleteEnemiesMonoojo;
-
 	list<Projectile*> deleteProjectiles;
+
 	for (auto const& projectile : projectiles) {
 		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
 
@@ -288,6 +288,14 @@ void GameLayer::update() {
 	// Colisiones , Player - Projectile
 	list<ProjectileEnemy*> deleteEnemyProjectiles;
 
+	for (auto const& projectile : projectilesEnemy) {
+		for (auto const& tile : tiles) {
+			if (tile->isOverlap(projectile)) {
+				projectile->vx = 0;
+				projectile->vy = 0;
+			}
+		}
+	}
 
 	for (auto const& projectile : projectilesEnemy) {
 		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
