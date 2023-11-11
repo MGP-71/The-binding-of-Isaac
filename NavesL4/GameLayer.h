@@ -13,6 +13,7 @@
 #include "ProjectileEnemy.h"
 
 #include "Audio.h"
+#include "Pad.h"
 #include "Space.h"
 
 #include <fstream> // Leer ficheros
@@ -61,5 +62,11 @@ public:
 
 	//para saber si las puertas están abiertas
 	bool puertasAbiertas;
+
+	// Elementos de interfaz
+	SDL_GameController* gamePad;
+	Pad* pad;
+	Actor* buttonJump;
+	Actor* buttonShoot;
 
 };

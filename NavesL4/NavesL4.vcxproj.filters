@@ -84,6 +84,12 @@
     <ClCompile Include="ProjectileEnemy.cpp">
       <Filter>Archivos de origen\actores</Filter>
     </ClCompile>
+    <ClCompile Include="MenuLayer.cpp">
+      <Filter>Archivos de origen\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="Pad.cpp">
+      <Filter>Archivos de origen\actores</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -125,9 +131,6 @@
     <ClInclude Include="Tile.h">
       <Filter>Archivos de encabezado\layers</Filter>
     </ClInclude>
-    <ClInclude Include="Door.h">
-      <Filter>Archivos de encabezado\layers</Filter>
-    </ClInclude>
     <ClInclude Include="Horf.h">
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
@@ -138,6 +141,15 @@
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileEnemy.h">
+      <Filter>Archivos de encabezado\actores</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuLayer.h">
+      <Filter>Archivos de encabezado\layers</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Archivos de encabezado\layers</Filter>
+    </ClInclude>
+    <ClInclude Include="Pad.h">
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
   </ItemGroup>
