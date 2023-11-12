@@ -429,15 +429,19 @@ void GameLayer::keysToControls(SDL_Event event) {
 			controlMoveY = 1;
 			break;
 		case SDLK_DOWN: // dispara
+			player->orientation = game->orientationDown;
 			controlShoot = true;
 			break;
 		case SDLK_UP: // dispara
+			player->orientation = game->orientationUp;
 			controlShoot = true;
 			break;
 		case SDLK_LEFT: // dispara
+			player->orientation = game->orientationLeft;
 			controlShoot = true;
 			break;
 		case SDLK_RIGHT: // dispara
+			player->orientation = game->orientationRight;
 			controlShoot = true;
 			break;
 		}
