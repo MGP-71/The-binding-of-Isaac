@@ -547,6 +547,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		space->addDynamicActor(tile);
 		break;
 	}
+	case '/': {
+		Tile* tile = new Tile("res/pills/pill.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		tile->y = tile->y - tile->height / 2;
+		tiles.push_back(tile);
+		space->addDynamicActor(tile);
+		break;
+	}
 	case 'F': {
 		Fatty* enemy = new Fatty( x, y, game);
 		// modificación para empezar a contar desde el suelo.
