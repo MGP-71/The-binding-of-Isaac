@@ -428,7 +428,16 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_s: // abajo
 			controlMoveY = 1;
 			break;
-		case SDLK_SPACE: // dispara
+		case SDLK_DOWN: // dispara
+			controlShoot = true;
+			break;
+		case SDLK_UP: // dispara
+			controlShoot = true;
+			break;
+		case SDLK_LEFT: // dispara
+			controlShoot = true;
+			break;
+		case SDLK_RIGHT: // dispara
 			controlShoot = true;
 			break;
 		}
