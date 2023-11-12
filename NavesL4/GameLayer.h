@@ -40,6 +40,8 @@ public:
 	int mapHeight;
 	list<Tile*> tiles;
 	list<Tile*> doors;
+	list<Tile*> fuegos;
+
 
 	Audio* audioBackground;
 	int newEnemyTime = 0;

@@ -14,6 +14,8 @@ void GameLayer::init() {
 	scrollX = 0;
 	scrollY = 0;
 	tiles.clear();
+	fuegos.clear();
+	doors.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
@@ -152,6 +154,14 @@ void GameLayer::update() {
 		if (player->isOverlap(enemy)) {
 			init();
 			return; // Cortar el for
+		}
+	}
+
+	//Colisiones jugador-fuego
+	for (auto const& fuego : fuegos) {
+		if (player->isOverlap(fuego)) {
+			init();
+			return;
 		}
 	}
 
@@ -504,6 +514,15 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
 		space->addStaticActor(tile);
+		break;
+	}
+	case '*': {
+		Tile* tile = new Tile("res/fondos/fuego.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		tile->y = tile->y - tile->height / 2;
+		tiles.push_back(tile);
+		fuegos.push_back(tile);
+		space->addDynamicActor(tile);
 		break;
 	}
 	case 'F': {
