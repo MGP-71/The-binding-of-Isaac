@@ -33,6 +33,8 @@ public:
 
 	void calculateScroll();
 	void actualizarVidas();
+	void actualizarBombas();
+
 
 	void loadMap(string name);
 	void loadMapObject(char character, float x, float y);
@@ -72,4 +74,9 @@ public:
 	Actor* buttonJump;
 	Actor* buttonShoot;
 	list<Actor*> hearts;
+
+	int nBombs;
+	list<Tile*> bombs;
+	Actor* bombsActor;
+	Text* textBombs;
 };

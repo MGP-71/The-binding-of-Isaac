@@ -17,13 +17,15 @@ void GameLayer::init() {
 	fuegos.clear();
 	doors.clear();
 	hearts.clear();
+	bombs.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
 
 
 	background = new Background("res/fondos/catacombs.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
-	
+	textBombs = new Text("hola", WIDTH * 0.075, HEIGHT * 0.4, game);
+	textBombs->content = to_string(0);
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -33,6 +35,7 @@ void GameLayer::init() {
 
 	loadMap("res/fondos/catacombs.txt");
 	actualizarVidas();
+	actualizarBombas();
 }
 
 void GameLayer::processControls() {
@@ -175,6 +178,33 @@ void GameLayer::update() {
 			return;
 		}
 	}
+
+	list<Tile*> deleteBombs;
+	//Colisiones jugador-bomba
+	for (auto const& bomb : bombs) {
+		if (player->isOverlap(bomb)) {
+			bool pInList = std::find(deleteBombs.begin(),
+				deleteBombs.end(),
+				bomb) != deleteBombs.end();
+
+			if (!pInList) {
+				deleteBombs.push_back(bomb);
+				nBombs++;
+				for (auto const& b : deleteBombs) {
+					bombs.remove(b);
+					space->removeDynamicActor(b);
+					delete b;
+					actualizarBombas();
+				}
+				deleteBombs.clear();
+			
+			}
+			
+			return;
+		}
+	}
+	
+	
 
 	//Colisiones Puerta-Personaje
 	for (auto const& tile : doors) {
@@ -356,7 +386,7 @@ void GameLayer::update() {
 	}
 	deleteEnemyProjectiles.clear();
 
-
+	
 		
 	cout << "update GameLayer" << endl;
 }
@@ -394,8 +424,11 @@ void GameLayer::calculateScroll() {
 void GameLayer::draw() {
 	calculateScroll();
 	background->draw();
-
+	textBombs->draw();
 	for (auto const& tile : tiles) {
+		tile->draw(scrollX, scrollY);
+	}
+	for (auto const& tile : bombs) {
 		tile->draw(scrollX, scrollY);
 	}
 
@@ -414,6 +447,8 @@ void GameLayer::draw() {
 	for (auto const& heart : hearts) {
 		heart->draw();
 	}
+		bombsActor->draw();
+	
 	//creo que no hace falta porque ya se pinta en enemies
 	/*for (auto const& enemy : horfEnemies) {
 		enemy->draw(scrollX, scrollY);
@@ -571,6 +606,15 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		space->addDynamicActor(tile);
 		break;
 	}
+	case 'B': {
+		Tile* tile = new Tile("res/recolectables/bomb.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		tile->y = tile->y - tile->height / 2;
+		bombs.push_back(tile);
+		//tiles.push_back(tile);
+		space->addDynamicActor(tile);
+		break;
+	}
 	case 'F': {
 		Fatty* enemy = new Fatty( x, y, game);
 		// modificación para empezar a contar desde el suelo.
@@ -642,4 +686,11 @@ void GameLayer::actualizarVidas() {
 	for (int i = 0; i < player->lifes; i++) {
 		hearts.push_back(new Actor("res/corazones/corazon.png", WIDTH * 0.1 + i * 45, HEIGHT * 0.05, 44, 36, game));
 	}
+}
+
+void GameLayer::actualizarBombas() {
+	bombsActor = new Actor("res/recolectables/bomb_icono.png", WIDTH * 0.05 , HEIGHT * 0.4, 16, 22, game);
+	textBombs->content = to_string(nBombs);
+
+	
 }
