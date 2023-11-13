@@ -32,6 +32,7 @@ public:
 	void keysToControls(SDL_Event event);
 
 	void calculateScroll();
+	void actualizarVidas();
 
 	void loadMap(string name);
 	void loadMapObject(char character, float x, float y);
@@ -70,5 +71,5 @@ public:
 	Pad* pad;
 	Actor* buttonJump;
 	Actor* buttonShoot;
-
+	list<Actor*> hearts;
 };

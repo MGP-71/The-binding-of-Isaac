@@ -16,23 +16,23 @@ void GameLayer::init() {
 	tiles.clear();
 	fuegos.clear();
 	doors.clear();
+	hearts.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
 
-	
-
 
 	background = new Background("res/fondos/catacombs.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
 	
+
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
 	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
-
 	loadMap("res/fondos/catacombs.txt");
+	actualizarVidas();
 }
 
 void GameLayer::processControls() {
@@ -152,7 +152,12 @@ void GameLayer::update() {
 	// Colisiones
 	for (auto const& enemy : enemies) {
 		if (player->isOverlap(enemy)) {
-			init();
+			player->loseLife();
+			actualizarVidas();
+			if (player->lifes <= 0) {
+				init();
+				return;
+			}
 			return; // Cortar el for
 		}
 	}
@@ -160,7 +165,13 @@ void GameLayer::update() {
 	//Colisiones jugador-fuego
 	for (auto const& fuego : fuegos) {
 		if (player->isOverlap(fuego)) {
-			init();
+			player->loseLife();
+			actualizarVidas();
+			if (player->lifes <= 0) {
+				actualizarVidas();
+				init();
+				return;
+			}
 			return;
 		}
 	}
@@ -329,9 +340,12 @@ void GameLayer::update() {
 				deleteEnemyProjectiles.push_back(projectile);
 			}
 
-			init();
-			return;
-
+			player->loseLife();
+			actualizarVidas();
+			if (player->lifes <= 0) {
+				init();
+			}
+			break;
 		}
 	}
 
@@ -397,7 +411,9 @@ void GameLayer::draw() {
 	for (auto const& enemy : enemies) {
 		enemy->draw(scrollX, scrollY);
 	}
-
+	for (auto const& heart : hearts) {
+		heart->draw();
+	}
 	//creo que no hace falta porque ya se pinta en enemies
 	/*for (auto const& enemy : horfEnemies) {
 		enemy->draw(scrollX, scrollY);
@@ -618,5 +634,12 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 
+	}
+}
+
+void GameLayer::actualizarVidas() {
+	hearts.clear();
+	for (int i = 0; i < player->lifes; i++) {
+		hearts.push_back(new Actor("res/corazones/corazon.png", WIDTH * 0.1 + i * 45, HEIGHT * 0.05, 44, 36, game));
 	}
 }

@@ -14,12 +14,15 @@ public:
 	void moveX(float axis);
 	void moveY(float axis);
 	void draw(float scrollX = 0, float scrollY = 0) override; // Va a sobrescribir
+	void loseLife();
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;
 	int shootCadence = 30;
 	int shootTime = 0;
 	float playerSpeed = 6.0;
+	int lifes = 3;
+	int invulnerableTime = 0;
 
 	Animation* aIdleRight;
 	Animation* aIdleUp;
@@ -35,9 +38,5 @@ public:
 	Animation* aShootingLeft;
 	Animation* aShootingUp;
 	Animation* aShootingDown;
-
-
-
-
 };
 

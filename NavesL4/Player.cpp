@@ -59,6 +59,10 @@ void Player::update() {
 		}
 	}
 
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
+
 
 	// Establecer orientación
 	if (vx > 0) {
@@ -77,7 +81,8 @@ void Player::update() {
 
 
 	// Selección de animación basada en estados
-	if (state == game->stateShooting) {
+	/*
+	* if (state == game->stateShooting) {
 		if (orientation == game->orientationRight) {
 			animation = aShootingRight;
 		}
@@ -91,6 +96,8 @@ void Player::update() {
 			animation = aShootingDown;
 		}
 	}
+	*/
+	
 	if (state == game->stateMoving) {
 		if (vx != 0) {
 			if (orientation == game->orientationRight) {
@@ -131,7 +138,14 @@ void Player::update() {
 }
 
 void Player::draw(float scrollX, float scrollY) {
-	animation->draw(x - scrollX, y - scrollY);
+	if (invulnerableTime == 0) {
+		animation->draw(x - scrollX, y - scrollY);
+	}
+	else {
+		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
+			animation->draw(x - scrollX, y - scrollY);
+		}
+	}
 }
 
 void Player::moveX(float axis) {
@@ -140,6 +154,16 @@ void Player::moveX(float axis) {
 
 void Player::moveY(float axis) {
 	vy = axis * playerSpeed;
+}
+
+void Player::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100;
+			// 100 actualizaciones 
+		}
+	}
 }
 
 Projectile* Player::shoot() {
@@ -154,18 +178,19 @@ Projectile* Player::shoot() {
 		aShootingDown->currentFrame = 0; //"Rebobinar" animación
 		Projectile* projectile = new Projectile(x, y, game);
 		if (orientation == game->orientationUp) {
+			animation = aShootingUp;
 			projectile->vx = 0;
 			projectile->vy = -9;
-		}
-		if (orientation == game->orientationDown) {
+		} else if (orientation == game->orientationDown) {
+			animation = aShootingDown;
 			projectile->vx = 0;
 			projectile->vy = 9;
-		}
-		if (orientation == game->orientationLeft) {
+		} else if (orientation == game->orientationLeft) {
+			animation = aShootingLeft;
 			projectile->vy = 0;
 			projectile->vx = -9; // Invertir
-		}
-		if (orientation == game->orientationRight) {
+		} else if (orientation == game->orientationRight) {
+			animation = aShootingRight;
 			projectile->vy = 0;
 			projectile->vx = 9; // Invertir
 		}
