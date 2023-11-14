@@ -19,6 +19,7 @@ void GameLayer::init() {
 	hearts.clear();
 	bombs.clear();
 	keys.clear();
+	corazones.clear();
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
@@ -217,6 +218,31 @@ void GameLayer::update() {
 		}
 	}
 
+	list<Tile*> deleteCorazones;
+	//Colisiones jugador-corazon
+	for (auto const& corazon : corazones) {
+		if (player->isOverlap(corazon) && hearts.size() < 5) {
+			bool pInList = std::find(deleteCorazones.begin(),
+				deleteCorazones.end(),
+				corazon) != deleteCorazones.end();
+
+			if (!pInList) {
+				deleteCorazones.push_back(corazon);
+				for (auto const& b : deleteCorazones) {
+					corazones.remove(b);
+					space->removeDynamicActor(b);
+					delete b;
+					player->lifes++;
+					actualizarVidas();
+				}
+				deleteCorazones.clear();
+
+			}
+
+			return;
+		}
+	}
+
 	list<Tile*> deleteKeys;
 	//Colisiones jugador-llave
 	for (auto const& key : keys) {
@@ -242,7 +268,7 @@ void GameLayer::update() {
 		}
 	}
 	list<Tile*> deletePills;
-	//Colisiones jugador-bomba
+	//Colisiones jugador-pildora
 	for (auto const& pill : pills) {
 		if (player->isOverlap(pill)) {
 			bool pInList = std::find(deletePills.begin(),
@@ -496,6 +522,9 @@ void GameLayer::draw() {
 	for (auto const& tile : pills) {
 		tile->draw(scrollX, scrollY);
 	}
+	for (auto const& tile : corazones) {
+		tile->draw(scrollX, scrollY);
+	}
 	for (auto const& tile : keys) {
 		tile->draw(scrollX, scrollY);
 	}
@@ -674,6 +703,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		tile->y = tile->y - tile->height / 2;
 		pills.push_back(tile);
 		//tiles.push_back(tile);
+		space->addDynamicActor(tile);
+		break;
+	}
+	case 'C': {
+		Tile* tile = new Tile("res/recolectables/corazon.png", x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		tile->y = tile->y - tile->height / 2;
+		corazones.push_back(tile);
 		space->addDynamicActor(tile);
 		break;
 	}

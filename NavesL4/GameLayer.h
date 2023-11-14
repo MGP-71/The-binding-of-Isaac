@@ -90,4 +90,7 @@ public:
 	int nPills;
 	list<Tile*> pills;
 	Actor* pillsActor;
+
+	list<Tile*> corazones;
+
 };
