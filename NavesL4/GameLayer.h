@@ -35,6 +35,7 @@ public:
 	void actualizarVidas();
 	void actualizarBombas();
 	void actualizarLlaves();
+	void actualizarPills();
 
 
 	void loadMap(string name);
@@ -85,4 +86,8 @@ public:
 	list<Tile*> keys;
 	Actor* keysActor;
 	Text* textKeys;
+
+	int nPills;
+	list<Tile*> pills;
+	Actor* pillsActor;
 };

@@ -40,6 +40,7 @@ void GameLayer::init() {
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
+	actualizarPills();
 }
 
 void GameLayer::processControls() {
@@ -232,7 +233,30 @@ void GameLayer::update() {
 			return;
 		}
 	}
-	
+	list<Tile*> deletePills;
+	//Colisiones jugador-bomba
+	for (auto const& pill : pills) {
+		if (player->isOverlap(pill)) {
+			bool pInList = std::find(deletePills.begin(),
+				deletePills.end(),
+				pill) != deletePills.end();
+
+			if (!pInList) {
+				deletePills.push_back(pill);
+				nPills++;
+				for (auto const& b : deletePills) {
+					pills.remove(b);
+					space->removeDynamicActor(b);
+					delete b;
+					actualizarPills();
+				}
+				deletePills.clear();
+
+			}
+
+			return;
+		}
+	}
 	
 
 	//Colisiones Puerta-Personaje
@@ -461,6 +485,9 @@ void GameLayer::draw() {
 	for (auto const& tile : bombs) {
 		tile->draw(scrollX, scrollY);
 	}
+	for (auto const& tile : pills) {
+		tile->draw(scrollX, scrollY);
+	}
 	for (auto const& tile : keys) {
 		tile->draw(scrollX, scrollY);
 	}
@@ -482,6 +509,7 @@ void GameLayer::draw() {
 	}
 		bombsActor->draw();
 		keysActor->draw();
+		pillsActor->draw();
 	
 	//creo que no hace falta porque ya se pinta en enemies
 	/*for (auto const& enemy : horfEnemies) {
@@ -636,7 +664,8 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		Tile* tile = new Tile("res/pills/pill.png", x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
-		tiles.push_back(tile);
+		pills.push_back(tile);
+		//tiles.push_back(tile);
 		space->addDynamicActor(tile);
 		break;
 	}
@@ -740,6 +769,11 @@ void GameLayer::actualizarBombas() {
 void GameLayer::actualizarLlaves() {
 	keysActor = new Actor("res/recolectables/key_icono.png", WIDTH * 0.05, HEIGHT * 0.45, 16, 18, game);
 	textKeys->content = to_string(nKeys);
+}
 
-
+void GameLayer::actualizarPills() {
+	if(nPills == 1)
+		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 16, 18, game);
+	else
+		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 0, 0, game); //esto es una chapuza que funciona
 }
