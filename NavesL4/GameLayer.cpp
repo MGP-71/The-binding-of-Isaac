@@ -652,7 +652,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '#': {
-		Tile* tile = new Tile("res/fondos/piedra.png", x, y, game);
+		Tile* tile = new Tile("res/fondos/rock.png", x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
