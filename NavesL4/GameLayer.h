@@ -34,6 +34,7 @@ public:
 	void calculateScroll();
 	void actualizarVidas();
 	void actualizarBombas();
+	void actualizarLlaves();
 
 
 	void loadMap(string name);
@@ -79,4 +80,9 @@ public:
 	list<Tile*> bombs;
 	Actor* bombsActor;
 	Text* textBombs;
+
+	int nKeys;
+	list<Tile*> keys;
+	Actor* keysActor;
+	Text* textKeys;
 };
