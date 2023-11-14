@@ -43,11 +43,13 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
-
-	if (x + vx < 10 || x + vx > 840)
+	/*
+	* if (x + vx < 10 || x + vx > 840)
 		moveX(0);
 	if (y + vy < 20 || y + vy > 690)
 		moveY(0);
+	*/
+	
 
 	bool endAnimation = animation->update();
 

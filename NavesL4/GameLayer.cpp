@@ -37,7 +37,7 @@ void GameLayer::init() {
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
-	loadMap("res/fondos/catacombs.txt");
+	loadMap("res/fondos/catacombs_1.txt");
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -64,11 +64,17 @@ void GameLayer::processControls() {
 
 	// Eje X
 	if (controlMoveX > 0) {
-		if (player->x < 840)
+		/*
+		* if (player->x < 840)
+		*/
+		
 			player->moveX(1);
 	}
 	else if (controlMoveX < 0) {
-		if (player->x > 20)
+		/*
+		* if (player->x > 20)
+		*/
+		
 			player->moveX(-1);
 	}
 	else {
@@ -77,12 +83,18 @@ void GameLayer::processControls() {
 
 	// Eje Y
 	if (controlMoveY > 0) {
-		if (player->y < 690)
+		/*
+		* if (player->y < 690)
+		*/
+		
 			player->moveY(1);
 
 	}
 	else if (controlMoveY < 0) {
-		if (player->y > 20)
+		/*
+		* if (player->y > 20)
+		*/
+		
 			player->moveY(-1);
 	}
 	else {
@@ -516,6 +528,9 @@ void GameLayer::draw() {
 	for (auto const& tile : tiles) {
 		tile->draw(scrollX, scrollY);
 	}
+	for (auto const& tile : doors) {
+		tile->draw(scrollX, scrollY);
+	}
 	for (auto const& tile : bombs) {
 		tile->draw(scrollX, scrollY);
 	}
@@ -681,7 +696,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '#': {
-		Tile* tile = new Tile("res/fondos/rock.png", x, y, game);
+		Tile* tile = new Tile("res/fondos/rock.png", x, y, 24, 23, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
@@ -689,7 +704,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '*': {
-		Tile* tile = new Tile("res/fondos/fuego.png", x, y, game);
+		Tile* tile = new Tile("res/fondos/fuego.png", x, y, 51, 51, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
@@ -698,7 +713,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '/': {
-		Tile* tile = new Tile("res/pills/pill.png", x, y, game);
+		Tile* tile = new Tile("res/pills/pill.png", x, y, 25, 25, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		pills.push_back(tile);
@@ -707,7 +722,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'C': {
-		Tile* tile = new Tile("res/recolectables/corazon.png", x, y, game);
+		Tile* tile = new Tile("res/recolectables/corazon.png", x, y, 44, 36, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		corazones.push_back(tile);
@@ -715,7 +730,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'B': {
-		Tile* tile = new Tile("res/recolectables/bomb.png", x, y, game);
+		Tile* tile = new Tile("res/recolectables/bomb.png", x, y, 28, 38, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		bombs.push_back(tile);
@@ -724,7 +739,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'K': {
-		Tile* tile = new Tile("res/recolectables/key.png", x, y, game);
+		Tile* tile = new Tile("res/recolectables/key.png", x, y, 28, 31, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		keys.push_back(tile);
@@ -758,37 +773,37 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'P': {
-		Tile* door = new Tile("res/puerta_up_cerrada.png", x, y, game);
+		Tile* door = new Tile("res/puerta_up_cerrada.png", x, y, 49, 33, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
-		tiles.push_back(door);
+		//tiles.push_back(door);
 		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
 	case 'L': {
-		Tile* door = new Tile("res/puerta_izquierda_cerrada.png", x, y, game);
+		Tile* door = new Tile("res/puerta_izquierda_cerrada.png", x, y, 33, 49, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
-		tiles.push_back(door);
+		//tiles.push_back(door);
 		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
 	case 'R': {
-		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x, y, game);
+		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x, y, 33, 49, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
-		tiles.push_back(door);
+		//tiles.push_back(door);
 		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
 	}
 	case 'D': {
-		Tile* door = new Tile("res/puerta_abajo_cerrada.png", x, y, game);
+		Tile* door = new Tile("res/puerta_abajo_cerrada.png", x, y, 49, 33, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
-		tiles.push_back(door);
+		//tiles.push_back(door);
 		doors.push_back(door);
 		space->addStaticActor(door);
 		break;
