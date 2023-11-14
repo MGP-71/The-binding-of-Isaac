@@ -521,7 +521,7 @@ void GameLayer::calculateScroll() {
 }
 
 void GameLayer::draw() {
-	calculateScroll();
+	//calculateScroll();
 	background->draw();
 	textBombs->draw();
 	textKeys->draw();
