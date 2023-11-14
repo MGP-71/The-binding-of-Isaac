@@ -155,6 +155,14 @@ void GameLayer::update() {
 				door->filename = "res/puerta_abajo_abierta.png";
 				door->texture = game->getTexture(door->filename);
 			}
+			
+
+		}
+
+		//para que se pueda pasar por las puertas al estar abiertas
+		for (auto const& door : doors) {
+			space->removeStaticActor(door);
+			space->addDynamicActor(door);
 		}
 	}
 	// Colisiones
