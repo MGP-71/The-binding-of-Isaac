@@ -7,9 +7,9 @@ class Actor
 public:
 	Actor(string filename, float x, float y, int width, int height, Game* game);
 	~Actor();
-	virtual void draw(float scrollX = 0, float scrollY = 0);
+	virtual void draw();
 	bool isOverlap(Actor* actor);
-	bool isInRender(float scrollX = 0, float scrollY = 0);
+	bool isInRender();
 	bool containsPoint(int pointX, int pointY); // contiene punto
 	SDL_Texture* texture;
 	int x;

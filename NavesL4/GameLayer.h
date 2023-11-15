@@ -32,6 +32,7 @@ public:
 	void keysToControls(SDL_Event event);
 
 	void calculateScroll();
+	void deleteMap();
 	void actualizarVidas();
 	void actualizarBombas();
 	void actualizarLlaves();

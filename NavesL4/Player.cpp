@@ -43,13 +43,16 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
-	/*
-	* if (x + vx < 10 || x + vx > 840)
+	/*cout << x << endl;
+	cout << y << endl;*/
+
+	if (x + vx < 125 || x + vx > 760) {
 		moveX(0);
-	if (y + vy < 20 || y + vy > 690)
-		moveY(0);
-	*/
+	}
 	
+	if (y + vy < 70 || y + vy > 440) {
+		moveY(0);
+	}
 
 	bool endAnimation = animation->update();
 
@@ -139,13 +142,13 @@ void Player::update() {
 	}
 }
 
-void Player::draw(float scrollX, float scrollY) {
+void Player::draw() {
 	if (invulnerableTime == 0) {
-		animation->draw(x - scrollX, y - scrollY);
+		animation->draw(x, y);
 	}
 	else {
 		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
-			animation->draw(x - scrollX, y - scrollY);
+			animation->draw(x, y);
 		}
 	}
 }

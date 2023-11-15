@@ -25,7 +25,7 @@ void GameLayer::init() {
 	//audioBackground->play();
 
 
-	background = new Background("res/fondos/catacombs.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
+	background = new Background("res/fondos/habitacion.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
 	textBombs = new Text("hola", WIDTH * 0.075, HEIGHT * 0.4, game);
 	textBombs->content = to_string(0);
 	textKeys = new Text("hola", WIDTH * 0.075, HEIGHT * 0.45, game);
@@ -64,17 +64,11 @@ void GameLayer::processControls() {
 
 	// Eje X
 	if (controlMoveX > 0) {
-		/*
-		* if (player->x < 840)
-		*/
-		
+		if (player->x < 760)
 			player->moveX(1);
 	}
 	else if (controlMoveX < 0) {
-		/*
-		* if (player->x > 20)
-		*/
-		
+		if (player->x > 125)
 			player->moveX(-1);
 	}
 	else {
@@ -83,25 +77,17 @@ void GameLayer::processControls() {
 
 	// Eje Y
 	if (controlMoveY > 0) {
-		/*
-		* if (player->y < 690)
-		*/
-		
+		if (player->y < 440)
 			player->moveY(1);
 
 	}
 	else if (controlMoveY < 0) {
-		/*
-		* if (player->y > 20)
-		*/
-		
+		if (player->y > 70)
 			player->moveY(-1);
 	}
 	else {
 		player->moveY(0);
 	}
-
-
 
 }
 
@@ -172,10 +158,10 @@ void GameLayer::update() {
 
 		}
 
-		//para que se pueda pasar por las puertas al estar abiertas
+		////para que se pueda pasar por las puertas al estar abiertas
 		for (auto const& door : doors) {
-			space->removeStaticActor(door);
-			space->addDynamicActor(door);
+			space->removeDynamicActor(door);
+			space->addStaticActor(door);
 		}
 	}
 	// Colisiones
@@ -311,8 +297,8 @@ void GameLayer::update() {
 		if (tile->isOverlap(player)) {
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
-				cout << "pasa" << endl;
-			
+				deleteMap();
+				loadMap("res/fondos/catacombs_2.txt");
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
@@ -341,7 +327,8 @@ void GameLayer::update() {
 	list<Projectile*> deleteProjectiles;
 
 	for (auto const& projectile : projectiles) {
-		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
+		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0) || 
+			(projectile->x < 125 || projectile->x > 760 || projectile->y < 70 || projectile->y > 440)) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
@@ -448,7 +435,8 @@ void GameLayer::update() {
 	}
 
 	for (auto const& projectile : projectilesEnemy) {
-		if (projectile->isInRender(scrollX, scrollY) == false || (projectile->vx == 0 && projectile->vy == 0)) {
+		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0) ||
+			((projectile->x < 125 || projectile->x > 760 || projectile->y < 70 || projectile->y > 440))) {
 
 			bool pInList = std::find(deleteEnemyProjectiles.begin(),
 				deleteEnemyProjectiles.end(),
@@ -489,8 +477,8 @@ void GameLayer::update() {
 		
 	cout << "update GameLayer" << endl;
 }
-
-void GameLayer::calculateScroll() {
+/*
+* void GameLayer::calculateScroll() {
 	// limite izquierda
 	if (player->x > WIDTH * 0.4) {
 		if (player->x - scrollX < WIDTH * 0.4) {
@@ -519,42 +507,44 @@ void GameLayer::calculateScroll() {
 		}
 	}
 }
+*/
+
 
 void GameLayer::draw() {
-	calculateScroll();
+	//calculateScroll();
 	background->draw();
 	textBombs->draw();
 	textKeys->draw();
 	for (auto const& tile : tiles) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 	for (auto const& tile : doors) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 	for (auto const& tile : bombs) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 	for (auto const& tile : pills) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 	for (auto const& tile : corazones) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 	for (auto const& tile : keys) {
-		tile->draw(scrollX, scrollY);
+		tile->draw();
 	}
 
 
 	for (auto const& projectile : projectiles) {
-		projectile->draw(scrollX, scrollY);
+		projectile->draw();
 	}
 	for (auto const& projectile : projectilesEnemy) {
-		projectile->draw(scrollX, scrollY);
+		projectile->draw();
 	}
 
-	player->draw(scrollX, scrollY);
+	player->draw();
 	for (auto const& enemy : enemies) {
-		enemy->draw(scrollX, scrollY);
+		enemy->draw();
 	}
 	for (auto const& heart : hearts) {
 		heart->draw();
@@ -678,7 +668,6 @@ void GameLayer::loadMap(string name) {
 			}
 
 			//cout << character << endl;
-			mapHeight = i * 33;
 		}
 	}
 	streamFile.close();
@@ -696,7 +685,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '#': {
-		Tile* tile = new Tile("res/fondos/rock.png", x, y, 24, 23, game);
+		Tile* tile = new Tile("res/fondos/rock.png", x, y, 36, 34, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		tiles.push_back(tile);
@@ -773,12 +762,12 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'P': {
-		Tile* door = new Tile("res/puerta_up_cerrada.png", x, y, 49, 33, game);
+		Tile* door = new Tile("res/puerta_up_cerrada.png", x-15, y+8, 49, 33, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
 		doors.push_back(door);
-		space->addStaticActor(door);
+		space->addDynamicActor(door);
 		break;
 	}
 	case 'L': {
@@ -787,25 +776,25 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
 		doors.push_back(door);
-		space->addStaticActor(door);
+		space->addDynamicActor(door);
 		break;
 	}
 	case 'R': {
-		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x, y, 33, 49, game);
+		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x+20, y, 33, 49, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
 		doors.push_back(door);
-		space->addStaticActor(door);
+		space->addDynamicActor(door);
 		break;
 	}
 	case 'D': {
-		Tile* door = new Tile("res/puerta_abajo_cerrada.png", x, y, 49, 33, game);
+		Tile* door = new Tile("res/puerta_abajo_cerrada.png", x-12, y+12, 49, 33, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
 		doors.push_back(door);
-		space->addStaticActor(door);
+		space->addDynamicActor(door);
 		break;
 	}
 
@@ -836,4 +825,11 @@ void GameLayer::actualizarPills() {
 		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 16, 18, game);
 	else
 		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 0, 0, game); //esto es una chapuza que funciona
+}
+
+void GameLayer::deleteMap() {
+	for (auto const& tile : tiles) {
+		space->removeStaticActor(tile);
+	}
+	tiles.clear();
 }
