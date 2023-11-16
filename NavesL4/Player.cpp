@@ -39,6 +39,8 @@ Player::Player(float x, float y, Game* game)
 
 	animation = aIdleDown;
 
+	playerSpeed = 6.0;
+
 
 }
 

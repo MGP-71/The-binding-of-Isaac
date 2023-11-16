@@ -2,6 +2,9 @@
 #include "Horf.h"
 #include "Fatty.h"
 #include "Monoojo.h"
+#include <iostream>
+#include <chrono>
+#include <thread>
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) {
@@ -20,6 +23,11 @@ void GameLayer::init() {
 	bombs.clear();
 	keys.clear();
 	corazones.clear();
+	objetos.clear();
+
+	habitacionVertical = 0;
+	habitacionHorizontal = 0;
+	speed = 6;
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
@@ -30,6 +38,9 @@ void GameLayer::init() {
 	textBombs->content = to_string(0);
 	textKeys = new Text("hola", WIDTH * 0.075, HEIGHT * 0.45, game);
 	textKeys->content = to_string(0);
+	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
+
+
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -37,7 +48,7 @@ void GameLayer::init() {
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
-	loadMap("res/fondos/catacombs_1.txt");
+	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -92,9 +103,13 @@ void GameLayer::processControls() {
 }
 
 void GameLayer::update() {
+
 	space->update();
 	background->update();
 	player->update();
+	player->playerSpeed = speed;
+	cout << speed << endl;
+	
 
 	for (auto const& enemy : enemies) {
 		enemy->update(player);
@@ -187,6 +202,32 @@ void GameLayer::update() {
 				init();
 				return;
 			}
+			return;
+		}
+	}
+
+
+	list<Tile*> deleteObjetos;
+	//Colisiones jugador-bomba
+	for (auto const& obj : objetos) {
+		if (player->isOverlap(obj)) {
+			bool pInList = std::find(deleteObjetos.begin(),
+				deleteObjetos.end(),
+				obj) != deleteObjetos.end();
+
+			if (!pInList) {
+				objetoConseguido(obj);
+
+				deleteObjetos.push_back(obj);
+				for (auto const& b : deleteObjetos) {
+					objetos.remove(b);
+					space->removeDynamicActor(b);
+					delete b;
+				}
+				deleteObjetos.clear();
+
+			}
+
 			return;
 		}
 	}
@@ -290,33 +331,66 @@ void GameLayer::update() {
 		}
 	}
 	
-
+	bool isOverlap = false;
+	string nameFile;
 	//Colisiones Puerta-Personaje
 	for (auto const& tile : doors) {
 		//si el personaje overlapea la puerta
 		if (tile->isOverlap(player)) {
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
-				deleteMap();
-				loadMap("res/fondos/catacombs_2.txt");
+				isOverlap = true;
+				habitacionVertical++;
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
+			}
+
+			//por ahora solo hay habitaciones amarillas arriba de las habitaciones
+			if (tile->filename.compare("res/puerta_amarilla_cerrada.png") == 0 && player->orientation == game->orientationUp && nKeys>0) {
+				nKeys--;
+				actualizarLlaves();
+				isOverlap = true;
+				habitacionVertical++;
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
+			}
+			if (tile->filename.compare("res/puerta_amarilla_abierta_down.png") == 0 && player->orientation == game->orientationDown ) {
+				isOverlap = true;
+				habitacionVertical--;
+				//al salir de la habitación amarilla se quita el texto
+				objConseguido->content = " ";
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
-				cout << "pasa" << endl;
-
+				isOverlap = true;
+				habitacionVertical--;
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
 			}
 
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_derecha_abierta.png") == 0 && player->orientation == game->orientationRight) {
-				cout << "pasa" << endl;
-
+				cout << "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEee" << endl;
+				isOverlap = true;
+				habitacionHorizontal++;
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_izquierda_abierta.png") == 0 && player->orientation == game->orientationLeft) {
-				cout << "pasa" << endl;
-
+				isOverlap = true;
+				habitacionHorizontal--;
+				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				break;
 			}
 		}
+	}
+	if (isOverlap) {
+		deleteMap();
+		isOverlap = false;
+		loadMap(nameFile);
 	}
 
 	// Colisiones , Enemy - Projectile
@@ -515,6 +589,7 @@ void GameLayer::draw() {
 	background->draw();
 	textBombs->draw();
 	textKeys->draw();
+	objConseguido->draw();
 	for (auto const& tile : tiles) {
 		tile->draw();
 	}
@@ -534,7 +609,9 @@ void GameLayer::draw() {
 		tile->draw();
 	}
 
-
+	for (auto const& tile : objetos) {
+		tile->draw();
+	}
 	for (auto const& projectile : projectiles) {
 		projectile->draw();
 	}
@@ -655,6 +732,7 @@ void GameLayer::loadMap(string name) {
 	}
 	else {
 		// Por línea
+
 		for (int i = 0; getline(streamFile, line); i++) {
 			istringstream streamLine(line);
 			mapWidth = line.length() * 40; // Ancho del mapa en pixels
@@ -682,6 +760,8 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		// modificación para empezar a contar desde el suelo.
 		player->y = player->y - player->height / 2;
 		space->addDynamicActor(player);
+		player->playerSpeed = speed;
+
 		break;
 	}
 	case '#': {
@@ -770,6 +850,24 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		space->addDynamicActor(door);
 		break;
 	}
+	case 'A': {
+		Tile* door = new Tile("res/puerta_amarilla_cerrada.png", x - 15, y + 8, 49, 38, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		//tiles.push_back(door);
+		doors.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
+	case 'X': {
+		Tile* door = new Tile("res/puerta_amarilla_abierta_down.png", x - 15, y + 8, 49, 38, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		//tiles.push_back(door);
+		doors.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
 	case 'L': {
 		Tile* door = new Tile("res/puerta_izquierda_cerrada.png", x, y, 33, 49, game);
 		// modificación para empezar a contar desde el suelo.
@@ -794,6 +892,24 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
 		doors.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
+
+	case 'T': {
+		Tile* door = new Tile("res/trampilla.png", x - 12, y + 12, 64, 64, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		tiles.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
+
+	case '2': {
+		Tile* door = new Tile("res/objetos/crickets_head.png", x - 12, y + 12, 34,30, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		objetos.push_back(door);
 		space->addDynamicActor(door);
 		break;
 	}
@@ -827,9 +943,29 @@ void GameLayer::actualizarPills() {
 		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 0, 0, game); //esto es una chapuza que funciona
 }
 
+void GameLayer::objetoConseguido(Tile* t) {
+
+	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
+		objConseguido->content = "+ velocidad";
+		player->playerSpeed =player->playerSpeed+6;
+		speed = player->playerSpeed;
+	}
+
+}
+
 void GameLayer::deleteMap() {
 	for (auto const& tile : tiles) {
 		space->removeStaticActor(tile);
 	}
 	tiles.clear();
+	for (auto const& tile : doors) {
+		space->removeStaticActor(tile);
+	}
+	doors.clear();
+	fuegos.clear();
+	bombs.clear();
+	keys.clear();
+	corazones.clear();
+	objetos.clear();
+
 }

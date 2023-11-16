@@ -40,6 +40,9 @@ public:
 
 
 	void loadMap(string name);
+
+	int habitacionVertical;
+	int habitacionHorizontal;
 	void loadMapObject(char character, float x, float y);
 
 	int mapWidth;
@@ -93,5 +96,11 @@ public:
 	Actor* pillsActor;
 
 	list<Tile*> corazones;
+
+	list<Tile*> objetos;
+	void objetoConseguido(Tile* t);
+	Text* objConseguido;
+
+	float speed;
 
 };
