@@ -45,14 +45,18 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
-	/*cout << x << endl;
-	cout << y << endl;*/
+	cout << x << endl;
+	cout << y << endl;
 
-	if (x + vx < 125 || x + vx > 760) {
+	if (x + vx < 125) {
+		moveX(0);
+	} else if (x + vx > 760) {
 		moveX(0);
 	}
 	
-	if (y + vy < 70 || y + vy > 440) {
+	if (y + vy < 70) {
+		moveY(0);
+	} else if ( y + vy > 440) {
 		moveY(0);
 	}
 

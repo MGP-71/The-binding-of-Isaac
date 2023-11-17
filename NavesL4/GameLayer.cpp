@@ -108,7 +108,7 @@ void GameLayer::update() {
 	background->update();
 	player->update();
 	player->playerSpeed = speed;
-	cout << speed << endl;
+	//cout << speed << endl;
 	
 
 	for (auto const& enemy : enemies) {
@@ -152,7 +152,7 @@ void GameLayer::update() {
 	}
 	if (allDead) {
 		puertasAbiertas = true;
-		for (auto const& door : space->staticActors) {
+		for (auto const& door : space->dynamicActors) {
 			if (door->filename.compare("res/puerta_up_cerrada.png") == 0) {
 				door->filename = "res/puerta_up_abierta.png";
 				door->texture = game->getTexture(door->filename);
@@ -174,10 +174,13 @@ void GameLayer::update() {
 		}
 
 		////para que se pueda pasar por las puertas al estar abiertas
-		for (auto const& door : doors) {
+
+		/*for (auto const& door : doors) {
 			space->removeDynamicActor(door);
-			space->addStaticActor(door);
 		}
+		for (auto const& door : doors) {
+			space->addStaticActor(door);
+		}*/
 	}
 	// Colisiones
 	for (auto const& enemy : enemies) {
@@ -334,7 +337,7 @@ void GameLayer::update() {
 	bool isOverlap = false;
 	string nameFile;
 	//Colisiones Puerta-Personaje
-	for (auto const& tile : doors) {
+	for (auto const& tile : space->dynamicActors) {
 		//si el personaje overlapea la puerta
 		if (tile->isOverlap(player)) {
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
@@ -346,7 +349,7 @@ void GameLayer::update() {
 			}
 
 			//por ahora solo hay habitaciones amarillas arriba de las habitaciones
-			if (tile->filename.compare("res/puerta_amarilla_cerrada.png") == 0 && player->orientation == game->orientationUp && nKeys>0) {
+			else if (tile->filename.compare("res/puerta_amarilla_cerrada.png") == 0 && player->orientation == game->orientationUp && nKeys>0) {
 				nKeys--;
 				actualizarLlaves();
 				isOverlap = true;
@@ -354,7 +357,7 @@ void GameLayer::update() {
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
 				break;
 			}
-			if (tile->filename.compare("res/puerta_amarilla_abierta_down.png") == 0 && player->orientation == game->orientationDown ) {
+			else if (tile->filename.compare("res/puerta_amarilla_abierta_down.png") == 0 && player->orientation == game->orientationDown ) {
 				isOverlap = true;
 				habitacionVertical--;
 				//al salir de la habitación amarilla se quita el texto
@@ -363,23 +366,21 @@ void GameLayer::update() {
 				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
-			if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
+			else if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
 				isOverlap = true;
 				habitacionVertical--;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
 				break;
 			}
-
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
-			if (tile->filename.compare("res/puerta_derecha_abierta.png") == 0 && player->orientation == game->orientationRight) {
-				cout << "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEee" << endl;
+			else if (tile->filename.compare("res/puerta_derecha_abierta.png") == 0 && player->orientation == game->orientationRight) {
 				isOverlap = true;
 				habitacionHorizontal++;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
 				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
-			if (tile->filename.compare("res/puerta_izquierda_abierta.png") == 0 && player->orientation == game->orientationLeft) {
+			else if (tile->filename.compare("res/puerta_izquierda_abierta.png") == 0 && player->orientation == game->orientationLeft) {
 				isOverlap = true;
 				habitacionHorizontal--;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
@@ -391,6 +392,7 @@ void GameLayer::update() {
 		deleteMap();
 		isOverlap = false;
 		loadMap(nameFile);
+		return;
 	}
 
 	// Colisiones , Enemy - Projectile
@@ -649,15 +651,19 @@ void GameLayer::keysToControls(SDL_Event event) {
 			game->scale();
 			break;
 		case SDLK_d: // derecha
+			player->orientation = game->orientationRight;
 			controlMoveX = 1;
 			break;
 		case SDLK_a: // izquierda
+			player->orientation = game->orientationLeft;
 			controlMoveX = -1;
 			break;
 		case SDLK_w: // arriba
+			player->orientation = game->orientationUp;
 			controlMoveY = -1;
 			break;
 		case SDLK_s: // abajo
+			player->orientation = game->orientationDown;
 			controlMoveY = 1;
 			break;
 		case SDLK_DOWN: // dispara
@@ -878,7 +884,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'R': {
-		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x+20, y, 33, 49, game);
+		Tile* door = new Tile("res/puerta_derecha_cerrada.png", x+18, y, 33, 49, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
@@ -959,13 +965,15 @@ void GameLayer::deleteMap() {
 	}
 	tiles.clear();
 	for (auto const& tile : doors) {
-		space->removeStaticActor(tile);
+		space->removeDynamicActor(tile);
 	}
+	projectiles.clear();
+	projectilesEnemy.clear();
 	doors.clear();
 	fuegos.clear();
 	bombs.clear();
 	keys.clear();
 	corazones.clear();
 	objetos.clear();
-
+	enemies.clear();
 }

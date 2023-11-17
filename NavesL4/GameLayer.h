@@ -31,7 +31,7 @@ public:
 	void draw() override;
 	void keysToControls(SDL_Event event);
 
-	void calculateScroll();
+	//void calculateScroll();
 	void deleteMap();
 	void actualizarVidas();
 	void actualizarBombas();
@@ -94,9 +94,7 @@ public:
 	int nPills;
 	list<Tile*> pills;
 	Actor* pillsActor;
-
 	list<Tile*> corazones;
-
 	list<Tile*> objetos;
 	void objetoConseguido(Tile* t);
 	Text* objConseguido;
