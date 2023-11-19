@@ -8,13 +8,24 @@ MenuLayer::MenuLayer(Game* game)
 
 void MenuLayer::init() {
 	// Fondo normal, sin velocidad
-	background = new Background("res/menu.jpg", WIDTH * 0.5, HEIGHT * 0.5, game);
-	button = new Actor("res/boton_jugar.png", WIDTH * 0.5, HEIGHT * 0.7, 232, 72, game);
+	background = new Background("res/menu_background.png", WIDTH * 0.5, HEIGHT * 0.5, game);
+	button = new Actor("res/boton_isaac.png", WIDTH * 0.48, HEIGHT * 0.2, 256, 66, game);
+	button_eden = new Actor("res/boton_eden.png", WIDTH * 0.48, HEIGHT * 0.3, 208, 64, game);
+	button_cain = new Actor("res/boton_cain.png", WIDTH * 0.48, HEIGHT * 0.4, 204, 63, game);
+	button_eve = new Actor("res/boton_eve.png", WIDTH * 0.48, HEIGHT * 0.5, 158, 58, game);
+	button_judas = new Actor("res/boton_judas.png", WIDTH * 0.5, HEIGHT * 0.6, 258, 68, game);
+
+
+
 }
 
 void MenuLayer::draw() {
 	background->draw();
 	button->draw();
+	button_eden->draw();
+	button_cain->draw();
+	button_eve->draw();
+	button_judas->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza NO PUEDE FALTAR
 }
@@ -59,6 +70,7 @@ void MenuLayer::processControls() {
 	//procesar controles, solo tiene uno
 	if (controlContinue) {
 		// Cambia la capa
+		game->personaje = personaje;
 		game->layer = game->gameLayer;
 		controlContinue = false;
 	}
@@ -90,6 +102,19 @@ void MenuLayer::mouseToControls(SDL_Event event) {
 	// Cada vez que hacen click
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		if (button->containsPoint(motionX, motionY)) {
+			personaje = 0;
+			controlContinue = true;
+		}if (button_eden->containsPoint(motionX, motionY)) {
+			personaje = 1;
+			controlContinue = true;
+		}if (button_cain->containsPoint(motionX, motionY)) {
+			personaje = 2;
+			controlContinue = true;
+		}if (button_eve->containsPoint(motionX, motionY)) {
+			personaje = 3;
+			controlContinue = true;
+		}if (button_judas->containsPoint(motionX, motionY)) {
+			personaje = 4;
 			controlContinue = true;
 		}
 	}

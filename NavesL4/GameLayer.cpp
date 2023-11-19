@@ -6,7 +6,7 @@
 #include <chrono>
 #include <thread>
 
-GameLayer::GameLayer(Game* game)
+GameLayer::GameLayer(Game* game, int personaje)
 	: Layer(game) {
 	//llama al constructor del padre : Layer(renderer)
 	init();

@@ -17,4 +17,13 @@ public:
 	SDL_GameController* gamePad; // Mando
 	Background* background;
 	Actor* button;
+	Actor* button_eden;
+	Actor* button_cain;
+	Actor* button_eve;
+	Actor* button_judas;
+
+	int personaje;
+
+
+
 };

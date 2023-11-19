@@ -24,7 +24,7 @@
 class GameLayer : public Layer
 {
 public:
-	GameLayer(Game* game);
+	GameLayer(Game* game, int personaje);
 	void init() override;
 	void processControls() override;
 	void update() override;

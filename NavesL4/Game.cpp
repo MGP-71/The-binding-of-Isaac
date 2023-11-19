@@ -16,7 +16,7 @@ Game::Game() {
 
 
 	menuLayer = new MenuLayer(this);
-	gameLayer = new GameLayer(this);
+	gameLayer = new GameLayer(this, personaje);
 	layer = menuLayer;
 
 	// fuentes

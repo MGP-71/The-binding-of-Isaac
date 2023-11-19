@@ -38,6 +38,7 @@ public:
 	int const inputKeyboard = 1;
 	int const inputMouse = 2;
 	int const inputGamePad = 3;
+	int personaje;
 
 	int const stateMoving = 1;
 	int const stateDying = 3;
