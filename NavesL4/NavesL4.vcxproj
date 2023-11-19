@@ -167,6 +167,7 @@
     <ClCompile Include="Cain.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Eve.cpp" />
     <ClCompile Include="Fatty.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLayer.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Cain.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Eve.h" />
     <ClInclude Include="Fatty.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLayer.h" />

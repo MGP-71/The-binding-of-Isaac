@@ -1,5 +1,6 @@
 #include "GameLayer.h"
 #include "Cain.h"
+#include "Eve.h"
 
 #include "Horf.h"
 #include "Fatty.h"
@@ -768,6 +769,10 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	case '1': {
 		if (personaje == 2) {
 			player = new Cain(x, y, game);
+
+		}
+		else if (personaje == 3) {
+			player = new Eve(x, y, game);
 
 		}
 		else {
