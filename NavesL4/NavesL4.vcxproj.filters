@@ -90,6 +90,9 @@
     <ClCompile Include="Pad.cpp">
       <Filter>Archivos de origen\actores</Filter>
     </ClCompile>
+    <ClCompile Include="Cain.cpp">
+      <Filter>Archivos de origen\actores</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -150,6 +153,9 @@
       <Filter>Archivos de encabezado\layers</Filter>
     </ClInclude>
     <ClInclude Include="Pad.h">
+      <Filter>Archivos de encabezado\actores</Filter>
+    </ClInclude>
+    <ClInclude Include="Cain.h">
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
   </ItemGroup>

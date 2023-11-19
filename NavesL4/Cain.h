@@ -1,20 +1,21 @@
 #pragma once
 
-#include "Actor.h"
+#include "Player.h"
 #include "Projectile.h" 
 #include "Audio.h"
 #include "Animation.h" // incluir animacion 
 
-class Player : public Actor
+class Cain : public Player
 {
 public:
-	Player(float x, float y, Game* game);
-	virtual Projectile* shoot();
-	virtual void update();
-	void moveX(float axis);
-	void moveY(float axis);
+	Cain(float x, float y, Game* game);
+
+	Projectile* shoot() override;
+	void update() override;
+	//void moveX(float axis);
+	//void moveY(float axis);
 	void draw() override; // Va a sobrescribir
-	void loseLife();
+	//void loseLife();
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;

@@ -1,4 +1,5 @@
 #include "MenuLayer.h"
+#include "Gamelayer.h"
 
 MenuLayer::MenuLayer(Game* game)
 	: Layer(game) {
@@ -71,7 +72,7 @@ void MenuLayer::processControls() {
 	if (controlContinue) {
 		// Cambia la capa
 		game->personaje = personaje;
-		game->layer = game->gameLayer;
+		game->layer = new GameLayer(game, personaje);
 		controlContinue = false;
 	}
 }

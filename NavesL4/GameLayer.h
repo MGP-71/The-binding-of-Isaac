@@ -38,6 +38,7 @@ public:
 	void actualizarLlaves();
 	void actualizarPills();
 
+	int personaje;
 
 	void loadMap(string name);
 

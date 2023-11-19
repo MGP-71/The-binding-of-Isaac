@@ -1,4 +1,6 @@
 #include "GameLayer.h"
+#include "Cain.h"
+
 #include "Horf.h"
 #include "Fatty.h"
 #include "Monoojo.h"
@@ -48,6 +50,8 @@ void GameLayer::init() {
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
+	personaje = game->personaje;
+	cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << personaje << endl;
 	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
 	actualizarVidas();
 	actualizarBombas();
@@ -550,8 +554,8 @@ void GameLayer::update() {
 	deleteEnemyProjectiles.clear();
 
 	
-		
-	cout << "update GameLayer" << endl;
+		 
+	cout << "update GameLayer " << game->personaje << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -762,7 +766,16 @@ void GameLayer::loadMapObject(char character, float x, float y)
 {
 	switch (character) {
 	case '1': {
-		player = new Player(x, y, game);
+		if (personaje == 2) {
+			player = new Cain(x, y, game);
+
+		}
+		else {
+			cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << endl;
+			player = new Player(x, y, game);
+		}
+			
+
 		// modificación para empezar a contar desde el suelo.
 		player->y = player->y - player->height / 2;
 		space->addDynamicActor(player);

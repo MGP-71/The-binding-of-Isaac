@@ -1,40 +1,40 @@
-#include "Player.h"
+#include "Cain.h"
 
-Player::Player(float x, float y, Game* game)
-	: Actor("", x, y, 47, 46, game) {
+Cain::Cain( float x, float y, Game* game)
+	: Player(x, y, game) {
 	orientation = game->orientationDown;
 	state = game->stateMoving;
 
 	audioShoot = new Audio("res/efecto_disparo.wav", false);
-	
-	aShootingRight = new Animation("res/isaac_derecha_disparando.png",
+
+	aShootingRight = new Animation("res/cain_derecha_disparando.png",
 		width, height, 131, 41, 6, 4, false, game);
-	aShootingLeft = new Animation("res/isaac_left_disparando.png",
+	aShootingLeft = new Animation("res/cain_left_disparando.png",
 		width, height, 124, 40, 6, 4, false, game);
-	aShootingUp = new Animation("res/isaac_up_disparando.png",
+	aShootingUp = new Animation("res/cain_up_disparando.png",
 		width, height, 124, 40, 6, 4, false, game);
-	aShootingDown = new Animation("res/isaac_down_disparando.png",
+	aShootingDown = new Animation("res/cain_down_disparando.png",
 		width, height, 127, 40, 6, 4, false, game);
 
 
-	aIdleRight = new Animation("res/isaac_derecha.png", width, height,
+	aIdleRight = new Animation("res/cain_derecha.png", width, height,
 		132, 39, 20000, 4, true, game);
-	aIdleDown = new Animation("res/isaac.png", width, height,
+	aIdleDown = new Animation("res/cain.png", width, height,
 		138, 40, 20000, 4, true, game);
 
-	aIdleLeft = new Animation("res/isaac_left.png", width, height,
+	aIdleLeft = new Animation("res/cain_left.png", width, height,
 		126, 40, 20000, 4, true, game);
-	aIdleUp = new Animation("res/isaac_up.png", width, height,
+	aIdleUp = new Animation("res/cain_up.png", width, height,
 		122, 40, 20000, 4, true, game);
 
-	aRunningRight = new Animation("res/isaac_derecha_movimiento.png", width, height,
+	aRunningRight = new Animation("res/cain_derecha_movimiento.png", width, height,
 		131, 41, 6, 4, true, game);
-	aRunningDown = new Animation("res/isaac_down_movimiento.png", width, height,
+	aRunningDown = new Animation("res/cain_down_movimiento.png", width, height,
 		124, 41, 6, 4, true, game);
 
-	aRunningLeft = new Animation("res/isaac_left_movimiento.png", width, height,
+	aRunningLeft = new Animation("res/cain_left_movimiento.png", width, height,
 		124, 40, 6, 4, true, game);
-	aRunningUp = new Animation("res/isaac_up_movimiento.png", width, height,
+	aRunningUp = new Animation("res/cain_up_movimiento.png", width, height,
 		124, 40, 6, 4, true, game);
 
 	animation = aIdleDown;
@@ -42,22 +42,23 @@ Player::Player(float x, float y, Game* game)
 	playerSpeed = 6.0;
 
 
-
 }
 
-void Player::update() {
+void Cain::update() {
 	cout << x << endl;
 	cout << y << endl;
 
 	if (x + vx < 125) {
 		moveX(0);
-	} else if (x + vx > 760) {
+	}
+	else if (x + vx > 760) {
 		moveX(0);
 	}
-	
+
 	if (y + vy < 70) {
 		moveY(0);
-	} else if ( y + vy > 440) {
+	}
+	else if (y + vy > 440) {
 		moveY(0);
 	}
 
@@ -109,7 +110,7 @@ void Player::update() {
 		}
 	}
 	*/
-	
+
 	if (state == game->stateMoving) {
 		if (vx != 0) {
 			if (orientation == game->orientationRight) {
@@ -149,7 +150,8 @@ void Player::update() {
 	}
 }
 
-void Player::draw() {
+
+void Cain::draw() {
 	if (invulnerableTime == 0) {
 		animation->draw(x, y);
 	}
@@ -160,25 +162,7 @@ void Player::draw() {
 	}
 }
 
-void Player::moveX(float axis) {
-	vx = axis * playerSpeed;
-}
-
-void Player::moveY(float axis) {
-	vy = axis * playerSpeed;
-}
-
-void Player::loseLife() {
-	if (invulnerableTime <= 0) {
-		if (lifes > 0) {
-			lifes--;
-			invulnerableTime = 100;
-			// 100 actualizaciones 
-		}
-	}
-}
-
-Projectile* Player::shoot() {
+Projectile* Cain::shoot() {
 
 	if (shootTime == 0) {
 		state = game->stateShooting;
@@ -193,15 +177,18 @@ Projectile* Player::shoot() {
 			animation = aShootingUp;
 			projectile->vx = 0;
 			projectile->vy = -9;
-		} else if (orientation == game->orientationDown) {
+		}
+		else if (orientation == game->orientationDown) {
 			animation = aShootingDown;
 			projectile->vx = 0;
 			projectile->vy = 9;
-		} else if (orientation == game->orientationLeft) {
+		}
+		else if (orientation == game->orientationLeft) {
 			animation = aShootingLeft;
 			projectile->vy = 0;
 			projectile->vx = -9; // Invertir
-		} else if (orientation == game->orientationRight) {
+		}
+		else if (orientation == game->orientationRight) {
 			animation = aShootingRight;
 			projectile->vy = 0;
 			projectile->vx = 9; // Invertir
@@ -213,3 +200,4 @@ Projectile* Player::shoot() {
 		return NULL;
 	}
 }
+
