@@ -162,6 +162,24 @@ void Cain::draw() {
 	}
 }
 
+
+void Cain::moveX(float axis) {
+	vx = axis * playerSpeed;
+}
+
+void Cain::moveY(float axis) {
+	vy = axis * playerSpeed;
+}
+
+void Cain::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100;
+			// 100 actualizaciones 
+		}
+	}
+}
 Projectile* Cain::shoot() {
 
 	if (shootTime == 0) {

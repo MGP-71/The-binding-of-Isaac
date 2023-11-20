@@ -162,6 +162,23 @@ void Eve::draw() {
 	}
 }
 
+void Eve::moveX(float axis) {
+	vx = axis * playerSpeed;
+}
+
+void Eve::moveY(float axis) {
+	vy = axis * playerSpeed;
+}
+
+void Eve::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100;
+			// 100 actualizaciones 
+		}
+	}
+}
 Projectile* Eve::shoot() {
 
 	if (shootTime == 0) {

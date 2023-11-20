@@ -12,10 +12,10 @@ public:
 
 	Projectile* shoot() override;
 	void update() override;
-	//void moveX(float axis);
-	//void moveY(float axis);
+	void moveX(float axis);
+	void moveY(float axis);
 	void draw() override; // Va a sobrescribir
-	//void loseLife();
+	void loseLife();
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;

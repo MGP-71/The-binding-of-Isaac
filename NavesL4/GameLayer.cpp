@@ -53,7 +53,6 @@ void GameLayer::init() {
 	monoojoEnemies.clear();
 
 	personaje = game->personaje;
-	cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << personaje << endl;
 	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
 	actualizarVidas();
 	actualizarBombas();
@@ -114,8 +113,6 @@ void GameLayer::update() {
 	background->update();
 	player->update();
 	player->playerSpeed = speed;
-	//cout << speed << endl;
-	
 
 	for (auto const& enemy : enemies) {
 		enemy->update(player);
@@ -780,7 +777,6 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			player = new Eden(x, y, game);
 		}
 		else {
-			cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << endl;
 			player = new Player(x, y, game);
 		}
 			

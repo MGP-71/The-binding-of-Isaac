@@ -162,6 +162,25 @@ void Eden::draw() {
 	}
 }
 
+
+void Eden::moveX(float axis) {
+	vx = axis * playerSpeed;
+}
+
+void Eden::moveY(float axis) {
+	vy = axis * playerSpeed;
+}
+
+void Eden::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100;
+			// 100 actualizaciones 
+		}
+	}
+}
+
 Projectile* Eden::shoot() {
 
 	if (shootTime == 0) {
