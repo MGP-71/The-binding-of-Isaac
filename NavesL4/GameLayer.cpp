@@ -1,6 +1,7 @@
 #include "GameLayer.h"
 #include "Cain.h"
 #include "Eve.h"
+#include "Eden.h"
 
 #include "Horf.h"
 #include "Fatty.h"
@@ -774,6 +775,9 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		else if (personaje == 3) {
 			player = new Eve(x, y, game);
 
+		}
+		else if (personaje == 1) {
+			player = new Eden(x, y, game);
 		}
 		else {
 			cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << endl;
