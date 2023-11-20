@@ -107,4 +107,6 @@ public:
 	void objetoConseguido(Tile* t);
 	Text* objConseguido;
 	Character* playerCharacter;
+
+	int lastDoorCrossed = 0;
 };

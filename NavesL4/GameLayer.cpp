@@ -352,6 +352,7 @@ void GameLayer::update() {
 		if (tile->isOverlap(player)) {
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
+				lastDoorCrossed = 1;
 				isOverlap = true;
 				habitacionVertical++;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
@@ -360,6 +361,7 @@ void GameLayer::update() {
 
 			//por ahora solo hay habitaciones amarillas arriba de las habitaciones
 			else if (tile->filename.compare("res/puerta_amarilla_cerrada.png") == 0 && player->orientation == game->orientationUp && nKeys>0) {
+				lastDoorCrossed = 1;
 				nKeys--;
 				actualizarLlaves();
 				isOverlap = true;
@@ -368,6 +370,7 @@ void GameLayer::update() {
 				break;
 			}
 			else if (tile->filename.compare("res/puerta_amarilla_abierta_down.png") == 0 && player->orientation == game->orientationDown ) {
+				lastDoorCrossed = 2;
 				isOverlap = true;
 				habitacionVertical--;
 				//al salir de la habitación amarilla se quita el texto
@@ -377,6 +380,7 @@ void GameLayer::update() {
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			else if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
+				lastDoorCrossed = 2;
 				isOverlap = true;
 				habitacionVertical--;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
@@ -384,6 +388,7 @@ void GameLayer::update() {
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			else if (tile->filename.compare("res/puerta_derecha_abierta.png") == 0 && player->orientation == game->orientationRight) {
+				lastDoorCrossed = 3;
 				isOverlap = true;
 				habitacionHorizontal++;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
@@ -391,6 +396,7 @@ void GameLayer::update() {
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			else if (tile->filename.compare("res/puerta_izquierda_abierta.png") == 0 && player->orientation == game->orientationLeft) {
+				lastDoorCrossed = 4;
 				isOverlap = true;
 				habitacionHorizontal--;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
