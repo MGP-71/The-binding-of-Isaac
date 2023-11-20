@@ -11,8 +11,8 @@ Player::Player(float x, float y, Game* game, Character* cha) : Actor("", x, y, 4
 }
 
 void Player::update() {
-	cout << x << endl;
-	cout << y << endl;
+	/*cout << x << endl;
+	cout << y << endl;*/
 
 	if (x + vx < 125) {
 		moveX(0);

@@ -45,22 +45,7 @@ void GameLayer::init() {
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
-	if (personaje == 2) {
-		playerCharacter = new Cain(game);
-	}
-	else if (personaje == 3) {
-		playerCharacter = new Eve(game);
-		cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
-	}
-	else if (personaje == 1) {
-		playerCharacter = new Eden(game);
-	}
-	else if (personaje == 4) {
-		playerCharacter = new Judas(game);
-	}
-	else {
-		playerCharacter = new Isaac(game);
-	}
+	chooseCharater();
 	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
 	actualizarVidas();
 	actualizarBombas();
@@ -352,13 +337,13 @@ void GameLayer::update() {
 		if (tile->isOverlap(player)) {
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
+				cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
 				lastDoorCrossed = 1;
 				isOverlap = true;
 				habitacionVertical++;
 				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
 				break;
 			}
-
 			//por ahora solo hay habitaciones amarillas arriba de las habitaciones
 			else if (tile->filename.compare("res/puerta_amarilla_cerrada.png") == 0 && player->orientation == game->orientationUp && nKeys>0) {
 				lastDoorCrossed = 1;
@@ -408,6 +393,21 @@ void GameLayer::update() {
 		deleteMap();
 		isOverlap = false;
 		loadMap(nameFile);
+		if (lastDoorCrossed == 1) { //up
+			player->x = 440;
+			player->y = 430;
+		} else if (lastDoorCrossed == 2) { //down
+			player->x = 440;
+			player->y = 80;
+		}
+		else if (lastDoorCrossed == 3) { //right
+			player->x = 135;
+			player->y = 255;
+		}
+		else if (lastDoorCrossed == 4) { //left
+			player->x = 750;
+			player->y = 255;
+		}
 		return;
 	}
 
@@ -420,7 +420,7 @@ void GameLayer::update() {
 
 	for (auto const& projectile : projectiles) {
 		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0) || 
-			(projectile->x < 125 || projectile->x > 760 || projectile->y < 70 || projectile->y > 440)) {
+			(projectile->x < 120 || projectile->x > 770 || projectile->y < 60 || projectile->y > 430)) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
@@ -431,8 +431,6 @@ void GameLayer::update() {
 			}
 		}
 	}
-
-
 
 	for (auto const& enemy : enemies) {
 		for (auto const& projectile : projectiles) {
@@ -567,7 +565,7 @@ void GameLayer::update() {
 
 	
 		 
-	cout << "update GameLayer " << game->personaje << endl;
+	cout << "update GameLayer " << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -990,4 +988,22 @@ void GameLayer::deleteMap() {
 	corazones.clear();
 	objetos.clear();
 	enemies.clear();
+}
+
+void GameLayer::chooseCharater() {
+	if (personaje == 2) {
+		playerCharacter = new Cain(game);
+	}
+	else if (personaje == 3) {
+		playerCharacter = new Eve(game);
+	}
+	else if (personaje == 1) {
+		playerCharacter = new Eden(game);
+	}
+	else if (personaje == 4) {
+		playerCharacter = new Judas(game);
+	}
+	else {
+		playerCharacter = new Isaac(game);
+	}
 }

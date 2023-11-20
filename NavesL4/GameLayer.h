@@ -44,6 +44,7 @@ public:
 	void actualizarBombas();
 	void actualizarLlaves();
 	void actualizarPills();
+	void chooseCharater();
 
 	int personaje;
 
