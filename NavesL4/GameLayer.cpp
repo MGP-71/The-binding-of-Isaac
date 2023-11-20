@@ -55,6 +55,9 @@ void GameLayer::init() {
 	else if (personaje == 1) {
 		playerCharacter = new Eden(game);
 	}
+	else if (personaje == 4) {
+		playerCharacter = new Judas(game);
+	}
 	else {
 		playerCharacter = new Isaac(game);
 	}
@@ -769,20 +772,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 {
 	switch (character) {
 	case '1': {
-		if (personaje == 2) {
-			player = new Player(x, y, game, playerCharacter);
-
-		}
-		else if (personaje == 3) {
-			player = new Player(x, y, game, playerCharacter);
-
-		}
-		else if (personaje == 1) {
-			player = new Player(x, y, game, playerCharacter);
-		}
-		else {
-			player = new Player(x, y, game, playerCharacter);
-		}
+		player = new Player(x, y, game, playerCharacter);
 		// modificación para empezar a contar desde el suelo.
 		player->y = player->y - player->height / 2;
 		space->addDynamicActor(player);

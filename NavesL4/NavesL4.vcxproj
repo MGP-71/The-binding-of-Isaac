@@ -175,6 +175,7 @@
     <ClCompile Include="GameLayer.cpp" />
     <ClCompile Include="Horf.cpp" />
     <ClCompile Include="Isaac.cpp" />
+    <ClCompile Include="Judas.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuLayer.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="GameLayer.h" />
     <ClInclude Include="Horf.h" />
     <ClInclude Include="Isaac.h" />
+    <ClInclude Include="Judas.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="MenuLayer.h" />
     <ClInclude Include="Monoojo.h" />
