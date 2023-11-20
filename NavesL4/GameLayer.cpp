@@ -1,11 +1,4 @@
 #include "GameLayer.h"
-#include "Cain.h"
-#include "Eve.h"
-#include "Eden.h"
-
-#include "Horf.h"
-#include "Fatty.h"
-#include "Monoojo.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -13,6 +6,7 @@
 GameLayer::GameLayer(Game* game, int personaje)
 	: Layer(game) {
 	//llama al constructor del padre : Layer(renderer)
+	this->personaje = personaje;
 	init();
 }
 
@@ -31,7 +25,6 @@ void GameLayer::init() {
 
 	habitacionVertical = 0;
 	habitacionHorizontal = 0;
-	speed = 6;
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
@@ -52,7 +45,19 @@ void GameLayer::init() {
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
 
-	personaje = game->personaje;
+	if (personaje == 2) {
+		playerCharacter = new Cain(game);
+	}
+	else if (personaje == 3) {
+		playerCharacter = new Eve(game);
+		cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
+	}
+	else if (personaje == 1) {
+		playerCharacter = new Eden(game);
+	}
+	else {
+		playerCharacter = new Isaac(game);
+	}
 	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
 	actualizarVidas();
 	actualizarBombas();
@@ -112,7 +117,6 @@ void GameLayer::update() {
 	space->update();
 	background->update();
 	player->update();
-	player->playerSpeed = speed;
 
 	for (auto const& enemy : enemies) {
 		enemy->update(player);
@@ -190,7 +194,7 @@ void GameLayer::update() {
 		if (player->isOverlap(enemy)) {
 			player->loseLife();
 			actualizarVidas();
-			if (player->lifes <= 0) {
+			if (player->character->lifes <= 0) {
 				init();
 				return;
 			}
@@ -203,7 +207,7 @@ void GameLayer::update() {
 		if (player->isOverlap(fuego)) {
 			player->loseLife();
 			actualizarVidas();
-			if (player->lifes <= 0) {
+			if (player->character->lifes <= 0) {
 				actualizarVidas();
 				init();
 				return;
@@ -277,7 +281,7 @@ void GameLayer::update() {
 					corazones.remove(b);
 					space->removeDynamicActor(b);
 					delete b;
-					player->lifes++;
+					player->character->lifes++;
 					actualizarVidas();
 				}
 				deleteCorazones.clear();
@@ -538,7 +542,7 @@ void GameLayer::update() {
 
 			player->loseLife();
 			actualizarVidas();
-			if (player->lifes <= 0) {
+			if (player->character->lifes <= 0) {
 				init();
 			}
 			break;
@@ -766,26 +770,22 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	switch (character) {
 	case '1': {
 		if (personaje == 2) {
-			player = new Cain(x, y, game);
+			player = new Player(x, y, game, playerCharacter);
 
 		}
 		else if (personaje == 3) {
-			player = new Eve(x, y, game);
+			player = new Player(x, y, game, playerCharacter);
 
 		}
 		else if (personaje == 1) {
-			player = new Eden(x, y, game);
+			player = new Player(x, y, game, playerCharacter);
 		}
 		else {
-			player = new Player(x, y, game);
+			player = new Player(x, y, game, playerCharacter);
 		}
-			
-
 		// modificación para empezar a contar desde el suelo.
 		player->y = player->y - player->height / 2;
 		space->addDynamicActor(player);
-		player->playerSpeed = speed;
-
 		break;
 	}
 	case '#': {
@@ -943,7 +943,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 
 void GameLayer::actualizarVidas() {
 	hearts.clear();
-	for (int i = 0; i < player->lifes; i++) {
+	for (int i = 0; i < player->character->lifes; i++) {
 		hearts.push_back(new Actor("res/corazones/corazon.png", WIDTH * 0.1 + i * 45, HEIGHT * 0.05, 44, 36, game));
 	}
 }
@@ -971,8 +971,8 @@ void GameLayer::objetoConseguido(Tile* t) {
 
 	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
 		objConseguido->content = "+ velocidad";
-		player->playerSpeed =player->playerSpeed+6;
-		speed = player->playerSpeed;
+		player->character->playerSpeed =player->character->playerSpeed+6;
+		player->character->playerSpeed + 3.0;
 	}
 
 }

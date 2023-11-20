@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Character.h"
 #include "Actor.h"
 #include "Projectile.h" 
 #include "Audio.h"
@@ -8,35 +8,22 @@
 class Player : public Actor
 {
 public:
-	Player(float x, float y, Game* game);
+	Player(float x, float y, Game* game, Character* cha);
 	virtual Projectile* shoot();
 	virtual void update();
 	void moveX(float axis);
 	void moveY(float axis);
 	void draw() override; // Va a sobrescribir
 	void loseLife();
+	void setAnimations();
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;
-	int shootCadence = 30;
 	int shootTime = 0;
-	float playerSpeed;
-	int lifes = 3;
 	int invulnerableTime = 0;
 
-	Animation* aIdleRight;
-	Animation* aIdleUp;
-	Animation* aIdleDown;
-	Animation* aIdleLeft;
-	Animation* aRunningRight;
-	Animation* aRunningLeft;
-	Animation* aRunningUp;
-	Animation* aRunningDown;
-
 	int state;
-	Animation* aShootingRight;
-	Animation* aShootingLeft;
-	Animation* aShootingUp;
-	Animation* aShootingDown;
+
+	Character* character;
 };
 

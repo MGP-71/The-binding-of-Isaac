@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Layer.h"
 #include "Player.h"
 #include "Background.h"
@@ -15,6 +13,14 @@
 #include "Audio.h"
 #include "Pad.h"
 #include "Space.h"
+#include "Cain.h"
+#include "Eve.h"
+#include "Eden.h"
+#include "Isaac.h"
+#include "Character.h"
+#include "Horf.h"
+#include "Fatty.h"
+#include "Monoojo.h"
 
 #include <fstream> // Leer ficheros
 #include <sstream> // Leer líneas / String
@@ -99,7 +105,5 @@ public:
 	list<Tile*> objetos;
 	void objetoConseguido(Tile* t);
 	Text* objConseguido;
-
-	float speed;
-
+	Character* playerCharacter;
 };

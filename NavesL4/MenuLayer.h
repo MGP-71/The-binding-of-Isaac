@@ -22,8 +22,4 @@ public:
 	Actor* button_eve;
 	Actor* button_judas;
 
-	int personaje;
-
-
-
 };

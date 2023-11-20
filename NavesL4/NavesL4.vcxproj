@@ -165,6 +165,7 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Cain.cpp" />
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Eden.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLayer.cpp" />
     <ClCompile Include="Horf.cpp" />
+    <ClCompile Include="Isaac.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuLayer.cpp" />
@@ -191,6 +193,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Cain.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Eden.h" />
     <ClInclude Include="Enemy.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLayer.h" />
     <ClInclude Include="Horf.h" />
+    <ClInclude Include="Isaac.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="MenuLayer.h" />
     <ClInclude Include="Monoojo.h" />

@@ -1,8 +1,8 @@
 #include "Character.h"
 #include "Animation.h"
 
-class Eve : public Character
+class Isaac : public Character
 {
 public:
-	Eve(Game* game);
+	Isaac(Game* game);
 };

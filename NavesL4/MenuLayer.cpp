@@ -15,9 +15,6 @@ void MenuLayer::init() {
 	button_cain = new Actor("res/boton_cain.png", WIDTH * 0.48, HEIGHT * 0.4, 204, 63, game);
 	button_eve = new Actor("res/boton_eve.png", WIDTH * 0.48, HEIGHT * 0.5, 158, 58, game);
 	button_judas = new Actor("res/boton_judas.png", WIDTH * 0.5, HEIGHT * 0.6, 258, 68, game);
-
-
-
 }
 
 void MenuLayer::draw() {
@@ -71,8 +68,7 @@ void MenuLayer::processControls() {
 	//procesar controles, solo tiene uno
 	if (controlContinue) {
 		// Cambia la capa
-		game->personaje = personaje;
-		game->layer = new GameLayer(game, personaje);
+		game->layer = new GameLayer(game, game->personaje);
 		controlContinue = false;
 	}
 }
@@ -103,19 +99,19 @@ void MenuLayer::mouseToControls(SDL_Event event) {
 	// Cada vez que hacen click
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		if (button->containsPoint(motionX, motionY)) {
-			personaje = 0;
+			game->personaje = 0;
 			controlContinue = true;
 		}if (button_eden->containsPoint(motionX, motionY)) {
-			personaje = 1;
+			game->personaje = 1;
 			controlContinue = true;
 		}if (button_cain->containsPoint(motionX, motionY)) {
-			personaje = 2;
+			game->personaje = 2;
 			controlContinue = true;
 		}if (button_eve->containsPoint(motionX, motionY)) {
-			personaje = 3;
+			game->personaje = 3;
 			controlContinue = true;
 		}if (button_judas->containsPoint(motionX, motionY)) {
-			personaje = 4;
+			game->personaje = 4;
 			controlContinue = true;
 		}
 	}

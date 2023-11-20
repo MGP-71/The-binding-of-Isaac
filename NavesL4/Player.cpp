@@ -1,48 +1,13 @@
 #include "Player.h"
 
-Player::Player(float x, float y, Game* game)
-	: Actor("", x, y, 47, 46, game) {
+Player::Player(float x, float y, Game* game, Character* cha) : Actor("", x, y, 47, 46, game) {
 	orientation = game->orientationDown;
 	state = game->stateMoving;
 
 	audioShoot = new Audio("res/efecto_disparo.wav", false);
-	
-	aShootingRight = new Animation("res/isaac_derecha_disparando.png",
-		width, height, 131, 41, 6, 4, false, game);
-	aShootingLeft = new Animation("res/isaac_left_disparando.png",
-		width, height, 124, 40, 6, 4, false, game);
-	aShootingUp = new Animation("res/isaac_up_disparando.png",
-		width, height, 124, 40, 6, 4, false, game);
-	aShootingDown = new Animation("res/isaac_down_disparando.png",
-		width, height, 127, 40, 6, 4, false, game);
-
-
-	aIdleRight = new Animation("res/isaac_derecha.png", width, height,
-		132, 39, 20000, 4, true, game);
-	aIdleDown = new Animation("res/isaac.png", width, height,
-		138, 40, 20000, 4, true, game);
-
-	aIdleLeft = new Animation("res/isaac_left.png", width, height,
-		126, 40, 20000, 4, true, game);
-	aIdleUp = new Animation("res/isaac_up.png", width, height,
-		122, 40, 20000, 4, true, game);
-
-	aRunningRight = new Animation("res/isaac_derecha_movimiento.png", width, height,
-		131, 41, 6, 4, true, game);
-	aRunningDown = new Animation("res/isaac_down_movimiento.png", width, height,
-		124, 41, 6, 4, true, game);
-
-	aRunningLeft = new Animation("res/isaac_left_movimiento.png", width, height,
-		124, 40, 6, 4, true, game);
-	aRunningUp = new Animation("res/isaac_up_movimiento.png", width, height,
-		124, 40, 6, 4, true, game);
-
-	animation = aIdleDown;
-
-	playerSpeed = 6.0;
-
-
-
+	character = cha;
+	animation = character->aIdleDown;
+	//setAnimations();
 }
 
 void Player::update() {
@@ -113,33 +78,33 @@ void Player::update() {
 	if (state == game->stateMoving) {
 		if (vx != 0) {
 			if (orientation == game->orientationRight) {
-				animation = aRunningRight;
+				animation = character->aRunningRight;
 			}
 			if (orientation == game->orientationLeft) {
-				animation = aRunningLeft;
+				animation = character->aRunningLeft;
 			}
 		}
 
 		if (vx == 0) {
 			if (orientation == game->orientationRight) {
-				animation = aIdleRight;
+				animation = character->aIdleRight;
 			}
 			if (orientation == game->orientationLeft) {
-				animation = aIdleLeft;
+				animation = character->aIdleLeft;
 			}
 			if (orientation == game->orientationUp) {
-				animation = aIdleUp;
+				animation = character->aIdleUp;
 			}
 			if (orientation == game->orientationDown) {
-				animation = aIdleDown;
+				animation = character->aIdleDown;
 			}
 		}
 		if (vy != 0) {
 			if (orientation == game->orientationUp) {
-				animation = aRunningUp;
+				animation = character->aRunningUp;
 			}
 			if (orientation == game->orientationDown) {
-				animation = aRunningDown;
+				animation = character->aRunningDown;
 			}
 		}
 	}
@@ -161,17 +126,17 @@ void Player::draw() {
 }
 
 void Player::moveX(float axis) {
-	vx = axis * playerSpeed;
+	vx = axis * character->playerSpeed;
 }
 
 void Player::moveY(float axis) {
-	vy = axis * playerSpeed;
+	vy = axis * character->playerSpeed;
 }
 
 void Player::loseLife() {
 	if (invulnerableTime <= 0) {
-		if (lifes > 0) {
-			lifes--;
+		if (character->lifes > 0) {
+			character->lifes--;
 			invulnerableTime = 100;
 			// 100 actualizaciones 
 		}
@@ -183,26 +148,26 @@ Projectile* Player::shoot() {
 	if (shootTime == 0) {
 		state = game->stateShooting;
 		//audioShoot->play();
-		shootTime = shootCadence;
-		aShootingLeft->currentFrame = 0; //"Rebobinar" animación
-		aShootingRight->currentFrame = 0; //"Rebobinar" 
-		aShootingUp->currentFrame = 0; //"Rebobinar" animación
-		aShootingDown->currentFrame = 0; //"Rebobinar" animación
+		shootTime = character->shootCadence;
+		character->aShootingLeft->currentFrame = 0; //"Rebobinar" animación
+		character->aShootingRight->currentFrame = 0; //"Rebobinar" 
+		character->aShootingUp->currentFrame = 0; //"Rebobinar" animación
+		character->aShootingDown->currentFrame = 0; //"Rebobinar" animación
 		Projectile* projectile = new Projectile(x, y, game);
 		if (orientation == game->orientationUp) {
-			animation = aShootingUp;
+			animation = character->aShootingUp;
 			projectile->vx = 0;
 			projectile->vy = -9;
 		} else if (orientation == game->orientationDown) {
-			animation = aShootingDown;
+			animation = character->aShootingDown;
 			projectile->vx = 0;
 			projectile->vy = 9;
 		} else if (orientation == game->orientationLeft) {
-			animation = aShootingLeft;
+			animation = character->aShootingLeft;
 			projectile->vy = 0;
 			projectile->vx = -9; // Invertir
 		} else if (orientation == game->orientationRight) {
-			animation = aShootingRight;
+			animation = character->aShootingRight;
 			projectile->vy = 0;
 			projectile->vx = 9; // Invertir
 		}
@@ -212,4 +177,39 @@ Projectile* Player::shoot() {
 	else {
 		return NULL;
 	}
+}
+
+void Player::setAnimations() {
+	character->aShootingRight = new Animation("res/isaac_derecha_disparando.png",
+		width, height, 131, 41, 6, 4, false, game);
+	character->aShootingLeft = new Animation("res/isaac_left_disparando.png",
+		width, height, 124, 40, 6, 4, false, game);
+	character->aShootingUp = new Animation("res/isaac_up_disparando.png",
+		width, height, 124, 40, 6, 4, false, game);
+	character->aShootingDown = new Animation("res/isaac_down_disparando.png",
+		width, height, 127, 40, 6, 4, false, game);
+
+
+	character->aIdleRight = new Animation("res/isaac_derecha.png", width, height,
+		132, 39, 20000, 4, true, game);
+	character->aIdleDown = new Animation("res/isaac.png", width, height,
+		138, 40, 20000, 4, true, game);
+
+	character->aIdleLeft = new Animation("res/isaac_left.png", width, height,
+		126, 40, 20000, 4, true, game);
+	character->aIdleUp = new Animation("res/isaac_up.png", width, height,
+		122, 40, 20000, 4, true, game);
+
+	character->aRunningRight = new Animation("res/isaac_derecha_movimiento.png", width, height,
+		131, 41, 6, 4, true, game);
+	character->aRunningDown = new Animation("res/isaac_down_movimiento.png", width, height,
+		124, 41, 6, 4, true, game);
+
+	character->aRunningLeft = new Animation("res/isaac_left_movimiento.png", width, height,
+		124, 40, 6, 4, true, game);
+	character->aRunningUp = new Animation("res/isaac_up_movimiento.png", width, height,
+		124, 40, 6, 4, true, game);
+
+	
+
 }
