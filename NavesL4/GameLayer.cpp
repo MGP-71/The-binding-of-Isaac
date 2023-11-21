@@ -661,6 +661,11 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_ESCAPE:
 			game->loopActive = false;
 			break;
+		case SDLK_SPACE:
+			if (personaje == 1) {
+				playerCharacter->playerSpeed = playerCharacter->playerSpeed + 5;
+			}
+			break;
 		case SDLK_1:
 			game->scale();
 			break;
@@ -712,6 +717,11 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_a: // izquierda
 			if (controlMoveX == -1) {
 				controlMoveX = 0;
+			}
+			break;
+		case SDLK_SPACE:
+			if (personaje == 1) {
+				playerCharacter->playerSpeed = playerCharacter->playerSpeed - 5;
 			}
 			break;
 		case SDLK_w: // arriba
