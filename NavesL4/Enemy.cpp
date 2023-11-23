@@ -43,7 +43,9 @@ void Enemy::update(Player* p) {
 		animation = aDying;
 	}
 	
-	 
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
 	if (state == game->stateMoving) {
 		if (x > p->x)
 			vx = -enemySpeed;
@@ -61,11 +63,24 @@ void Enemy::update(Player* p) {
 }
 
 void Enemy::draw() {
-	animation->draw(x, y);
+	if (invulnerableTime == 0) {
+		animation->draw(x, y);
+	}
+	else {
+		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
+			animation->draw(x, y);
+		}
+	}
 }
 
 void Enemy::impacted() {
-	if (state != game->stateDying) {
-		state = game->stateDying;
+	if (vidas > 1) {
+		vidas--;
+		invulnerableTime = 10;
+	}
+	else {
+		if (state != game->stateDying) {
+			state = game->stateDying;
+		}
 	}
 }

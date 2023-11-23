@@ -17,4 +17,8 @@ public:
 	Animation* aDying;
 	float vxIntelligence;
 	float enemySpeed = 1.5f;
+	int invulnerableTime = 0;
+
+	int vidas;
+
 };

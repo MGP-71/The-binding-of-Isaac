@@ -13,6 +13,7 @@ Monoojo::Monoojo(float x, float y, Game* game)
 
 	vx = enemySpeed;
 
+	vidas = 3;
 
 }
 
@@ -32,6 +33,9 @@ void Monoojo::update(Player* p) {
 		}
 	}
 
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
 
 	if (state == game->stateMoving) {
 		animation = aMoving;

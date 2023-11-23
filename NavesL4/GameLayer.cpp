@@ -206,7 +206,7 @@ void GameLayer::update() {
 
 
 	list<Tile*> deleteObjetos;
-	//Colisiones jugador-bomba
+	//Colisiones jugador-objetos
 	for (auto const& obj : objetos) {
 		if (player->isOverlap(obj)) {
 			bool pInList = std::find(deleteObjetos.begin(),

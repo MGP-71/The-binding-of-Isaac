@@ -15,6 +15,7 @@ Horf::Horf(float x, float y, Game* game)
 	vy = 0;
 
 	enemySpeed = 0;
+	vidas = 2;
 
 
 }
@@ -39,6 +40,9 @@ void Horf::update(Player* p) {
 		animation = aDying;
 	}
 
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
 	// Establecer velocidad
 	if (state != game->stateDying) {
 		// no está muerto y se ha quedado parado
