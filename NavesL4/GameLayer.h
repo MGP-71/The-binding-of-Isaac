@@ -59,6 +59,7 @@ public:
 	list<Tile*> tiles;
 	list<Tile*> doors;
 	list<Tile*> fuegos;
+	int vecesInvencible = 0;
 
 
 	Audio* audioBackground;
@@ -107,6 +108,8 @@ public:
 	list<Tile*> objetos;
 	void objetoConseguido(Tile* t);
 	Text* objConseguido;
+	Text* textActivo;
+
 	Character* playerCharacter;
 
 	int lastDoorCrossed = 0;

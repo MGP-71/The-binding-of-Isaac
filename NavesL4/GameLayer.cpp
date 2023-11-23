@@ -2,12 +2,15 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+const Uint32 duracionInvencibilidad = 3000;
+Uint32 tiempoInicioInvencibilidad = 0;
 
 GameLayer::GameLayer(Game* game, int personaje)
 	: Layer(game) {
 	//llama al constructor del padre : Layer(renderer)
 	this->personaje = personaje;
 	init();
+
 }
 
 void GameLayer::init() {
@@ -36,6 +39,8 @@ void GameLayer::init() {
 	textKeys = new Text("hola", WIDTH * 0.075, HEIGHT * 0.45, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
+	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.2, game);
+
 
 
 
@@ -176,16 +181,25 @@ void GameLayer::update() {
 		for (auto const& door : doors) {
 			space->addStaticActor(door);
 		}*/
+
+
 	}
 	// Colisiones
 	for (auto const& enemy : enemies) {
 		if (player->isOverlap(enemy)) {
-			player->loseLife();
-			actualizarVidas();
-			if (player->character->lifes <= 0) {
-				init();
-				return;
+			if (!playerCharacter->invencibilidad) {
+				player->loseLife();
+				actualizarVidas();
+				if (player->character->lifes <= 0) {
+					init();
+					return;
+				}
 			}
+			else {
+				enemy->impacted();
+
+			}
+			
 			return; // Cortar el for
 		}
 	}
@@ -193,14 +207,16 @@ void GameLayer::update() {
 	//Colisiones jugador-fuego
 	for (auto const& fuego : fuegos) {
 		if (player->isOverlap(fuego)) {
-			player->loseLife();
-			actualizarVidas();
-			if (player->character->lifes <= 0) {
+			if (!playerCharacter->invencibilidad) {
+				player->loseLife();
 				actualizarVidas();
-				init();
+				if (player->character->lifes <= 0) {
+					actualizarVidas();
+					init();
+					return;
+				}
 				return;
 			}
-			return;
 		}
 	}
 
@@ -547,11 +563,14 @@ void GameLayer::update() {
 				deleteEnemyProjectiles.push_back(projectile);
 			}
 
-			player->loseLife();
-			actualizarVidas();
-			if (player->character->lifes <= 0) {
-				init();
+			if (!playerCharacter->invencibilidad) {
+				player->loseLife();
+				actualizarVidas();
+				if (player->character->lifes <= 0) {
+					init();
+				}
 			}
+			
 			break;
 		}
 	}
@@ -564,7 +583,16 @@ void GameLayer::update() {
 	deleteEnemyProjectiles.clear();
 
 	
-		 
+	// Actualizar la invencibilidad si está activa
+	if (playerCharacter->invencibilidad) {
+		Uint32 tiempoActual = SDL_GetTicks();
+		if (tiempoActual - tiempoInicioInvencibilidad >= duracionInvencibilidad) {
+			// Desactivar la invencibilidad después de la duración deseada
+			playerCharacter->invencibilidad = false;
+			textActivo->content = " ";
+
+		}
+	}
 	cout << "update GameLayer " << endl;
 }
 /*
@@ -605,6 +633,7 @@ void GameLayer::draw() {
 	background->draw();
 	textBombs->draw();
 	textKeys->draw();
+	textActivo->draw();
 	objConseguido->draw();
 	for (auto const& tile : tiles) {
 		tile->draw();
@@ -664,6 +693,20 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_SPACE:
 			if (personaje == 1) {
 				playerCharacter->playerSpeed = playerCharacter->playerSpeed + 5;
+				textActivo->content = "Tienes supervelocidad!!";
+
+			}
+
+			if (personaje == 3) {
+				if (vecesInvencible == 0) {
+					playerCharacter->invencibilidad = true;
+					tiempoInicioInvencibilidad = SDL_GetTicks();
+					textActivo->content = "Eres invencible durante 3 segundos!!";
+					vecesInvencible++;
+
+				}
+			
+
 			}
 			break;
 		case SDLK_1:
@@ -722,6 +765,11 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_SPACE:
 			if (personaje == 1) {
 				playerCharacter->playerSpeed = playerCharacter->playerSpeed - 5;
+				textActivo->content = " ";
+
+			}
+			if (personaje == 3) {
+				playerCharacter->invencibilidad = false;
 			}
 			break;
 		case SDLK_w: // arriba
@@ -784,6 +832,7 @@ void GameLayer::loadMap(string name) {
 
 void GameLayer::loadMapObject(char character, float x, float y)
 {
+	vecesInvencible = 0;
 	switch (character) {
 	case '1': {
 		player = new Player(x, y, game, playerCharacter);

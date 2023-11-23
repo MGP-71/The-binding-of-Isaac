@@ -27,4 +27,6 @@ public:
 
 	int width = 47;
 	int height = 46;
+
+	bool invencibilidad = false;
 };
