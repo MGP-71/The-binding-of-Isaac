@@ -101,6 +101,8 @@ public:
 	Actor* keysActor;
 	Text* textKeys;
 
+	list<Tile*> rocas;
+
 	int nPills;
 	list<Tile*> pills;
 	Actor* pillsActor;

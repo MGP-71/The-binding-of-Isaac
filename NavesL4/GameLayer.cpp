@@ -19,6 +19,7 @@ void GameLayer::init() {
 	scrollY = 0;
 	tiles.clear();
 	fuegos.clear();
+	rocas.clear();
 	doors.clear();
 	hearts.clear();
 	bombs.clear();
@@ -219,6 +220,45 @@ void GameLayer::update() {
 			}
 		}
 	}
+
+	list<Tile*> deleteRocas;
+
+	if (playerCharacter->rompeRocas) {
+		for (Tile* tile : rocas) {
+			space->addDynamicActor(tile);
+		}
+	}
+	else {
+		for (Tile* tile : rocas) {
+			space->removeDynamicActor(tile);
+			space->addStaticActor(tile);
+		}
+	}
+
+	if (playerCharacter->rompeRocas) {
+		// Marcar elementos para eliminación
+		for (auto const& tile : rocas) {
+			if (player->isOverlap(tile)) {
+				deleteRocas.push_back(tile);
+			}
+		}
+
+		// Eliminar elementos marcados
+		for (auto const& b : deleteRocas) {
+			rocas.remove(b);
+			space->removeDynamicActor(b);
+			space->removeStaticActor(b);
+			delete b;
+		}
+
+		deleteRocas.clear();
+	}
+	
+
+	
+	
+	
+
 
 
 	list<Tile*> deleteObjetos;
@@ -635,7 +675,11 @@ void GameLayer::draw() {
 	textKeys->draw();
 	textActivo->draw();
 	objConseguido->draw();
+	
 	for (auto const& tile : tiles) {
+		tile->draw();
+	}
+	for (auto const& tile : rocas) {
 		tile->draw();
 	}
 	for (auto const& tile : doors) {
@@ -696,7 +740,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 				textActivo->content = "Tienes supervelocidad!!";
 
 			}
-
+			if (personaje == 2) {
+					playerCharacter->rompeRocas = true;
+					textActivo->content = "Puedes romper rocas!!";
+			}
 			if (personaje == 3) {
 				if (vecesInvencible == 0) {
 					playerCharacter->invencibilidad = true;
@@ -705,8 +752,6 @@ void GameLayer::keysToControls(SDL_Event event) {
 					vecesInvencible++;
 
 				}
-			
-
 			}
 			break;
 		case SDLK_1:
@@ -766,7 +811,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 			if (personaje == 1) {
 				playerCharacter->playerSpeed = playerCharacter->playerSpeed - 5;
 				textActivo->content = " ";
-
+			}
+			if (personaje == 2) {
+				playerCharacter->rompeRocas = false;
+				textActivo->content = " ";
 			}
 			if (personaje == 3) {
 				playerCharacter->invencibilidad = false;
@@ -845,7 +893,8 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		Tile* tile = new Tile("res/fondos/rock.png", x, y, 36, 34, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
-		tiles.push_back(tile);
+		//tiles.push_back(tile);
+		rocas.push_back(tile);
 		space->addStaticActor(tile);
 		break;
 	}
@@ -1042,6 +1091,7 @@ void GameLayer::deleteMap() {
 	projectilesEnemy.clear();
 	doors.clear();
 	fuegos.clear();
+	rocas.clear();
 	bombs.clear();
 	keys.clear();
 	corazones.clear();

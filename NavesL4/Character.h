@@ -29,4 +29,5 @@ public:
 	int height = 46;
 
 	bool invencibilidad = false;
+	bool rompeRocas = false;
 };
