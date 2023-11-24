@@ -2,6 +2,9 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <list>
+#include <algorithm>
+
 const Uint32 duracionInvencibilidad = 3000;
 Uint32 tiempoInicioInvencibilidad = 0;
 
@@ -26,6 +29,7 @@ void GameLayer::init() {
 	keys.clear();
 	corazones.clear();
 	objetos.clear();
+	roomsCleared.clear();
 
 	habitacionVertical = 0;
 	habitacionHorizontal = 0;
@@ -52,7 +56,8 @@ void GameLayer::init() {
 	monoojoEnemies.clear();
 
 	chooseCharater();
-	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");	
+	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");
+	nameFile = "res/fondos/1_0_0.txt";
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -386,18 +391,17 @@ void GameLayer::update() {
 	}
 	
 	bool isOverlap = false;
-	string nameFile;
 	//Colisiones Puerta-Personaje
 	for (auto const& tile : space->dynamicActors) {
 		//si el personaje overlapea la puerta
 		if (tile->isOverlap(player)) {
+			saveRoom(nameFile);
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			if (tile->filename.compare("res/puerta_up_abierta.png") == 0 && player->orientation == game->orientationUp) {
-				cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
 				lastDoorCrossed = 1;
 				isOverlap = true;
 				habitacionVertical++;
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 			//por ahora solo hay habitaciones amarillas arriba de las habitaciones
@@ -407,7 +411,7 @@ void GameLayer::update() {
 				actualizarLlaves();
 				isOverlap = true;
 				habitacionVertical++;
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 			else if (tile->filename.compare("res/puerta_amarilla_abierta_down.png") == 0 && player->orientation == game->orientationDown ) {
@@ -416,7 +420,7 @@ void GameLayer::update() {
 				habitacionVertical--;
 				//al salir de la habitación amarilla se quita el texto
 				objConseguido->content = " ";
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
@@ -424,7 +428,7 @@ void GameLayer::update() {
 				lastDoorCrossed = 2;
 				isOverlap = true;
 				habitacionVertical--;
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
@@ -432,7 +436,7 @@ void GameLayer::update() {
 				lastDoorCrossed = 3;
 				isOverlap = true;
 				habitacionHorizontal++;
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
@@ -440,7 +444,7 @@ void GameLayer::update() {
 				lastDoorCrossed = 4;
 				isOverlap = true;
 				habitacionHorizontal--;
-				nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+				checkRoomCleared();
 				break;
 			}
 		}
@@ -1083,10 +1087,13 @@ void GameLayer::deleteMap() {
 	for (auto const& tile : tiles) {
 		space->removeStaticActor(tile);
 	}
-	tiles.clear();
+	for (auto const& rocas : rocas) {
+		space->removeStaticActor(rocas);
+	}
 	for (auto const& tile : doors) {
 		space->removeDynamicActor(tile);
 	}
+	tiles.clear();
 	projectiles.clear();
 	projectilesEnemy.clear();
 	doors.clear();
@@ -1114,5 +1121,16 @@ void GameLayer::chooseCharater() {
 	}
 	else {
 		playerCharacter = new Isaac(game);
+	}
+}
+
+void GameLayer::saveRoom(string nameFile) {
+	roomsCleared.push_back(nameFile);
+}
+
+void GameLayer::checkRoomCleared() {
+	nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+	if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
+		nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
 	}
 }

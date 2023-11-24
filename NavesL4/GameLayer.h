@@ -45,6 +45,8 @@ public:
 	void actualizarLlaves();
 	void actualizarPills();
 	void chooseCharater();
+	void saveRoom(string nameFile);
+	void checkRoomCleared();
 
 	int personaje;
 
@@ -115,4 +117,7 @@ public:
 	Character* playerCharacter;
 
 	int lastDoorCrossed = 0;
+
+	list<string> roomsCleared;
+	string nameFile;
 };
