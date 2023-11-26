@@ -637,11 +637,30 @@ void GameLayer::update() {
 
 
 	time(&endBomb);
-	if ((endBomb - startBomb) > 2) {
-		activeBomb = NULL;
+	if ((endBomb - startBomb) > 2 && activeBomb != NULL) {
+		time(&timeExplosion);
+		activeBomb = new Tile("res/recolectables/explosion.png", activeBomb->x, activeBomb->y, 38, 38, game);
+		for (auto const& tile : rocas) {
+			if (calculateDistance(activeBomb, tile) < 100) {
+				deleteRocas.push_back(tile);
+				space->removeStaticActor(tile);
+			}
+		}
+		for (auto const& b : deleteRocas) {
+			rocas.remove(b);
+			space->removeDynamicActor(b);
+			space->removeStaticActor(b);
+			delete b;
+		}
+		deleteRocas.clear();
+		if ((endBomb - startBomb) > 3) {
+			activeBomb = NULL;
+		}
 	}
 
-	cout << "update GameLayer " + to_string(nBombs)  << endl;
+	
+
+	cout << "update GameLayer " << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -1147,11 +1166,16 @@ void GameLayer::checkRoomCleared() {
 }
 
 void GameLayer::dropBomb() {
-	
 	if (nBombs <= 0 || activeBomb != NULL) return;
-	cout << "AAAAAAAAAAAAAAAAA" << endl;
 	activeBomb = new Tile("res/recolectables/bomb.png", player->x, player->y, 28, 38, game);
 	time(&startBomb);
 	nBombs--;
 	actualizarBombas();
+}
+
+double  GameLayer::calculateDistance(Actor* actor1, Actor* actor2) {
+	double deltaX = actor1->x - actor2->x;
+	double deltaY = actor1->y - actor2->y;
+
+	return std::sqrt(deltaX * deltaX + deltaY * deltaY);
 }

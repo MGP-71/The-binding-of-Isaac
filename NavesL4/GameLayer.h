@@ -48,6 +48,7 @@ public:
 	void saveRoom(string nameFile);
 	void checkRoomCleared();
 	void dropBomb();
+	double calculateDistance(Actor* actor1, Actor* actor2);
 
 	int personaje;
 
@@ -66,6 +67,7 @@ public:
 
 	Tile* activeBomb;
 	time_t startBomb, endBomb;
+	time_t timeExplosion;
 
 	Audio* audioBackground;
 	int newEnemyTime = 0;
