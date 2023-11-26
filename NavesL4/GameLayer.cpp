@@ -5,6 +5,7 @@
 #include <list>
 #include <algorithm>
 
+
 const Uint32 duracionInvencibilidad = 3000;
 Uint32 tiempoInicioInvencibilidad = 0;
 
@@ -39,12 +40,13 @@ void GameLayer::init() {
 
 
 	background = new Background("res/fondos/habitacion.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
-	textBombs = new Text("hola", WIDTH * 0.075, HEIGHT * 0.4, game);
+	textBombs = new Text("hola", WIDTH * 0.05, HEIGHT * 0.05, game);
 	textBombs->content = to_string(0);
-	textKeys = new Text("hola", WIDTH * 0.075, HEIGHT * 0.45, game);
+	textKeys = new Text("hola", WIDTH * 0.05, HEIGHT * 0.1, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
 	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.2, game);
+	
 
 
 
@@ -54,6 +56,7 @@ void GameLayer::init() {
 	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
+	activeBomb = NULL;
 
 	chooseCharater();
 	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");
@@ -259,12 +262,6 @@ void GameLayer::update() {
 		deleteRocas.clear();
 	}
 	
-
-	
-	
-	
-
-
 
 	list<Tile*> deleteObjetos;
 	//Colisiones jugador-objetos
@@ -637,7 +634,14 @@ void GameLayer::update() {
 
 		}
 	}
-	cout << "update GameLayer " << endl;
+
+
+	time(&endBomb);
+	if ((endBomb - startBomb) > 2) {
+		activeBomb = NULL;
+	}
+
+	cout << "update GameLayer " + to_string(nBombs)  << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -719,9 +723,12 @@ void GameLayer::draw() {
 	for (auto const& heart : hearts) {
 		heart->draw();
 	}
-		bombsActor->draw();
-		keysActor->draw();
-		pillsActor->draw();
+
+	bombsActor->draw();
+	keysActor->draw();
+	pillsActor->draw();
+	if (activeBomb != NULL)
+		activeBomb->draw();
 	
 	//creo que no hace falta porque ya se pinta en enemies
 	/*for (auto const& enemy : horfEnemies) {
@@ -793,7 +800,11 @@ void GameLayer::keysToControls(SDL_Event event) {
 			player->orientation = game->orientationRight;
 			controlShoot = true;
 			break;
+		case SDLK_e: // bomba
+			dropBomb();
+			break;
 		}
+
 
 
 	}
@@ -1055,14 +1066,14 @@ void GameLayer::actualizarVidas() {
 }
 
 void GameLayer::actualizarBombas() {
-	bombsActor = new Actor("res/recolectables/bomb_icono.png", WIDTH * 0.05 , HEIGHT * 0.4, 16, 22, game);
+	bombsActor = new Actor("res/recolectables/bomb_icono.png", WIDTH * 0.02 , HEIGHT * 0.05, 16, 22, game);
 	textBombs->content = to_string(nBombs);
 
 	
 }
 
 void GameLayer::actualizarLlaves() {
-	keysActor = new Actor("res/recolectables/key_icono.png", WIDTH * 0.05, HEIGHT * 0.45, 16, 18, game);
+	keysActor = new Actor("res/recolectables/key_icono.png", WIDTH * 0.02, HEIGHT * 0.1, 16, 18, game);
 	textKeys->content = to_string(nKeys);
 }
 
@@ -1133,4 +1144,14 @@ void GameLayer::checkRoomCleared() {
 	if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
 		nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
 	}
+}
+
+void GameLayer::dropBomb() {
+	
+	if (nBombs <= 0 || activeBomb != NULL) return;
+	cout << "AAAAAAAAAAAAAAAAA" << endl;
+	activeBomb = new Tile("res/recolectables/bomb.png", player->x, player->y, 28, 38, game);
+	time(&startBomb);
+	nBombs--;
+	actualizarBombas();
 }

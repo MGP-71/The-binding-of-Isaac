@@ -47,6 +47,7 @@ public:
 	void chooseCharater();
 	void saveRoom(string nameFile);
 	void checkRoomCleared();
+	void dropBomb();
 
 	int personaje;
 
@@ -63,6 +64,8 @@ public:
 	list<Tile*> fuegos;
 	int vecesInvencible = 0;
 
+	Tile* activeBomb;
+	time_t startBomb, endBomb;
 
 	Audio* audioBackground;
 	int newEnemyTime = 0;
