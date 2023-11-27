@@ -46,10 +46,6 @@ void GameLayer::init() {
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
 	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.2, game);
-	
-
-
-
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -59,10 +55,14 @@ void GameLayer::init() {
 
 	activeBomb = NULL;
 	azazel = NULL;
+	trapdoor = NULL;
 
 	chooseCharater();
-	loadMap("res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt");
+
 	nameFile = "res/fondos/1_0_0.txt";
+	
+	loadMap(nameFile);
+	
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -154,10 +154,15 @@ void GameLayer::update() {
 		}
 	}
 	
-	ProjectileEnemy* projAaza = azazel->shoot(player);
-	if (projAaza != NULL) {
-		projectilesEnemy.push_back(projAaza);
-		space->addDynamicActor(projAaza);
+	if (azazel != NULL) {
+		ProjectileEnemy* projAaza = azazel->shoot(player);
+		if (projAaza != NULL) {
+			projectilesEnemy.push_back(projAaza);
+			space->addDynamicActor(projAaza);
+		}
+		if (azazel->state == game->stateDead) {
+			azazel = NULL;
+		}
 	}
 	
 	
@@ -685,6 +690,20 @@ void GameLayer::update() {
 		}
 	}
 
+	if (azazel == NULL && trapdoor != NULL && player->isOverlap(trapdoor)) {
+		floor++;
+		trapdoor = NULL;
+		deleteMap();
+		if (floor == 1) {
+			nameFile = "res/fondos/1_0_0.txt";
+		}
+		else if (floor == 2) {
+			nameFile = "res/fondos/2_0_0.txt";
+		}
+		loadMap(nameFile);
+		return;
+	}
+
 	cout << "update GameLayer " << endl;
 }
 /*
@@ -1082,11 +1101,11 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	}
 
 	case 'T': {
-		Tile* door = new Tile("res/trampilla.png", x - 12, y + 12, 64, 64, game);
+		trapdoor = new Tile("res/trampilla.png", x - 12, y + 12, 64, 64, game);
 		// modificación para empezar a contar desde el suelo.
-		door->y = door->y - door->height / 2;
-		tiles.push_back(door);
-		space->addDynamicActor(door);
+		trapdoor->y = trapdoor->y - trapdoor->height / 2;
+		tiles.push_back(trapdoor);
+		space->addDynamicActor(trapdoor);
 		break;
 	}
 	case '2': {
@@ -1118,8 +1137,6 @@ void GameLayer::actualizarVidas() {
 void GameLayer::actualizarBombas() {
 	bombsActor = new Actor("res/recolectables/bomb_icono.png", WIDTH * 0.02 , HEIGHT * 0.05, 16, 22, game);
 	textBombs->content = to_string(nBombs);
-
-	
 }
 
 void GameLayer::actualizarLlaves() {
@@ -1138,7 +1155,7 @@ void GameLayer::objetoConseguido(Tile* t) {
 
 	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
 		objConseguido->content = "+ velocidad";
-		player->character->playerSpeed =player->character->playerSpeed+6;
+		player->character->playerSpeed = player->character->playerSpeed+6;
 		player->character->playerSpeed + 3.0;
 	}
 

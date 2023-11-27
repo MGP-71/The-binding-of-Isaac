@@ -128,4 +128,6 @@ public:
 	string nameFile;
 
 	Azazel* azazel;
+	Tile* trapdoor;
+	int floor = 1;
 };

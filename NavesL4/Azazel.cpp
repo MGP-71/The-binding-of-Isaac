@@ -1,19 +1,21 @@
 #include "Azazel.h"
-Azazel::Azazel(float x, float y, Game* game): Enemy("res/enemigos/azazel.png", x, y, game) {
+Azazel::Azazel(float x, float y, Game* game): Enemy("res/enemigos/azazel_singular.png", x, y, game) {
 
+	width=130;
+	height = 90;
 	state = game->stateMoving;
 
-	aDying = new Animation("res/enemigos/azazel.png", width, height,
-		121, 44, 6, 2, false, game);
+	aDying = new Animation("res/enemigos/azazel_morir.png", width, height,
+		508, 106, 6, 4, false, game);
 	aMoving = new Animation("res/enemigos/azazel.png", width, height,
-		121, 44, 6, 2, true, game);
+		518, 90, 6, 4, true, game);
 	animation = aMoving;
 
 	vx = 0;
 	vy = 0;
 
 	enemySpeed = 1;
-	vidas = 10;
+	vidas = 2;
 
 
 }
@@ -76,11 +78,27 @@ ProjectileEnemy* Azazel::shoot(Player* p) {
 	if (shootTime == 0) {
 
 		cout << "disparando" << endl;
-		shootTime = shootCadence;
 
 		// Calcular la dirección hacia el jugador
 		float directionX = p->x - x;
 		float directionY = p->y - y;
+		if (shootCadence == 120) {
+			directionX = p->x - x;
+			directionY = p->y - y;
+			shootCadence = 1;
+		}
+		else if (shootCadence == 1) {
+			directionX = p->x - x + 50;
+			directionY = p->y - y + 50;
+			shootCadence = 2;
+		}
+		else if (shootCadence == 2) {
+			directionX = p->x - x - 50;
+			directionY = p->y - y - 50;
+			shootCadence = 120;
+		}
+		shootTime = shootCadence;
+		
 
 		// Normalizar la dirección para obtener un vector de longitud 1
 		float length = sqrt(directionX * directionX + directionY * directionY);
@@ -88,9 +106,11 @@ ProjectileEnemy* Azazel::shoot(Player* p) {
 		directionY /= length;
 
 		// Crear el proyectil con la dirección ajustada hacia el jugador
-		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);
+		ProjectileEnemy* projectile = new ProjectileEnemy(directionX, directionY, x, y, game);;
+
 		projectile->vx = 5;
 		projectile->vy = 5;
+
 		if (x > p->x)
 			projectile->vx = -projectile->vx * -directionX * 2;
 		else
@@ -99,7 +119,6 @@ ProjectileEnemy* Azazel::shoot(Player* p) {
 			projectile->vy = -projectile->vy * -directionY * 2;
 		else
 			projectile->vy = projectile->vy * directionY * 2;
-
 
 		return projectile;
 	}

@@ -1,7 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(string filename, float x, float y, Game* game)
-	: Actor(filename, x, y, 43, 56, game) {
+Enemy::Enemy(string filename, float x, float y, Game* game): Actor(filename, x, y, 43, 56, game) {
 
 	state = game->stateMoving;
 
