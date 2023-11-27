@@ -22,6 +22,7 @@
 #include "Fatty.h"
 #include "Monoojo.h"
 #include "Judas.h"
+#include "Azazel.h"
 
 #include <fstream> // Leer ficheros
 #include <sstream> // Leer líneas / String
@@ -125,4 +126,6 @@ public:
 
 	list<string> roomsCleared;
 	string nameFile;
+
+	Azazel* azazel;
 };

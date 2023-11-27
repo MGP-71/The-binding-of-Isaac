@@ -163,6 +163,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Azazel.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Cain.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Azazel.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Cain.h" />
     <ClInclude Include="Character.h" />
