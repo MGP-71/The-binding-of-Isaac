@@ -183,6 +183,10 @@ void GameLayer::update() {
 				door->filename = "res/puerta_up_abierta.png";
 				door->texture = game->getTexture(door->filename);
 			}
+			if (door->filename.compare("res/door_boss_cerrada.png") == 0) {
+				door->filename = "res/door_boss_abierta.png";
+				door->texture = game->getTexture(door->filename);
+			}
 			else if (door->filename.compare("res/puerta_izquierda_cerrada.png") == 0) {
 				door->filename = "res/puerta_izquierda_abierta.png";
 				door->texture = game->getTexture(door->filename);
@@ -439,6 +443,13 @@ void GameLayer::update() {
 			}
 			//y la puerta es la de arriba y está abierta y el personaje está mirando pa arriba 
 			else if (tile->filename.compare("res/puerta_abajo_abierta.png") == 0 && player->orientation == game->orientationDown) {
+				lastDoorCrossed = 2;
+				isOverlap = true;
+				habitacionVertical--;
+				checkRoomCleared();
+				break;
+			}
+			else if (tile->filename.compare("res/door_boss_abierta.png") == 0 && player->orientation == game->orientationDown) {
 				lastDoorCrossed = 2;
 				isOverlap = true;
 				habitacionVertical--;
@@ -1084,6 +1095,15 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	}
 	case 'P': {
 		Tile* door = new Tile("res/puerta_up_cerrada.png", x - 15, y + 8, 49, 33, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		//tiles.push_back(door);
+		doors.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
+	case '+': {
+		Tile* door = new Tile("res/door_boss_cerrada.png", x - 15, y + 20, 64, 40, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
