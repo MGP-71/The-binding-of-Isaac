@@ -722,8 +722,8 @@ void GameLayer::update() {
 		loadMap(nameFile);
 		return;
 	}
-
-	cout << "update GameLayer " << endl;
+	 
+	cout << "update GameLayer " << habitacionVertical  << " " << habitacionHorizontal << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -1104,6 +1104,15 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	}
 	case '+': {
 		Tile* door = new Tile("res/door_boss_cerrada.png", x - 15, y + 20, 64, 40, game);
+		// modificación para empezar a contar desde el suelo.
+		door->y = door->y - door->height / 2;
+		//tiles.push_back(door);
+		doors.push_back(door);
+		space->addDynamicActor(door);
+		break;
+	}
+	case '-': {
+		Tile* door = new Tile("res/door_boss_cerrada2.png", x - 15, y + 20, 64, 40, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
