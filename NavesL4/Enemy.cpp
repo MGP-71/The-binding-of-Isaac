@@ -72,9 +72,9 @@ void Enemy::draw() {
 	}
 }
 
-void Enemy::impacted() {
+void Enemy::impacted(int dm) {
 	if (vidas > 1) {
-		vidas--;
+		vidas = vidas - dm;
 		invulnerableTime = 10;
 	}
 	else {

@@ -12,7 +12,7 @@ public:
 	virtual void update(Player* p);
 	Animation* aMoving;
 	Animation* animation; // Referencia a la animación mostrada
-	void impacted(); // Recibe impacto y pone animación de morir
+	void impacted(int dm); // Recibe impacto y pone animación de morir
 	int state;
 	Animation* aDying;
 	float vxIntelligence;

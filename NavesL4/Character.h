@@ -30,4 +30,5 @@ public:
 
 	bool invencibilidad = false;
 	bool rompeRocas = false;
+	int damage;
 };

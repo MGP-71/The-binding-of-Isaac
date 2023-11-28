@@ -63,6 +63,9 @@ void GameLayer::init() {
 	
 	loadMap(nameFile);
 	
+	nKeys = 0;
+	nBombs = 0;
+	floor = 1;
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -219,7 +222,7 @@ void GameLayer::update() {
 				}
 			}
 			else {
-				enemy->impacted();
+				enemy->impacted(1);
 
 			}
 			
@@ -514,7 +517,7 @@ void GameLayer::update() {
 					deleteProjectiles.push_back(projectile);
 				}
 
-				enemy->impacted();
+				enemy->impacted(player->character->damage);
 
 			}
 		}
@@ -700,6 +703,8 @@ void GameLayer::update() {
 		else if (floor == 2) {
 			nameFile = "res/fondos/2_0_0.txt";
 		}
+		habitacionVertical = 0;
+		habitacionHorizontal = 0;
 		loadMap(nameFile);
 		return;
 	}
@@ -1207,10 +1212,19 @@ void GameLayer::saveRoom(string nameFile) {
 }
 
 void GameLayer::checkRoomCleared() {
-	nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
-	if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
-		nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
+	if (floor == 1) {
+		nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+		if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
+			nameFile = "res/fondos/1_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
+		}
 	}
+	else if (floor == 2) {
+		nameFile = "res/fondos/2_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+		if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
+			nameFile = "res/fondos/2_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
+		}
+	}
+	
 }
 
 void GameLayer::dropBomb() {
