@@ -4,7 +4,9 @@
 #include <thread>
 #include <list>
 #include <algorithm>
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 const Uint32 duracionInvencibilidad = 3000;
 Uint32 tiempoInicioInvencibilidad = 0;
@@ -31,6 +33,7 @@ void GameLayer::init() {
 	corazones.clear();
 	objetos.clear();
 	roomsCleared.clear();
+	objetosConseguidos.clear();
 
 	habitacionVertical = 0;
 	habitacionHorizontal = 0;
@@ -70,6 +73,8 @@ void GameLayer::init() {
 	actualizarBombas();
 	actualizarLlaves();
 	actualizarPills();
+
+	srand(static_cast<unsigned int>(time(0)));
 }
 
 void GameLayer::processControls() {
@@ -723,7 +728,7 @@ void GameLayer::update() {
 		return;
 	}
 	 
-	cout << "update GameLayer " << habitacionVertical  << " " << habitacionHorizontal << endl;
+	cout << "update GameLayer " << endl;
 }
 /*
 * void GameLayer::calculateScroll() {
@@ -1175,7 +1180,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '2': {
-		Tile* door = new Tile("res/objetos/crickets_head.png", x - 12, y + 12, 34, 30, game);
+		Tile* door = objetoRandom(x, y);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		objetos.push_back(door);
@@ -1220,11 +1225,15 @@ void GameLayer::actualizarPills() {
 void GameLayer::objetoConseguido(Tile* t) {
 
 	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
+		objConseguido->content = "+ daño";
+		player->character->damage = 2;
+	} else if (t->filename.compare("res/objetos/crickets_body.png") == 0) {
 		objConseguido->content = "+ velocidad";
-		player->character->playerSpeed = player->character->playerSpeed+6;
-		player->character->playerSpeed + 3.0;
+		player->character->playerSpeed = player->character->playerSpeed + 3.0;
+	} else if (t->filename.compare("res/objetos/cuchara.png") == 0) {
+		objConseguido->content = "+ cadencia";
+		player->character->shootCadence = 15;
 	}
-
 }
 
 void GameLayer::deleteMap() {
@@ -1296,9 +1305,36 @@ void GameLayer::dropBomb() {
 	actualizarBombas();
 }
 
-double  GameLayer::calculateDistance(Actor* actor1, Actor* actor2) {
+double GameLayer::calculateDistance(Actor* actor1, Actor* actor2) {
 	double deltaX = actor1->x - actor2->x;
 	double deltaY = actor1->y - actor2->y;
 
 	return std::sqrt(deltaX * deltaX + deltaY * deltaY);
+}
+
+Tile* GameLayer::objetoRandom(int x, int y) {
+	Tile* tile = NULL;
+	int rd = 0;
+	int max = 3;
+	int min = 1;
+	while (true) {
+		rd = rand() % (max - min + 1) + min;
+		if (std::find(objetosConseguidos.begin(), objetosConseguidos.end(), rd) != objetosConseguidos.end()) {
+			rd = 0;
+		}
+		if (rd == 1) {
+			tile = new Tile("res/objetos/crickets_head.png", x, y, 34, 30, game);
+			break;
+		}
+		else if (rd == 2) {
+			tile = new Tile("res/objetos/crickets_body.png", x, y, 35, 33, game);
+			break;
+		}
+		else if (rd == 3) {
+			tile = new Tile("res/objetos/cuchara.png", x, y, 32, 29, game);
+			break;
+		}
+	}
+	objetosConseguidos.push_back(rd);
+	return tile;
 }

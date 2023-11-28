@@ -50,6 +50,7 @@ public:
 	void checkRoomCleared();
 	void dropBomb();
 	double calculateDistance(Actor* actor1, Actor* actor2);
+	Tile* objetoRandom(int x, int y);
 
 	int personaje;
 
@@ -130,4 +131,6 @@ public:
 	Azazel* azazel;
 	Tile* trapdoor;
 	int floor = 1;
+
+	list<int> objetosConseguidos;
 };
