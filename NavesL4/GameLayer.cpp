@@ -678,16 +678,19 @@ void GameLayer::update() {
 			delete b;
 		}
 		deleteRocas.clear();
-		if (calculateDistance(activeBomb, player) < 100) {
-			if (!playerCharacter->invencibilidad) {
-				player->loseLife();
-				actualizarVidas();
-				if (player->character->lifes <= 0) {
-					init();
-					return;
+		if (personaje != 4) {
+			if (calculateDistance(activeBomb, player) < 100) {
+				if (!playerCharacter->invencibilidad) {
+					player->loseLife();
+					actualizarVidas();
+					if (player->character->lifes <= 0) {
+						init();
+						return;
+					}
 				}
 			}
 		}
+		
 		if ((endBomb - startBomb) > 3) {
 			activeBomb = NULL;
 		}
@@ -806,8 +809,10 @@ void GameLayer::draw() {
 }
 
 void GameLayer::keysToControls(SDL_Event event) {
+
 	if (event.type == SDL_KEYDOWN) {
 		int code = event.key.keysym.sym;
+
 		// Pulsada
 		switch (code) {
 		case SDLK_ESCAPE:
@@ -830,6 +835,30 @@ void GameLayer::keysToControls(SDL_Event event) {
 					textActivo->content = "Eres invencible durante 3 segundos!!";
 					vecesInvencible++;
 
+				}
+			}
+			if (personaje == 4) {
+				list<Tile*> deleteRocas;
+				player->state = game->stateExplotando;
+				for (auto const& tile : rocas) {
+					if (calculateDistance(player, tile) < 100) {
+						deleteRocas.push_back(tile);
+						space->removeStaticActor(tile);
+					}
+				}
+				for (auto const& e : enemies) {
+					if (calculateDistance(player, e) < 100) {
+						e->state = game->stateDying;
+					}
+				}
+				for (auto const& b : deleteRocas) {
+					rocas.remove(b);
+					delete b;
+				}
+				deleteRocas.clear();
+			
+				if ((endBomb - startBomb) > 3) {
+					activeBomb = NULL;
 				}
 			}
 			break;
@@ -901,6 +930,9 @@ void GameLayer::keysToControls(SDL_Event event) {
 			}
 			if (personaje == 3) {
 				playerCharacter->invencibilidad = false;
+			}
+			if (personaje == 4) {
+				player->state = game->stateMoving;
 			}
 			break;
 		case SDLK_w: // arriba

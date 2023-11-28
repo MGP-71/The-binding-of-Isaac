@@ -44,6 +44,7 @@ public:
 	int const stateDying = 3;
 	int const stateDead = 4;
 	int const stateShooting = 5;
+	int const stateExplotando = 6;
 
 	int const orientationRight = 1;
 	int const orientationLeft = 2;

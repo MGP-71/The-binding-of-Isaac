@@ -31,6 +31,9 @@ Judas::Judas(Game* game) : Character(game) {
 	aRunningUp = new Animation("res/judas_up_movimiento.png", width, height,
 		126, 44, 6, 4, true, game);
 
+	explotando = new Animation("res/judas_explotando.png", width, height,
+		138, 44, 20000, 4, true, game);
+
 	shootCadence = 30;
 	playerSpeed = 6.0;
 	lifes = 3;

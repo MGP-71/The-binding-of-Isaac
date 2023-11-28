@@ -75,6 +75,9 @@ void Player::update() {
 	}
 	*/
 	
+	if (state == game->stateExplotando) {
+		animation = character->explotando;
+	}
 	if (state == game->stateMoving) {
 		if (vx != 0) {
 			if (orientation == game->orientationRight) {

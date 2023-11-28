@@ -25,6 +25,9 @@ public:
 	Animation* aShootingUp;
 	Animation* aShootingDown;
 
+	Animation* explotando;
+
+
 	int width = 47;
 	int height = 46;
 
