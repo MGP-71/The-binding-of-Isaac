@@ -136,5 +136,5 @@ public:
 	Tile* trapdoor;
 	int floor = 1;
 
-	list<int> objetosConseguidos;
+	std::list<int> objetosTotales = { 1, 2, 3, 4, 5 };
 };

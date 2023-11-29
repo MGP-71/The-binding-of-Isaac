@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <iterator>
+
 
 const Uint32 duracionInvencibilidad = 3000;
 Uint32 tiempoInicioInvencibilidad = 0;
@@ -33,7 +35,7 @@ void GameLayer::init() {
 	corazones.clear();
 	objetos.clear();
 	roomsCleared.clear();
-	objetosConseguidos.clear();
+	objetosTotales = { 1, 2, 3 };
 
 	habitacionVertical = 0;
 	habitacionHorizontal = 0;
@@ -1334,26 +1336,28 @@ double GameLayer::calculateDistance(Actor* actor1, Actor* actor2) {
 Tile* GameLayer::objetoRandom(int x, int y) {
 	Tile* tile = NULL;
 	int rd = 0;
-	int max = 3;
-	int min = 1;
+	std::size_t listSize = objetosTotales.size()-1;
+	int min = 0;
 	while (true) {
-		rd = rand() % (max - min + 1) + min;
-		if (std::find(objetosConseguidos.begin(), objetosConseguidos.end(), rd) != objetosConseguidos.end()) {
-			rd = 0;
-		}
-		if (rd == 1) {
+		rd = rand() % (listSize - min + 1) + min;
+		int valorEnPosicion = objetosTotales.front();
+		auto it = std::next(objetosTotales.begin(), rd);
+		valorEnPosicion = *it;
+		if (valorEnPosicion == 1) {
 			tile = new Tile("res/objetos/crickets_head.png", x, y, 34, 30, game);
+			objetosTotales.remove(valorEnPosicion);
 			break;
 		}
-		else if (rd == 2) {
+		else if (valorEnPosicion == 2) {
 			tile = new Tile("res/objetos/crickets_body.png", x, y, 35, 33, game);
+			objetosTotales.remove(valorEnPosicion);
 			break;
 		}
-		else if (rd == 3) {
+		else if (valorEnPosicion == 3) {
 			tile = new Tile("res/objetos/cuchara.png", x, y, 32, 29, game);
+			objetosTotales.remove(valorEnPosicion);
 			break;
 		}
 	}
-	objetosConseguidos.push_back(rd);
 	return tile;
 }
