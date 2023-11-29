@@ -9,6 +9,8 @@
 #include "Horf.h"
 #include "Monoojo.h"
 #include "ProjectileEnemy.h"
+#include "Jefe2.h"
+
 
 #include "Audio.h"
 #include "Pad.h"
@@ -129,6 +131,8 @@ public:
 	string nameFile;
 
 	Azazel* azazel;
+	Jefe2* jefe2;
+
 	Tile* trapdoor;
 	int floor = 1;
 

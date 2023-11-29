@@ -58,6 +58,7 @@ void GameLayer::init() {
 
 	activeBomb = NULL;
 	azazel = NULL;
+	jefe2 = NULL;
 	trapdoor = NULL;
 
 	chooseCharater();
@@ -126,6 +127,7 @@ void GameLayer::processControls() {
 
 void GameLayer::update() {
 
+	
 	space->update();
 	background->update();
 	player->update();
@@ -170,6 +172,12 @@ void GameLayer::update() {
 		}
 		if (azazel->state == game->stateDead) {
 			azazel = NULL;
+		}
+	}
+
+	if (jefe2 != NULL) {
+		if (jefe2->state == game->stateDead) {
+			jefe2 = NULL;
 		}
 	}
 	
@@ -712,7 +720,7 @@ void GameLayer::update() {
 		}
 	}
 
-	if (azazel == NULL && trapdoor != NULL && player->isOverlap(trapdoor)) {
+	if ((azazel == NULL || jefe2 == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
 		floor++;
 		trapdoor = NULL;
 		deleteMap();
@@ -721,6 +729,9 @@ void GameLayer::update() {
 		}
 		else if (floor == 2) {
 			nameFile = "res/fondos/2_0_0.txt";
+		}
+		else if (floor == 3) {
+			nameFile = "res/fondos/3_0_0.txt";
 		}
 		habitacionVertical = 0;
 		habitacionHorizontal = 0;
@@ -1193,6 +1204,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		azazel->y = azazel->y - azazel->height / 2;
 		enemies.push_back(azazel);
 		space->addDynamicActor(azazel);
+		break;
+	}
+	case 'J': {
+		jefe2 = new Jefe2(x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		jefe2->y = jefe2->y - jefe2->height / 2;
+		enemies.push_back(jefe2);
+		space->addDynamicActor(jefe2);
 		break;
 	}
 	}
