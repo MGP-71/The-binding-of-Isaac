@@ -722,7 +722,7 @@ void GameLayer::update() {
 		}
 	}
 
-	if ((azazel == NULL || jefe2 == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
+	if ((azazel == NULL && jefe2 == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
 		floor++;
 		trapdoor = NULL;
 		deleteMap();
@@ -1315,7 +1315,6 @@ void GameLayer::checkRoomCleared() {
 			nameFile = "res/fondos/2_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
 		}
 	}
-	
 }
 
 void GameLayer::dropBomb() {
