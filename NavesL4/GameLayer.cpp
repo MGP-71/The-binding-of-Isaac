@@ -60,7 +60,10 @@ void GameLayer::init() {
 	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
-
+	pills.clear();
+	nKeys = 0;
+	nBombs = 0;
+	nPills = 0;
 	activeBomb = NULL;
 	azazel = NULL;
 	jefe2 = NULL;
@@ -799,9 +802,9 @@ void GameLayer::draw() {
 	for (auto const& tile : bombs) {
 		tile->draw();
 	}
-	for (auto const& tile : pills) {
+	/*for (auto const& tile : pills) {
 		tile->draw();
-	}
+	}*/
 	for (auto const& tile : corazones) {
 		tile->draw();
 	}
