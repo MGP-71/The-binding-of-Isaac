@@ -38,13 +38,16 @@ void GameLayer::init() {
 	corazones.clear();
 	objetos.clear();
 	roomsCleared.clear();
+	pills.clear(); //por que no funcionaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	objetosTotales = { 1, 2, 3 };
 
 	habitacionVertical = 0;
 	habitacionHorizontal = 0;
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	//audioBackground->play();
+	audioFinal = new Audio("res/final.wav", true);
+
+	audioBackground->play();
 
 
 	background = new Background("res/fondos/habitacion.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -60,7 +63,6 @@ void GameLayer::init() {
 	horfEnemies.clear(); // Vaciar por si reiniciamos el juego
 	projectilesEnemy.clear(); // Vaciar por si reiniciamos el juego
 	monoojoEnemies.clear();
-	pills.clear();
 	nKeys = 0;
 	nBombs = 0;
 	nPills = 0;
@@ -741,6 +743,13 @@ void GameLayer::update() {
 		else if (floor == 3) {
 			nameFile = "res/fondos/3_0_0.txt";
 		}
+		else {
+			//esto hacerlo cuando se mate al ultimo boss y quitar la trampilla porque no es necesariaaaaa
+			textActivo->content = "Eres un crack!!!";
+			audioBackground->stop();
+			audioFinal->play();
+
+		}
 		habitacionVertical = 0;
 		habitacionHorizontal = 0;
 		loadMap(nameFile);
@@ -802,9 +811,7 @@ void GameLayer::draw() {
 	for (auto const& tile : bombs) {
 		tile->draw();
 	}
-	/*for (auto const& tile : pills) {
-		tile->draw();
-	}*/
+
 	for (auto const& tile : corazones) {
 		tile->draw();
 	}
@@ -1300,6 +1307,7 @@ void GameLayer::deleteMap() {
 	rocas.clear();
 	bombs.clear();
 	keys.clear();
+	pills.clear();
 	corazones.clear();
 	objetos.clear();
 	enemies.clear();
@@ -1338,6 +1346,12 @@ void GameLayer::checkRoomCleared() {
 		nameFile = "res/fondos/2_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
 		if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
 			nameFile = "res/fondos/2_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
+		}
+	}
+	else if (floor == 3) {
+		nameFile = "res/fondos/3_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + ".txt";
+		if (std::find(roomsCleared.begin(), roomsCleared.end(), nameFile) != roomsCleared.end()) {
+			nameFile = "res/fondos/3_" + std::to_string(habitacionVertical) + "_" + std::to_string(habitacionHorizontal) + " - X" + ".txt";
 		}
 	}
 }

@@ -40,3 +40,13 @@ void Audio::play() {
 		SDL_PauseAudioDevice(deviceId, 0);
 	}
 }
+
+void Audio::stop() {
+	if (loop) {
+		Mix_HaltMusic(); // Stop music playback
+	}
+	else {
+		SDL_ClearQueuedAudio(deviceId); // Clear the audio queue
+		SDL_PauseAudioDevice(deviceId, 1); // Pause the audio device
+	}
+}

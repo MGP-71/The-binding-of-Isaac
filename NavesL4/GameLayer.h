@@ -74,6 +74,7 @@ public:
 	time_t timeExplosion;
 
 	Audio* audioBackground;
+	Audio* audioFinal;
 	int newEnemyTime = 0;
 	Player* player;
 	Background* background;

@@ -12,6 +12,7 @@ public:
 	Audio(string filename, bool loop);
 	~Audio(); //destructor
 	void play();
+	void stop();
 	bool loop;
 	Mix_Music* mix; // Lib mixer
 	SDL_AudioSpec wavSpec; // Lib SDL Standard
