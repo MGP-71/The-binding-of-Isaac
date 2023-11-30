@@ -17,7 +17,10 @@ GameLayer::GameLayer(Game* game, int personaje)
 	: Layer(game) {
 	//llama al constructor del padre : Layer(renderer)
 	this->personaje = personaje;
+	audioPill = new Audio("res/pill.wav", false);
+
 	init();
+
 
 }
 
@@ -805,6 +808,9 @@ void GameLayer::draw() {
 	for (auto const& tile : keys) {
 		tile->draw();
 	}
+	for (auto const& tile : pills) {
+		tile->draw();
+	}
 
 	for (auto const& tile : objetos) {
 		tile->draw();
@@ -894,6 +900,16 @@ void GameLayer::keysToControls(SDL_Event event) {
 		case SDLK_1:
 			game->scale();
 			break;
+		case SDLK_q:
+			if (nPills == 1) {
+				nPills = 0;
+				actualizarPills();
+				player->character->playerSpeed += 1;
+				audioPill->play();
+				textActivo->content = "Más velocidad!";
+
+			}
+			break;
 		case SDLK_d: // derecha
 			player->orientation = game->orientationRight;
 			controlMoveX = 1;
@@ -942,6 +958,12 @@ void GameLayer::keysToControls(SDL_Event event) {
 			if (controlMoveX == 1) {
 				controlMoveX = 0;
 			}
+			break;
+		case SDLK_q:
+		
+				textActivo->content = " ";
+
+			
 			break;
 		case SDLK_a: // izquierda
 			if (controlMoveX == -1) {

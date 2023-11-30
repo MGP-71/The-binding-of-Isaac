@@ -133,6 +133,8 @@ public:
 	Azazel* azazel;
 	Jefe2* jefe2;
 
+	Audio* audioPill;
+
 	Tile* trapdoor;
 	int floor = 1;
 
