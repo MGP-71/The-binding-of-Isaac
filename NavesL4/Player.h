@@ -19,6 +19,9 @@ public:
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
 	Audio* audioShoot;
+	Audio* audioGolpeado;
+	Audio* audioMuerte;
+
 	int shootTime = 0;
 	int invulnerableTime = 0;
 
