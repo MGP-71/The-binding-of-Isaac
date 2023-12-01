@@ -71,16 +71,17 @@ void GameLayer::init() {
 	jefe2 = NULL;
 	bigHorn = NULL;
 	trapdoor = NULL;
+	trofeo = NULL;
 
 	chooseCharater();
 
-	nameFile = "res/fondos/1_0_0.txt";
+	nameFile = "res/fondos/3_0_0.txt";
 	
 	loadMap(nameFile);
 	
 	nKeys = 0;
 	nBombs = 0;
-	floor = 1;
+	floor = 3;
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
@@ -204,6 +205,8 @@ void GameLayer::update() {
 			space->addDynamicActor(enemyS);
 		}
 		if (bigHorn->state == game->stateDead) {
+			audioBackground->stop();
+			audioFinal->play();
 			bigHorn = NULL;
 		}
 	}
@@ -698,6 +701,7 @@ void GameLayer::update() {
 	// Actualizar la invencibilidad si está activa
 	if (playerCharacter->invencibilidad) {
 		Uint32 tiempoActual = SDL_GetTicks();
+	
 		if (tiempoActual - tiempoInicioInvencibilidad >= duracionInvencibilidad) {
 			// Desactivar la invencibilidad después de la duración deseada
 			playerCharacter->invencibilidad = false;
@@ -767,6 +771,11 @@ void GameLayer::update() {
 		habitacionVertical = 0;
 		habitacionHorizontal = 0;
 		loadMap(nameFile);
+		return;
+	}
+	if (bigHorn == NULL && trofeo != NULL && player->isOverlap(trofeo)) {
+		//esto hacerlo cuando se mate al ultimo boss y quitar la trampilla porque no es necesariaaaaa
+		textActivo->content = "Eres un crack!!!";
 		return;
 	}
 	
@@ -900,6 +909,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 				}
 			}
 			if (personaje == 4) {
+				textActivo->content = "Explotando!!";
 				list<Tile*> deleteRocas;
 				player->state = game->stateExplotando;
 				for (auto const& tile : rocas) {
@@ -1006,10 +1016,11 @@ void GameLayer::keysToControls(SDL_Event event) {
 				playerCharacter->rompeRocas = false;
 				textActivo->content = " ";
 			}
-			if (personaje == 3) {
+			/*if (personaje == 3) {
 				playerCharacter->invencibilidad = false;
-			}
+			}*/
 			if (personaje == 4) {
+				textActivo->content = " ";
 				player->state = game->stateMoving;
 			}
 			break;
@@ -1279,6 +1290,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		bigHorn->y = bigHorn->y - bigHorn->height / 2;
 		enemies.push_back(bigHorn);
 		space->addDynamicActor(bigHorn);
+		break;
+	}
+	case 'U': {
+		trofeo = new Tile("res/trophy.png", x - 12, y + 12, 64, 64, game);
+		// modificación para empezar a contar desde el suelo.
+		trofeo->y = trofeo->y - trofeo->height / 2;
+		tiles.push_back(trofeo);
+		space->addDynamicActor(trofeo);
 		break;
 	}
 	}

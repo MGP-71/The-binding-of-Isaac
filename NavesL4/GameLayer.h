@@ -139,6 +139,8 @@ public:
 	Audio* audioPill;
 
 	Tile* trapdoor;
+	Tile* trofeo;
+
 	int floor = 1;
 
 	std::list<int> objetosTotales = { 1, 2, 3, 4, 5 };
