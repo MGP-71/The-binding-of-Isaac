@@ -25,6 +25,7 @@
 #include "Monoojo.h"
 #include "Judas.h"
 #include "Azazel.h"
+#include "BigHorn.h"
 
 #include <fstream> // Leer ficheros
 #include <sstream> // Leer líneas / String
@@ -66,7 +67,7 @@ public:
 	int mapHeight;
 	list<Tile*> tiles;
 	list<Tile*> doors;
-	list<Tile*> fuegos;
+	list<Enemy*> fuegos;
 	int vecesInvencible = 0;
 
 	Tile* activeBomb;
@@ -133,6 +134,7 @@ public:
 
 	Azazel* azazel;
 	Jefe2* jefe2;
+	BigHorn* bigHorn;
 
 	Audio* audioPill;
 

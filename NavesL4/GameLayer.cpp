@@ -47,7 +47,7 @@ void GameLayer::init() {
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	audioFinal = new Audio("res/final.wav", true);
 
-	audioBackground->play();
+	//audioBackground->play();
 
 
 	background = new Background("res/fondos/habitacion.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -56,7 +56,7 @@ void GameLayer::init() {
 	textKeys = new Text("hola", WIDTH * 0.05, HEIGHT * 0.1, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
-	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.2, game);
+	textActivo = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -69,6 +69,7 @@ void GameLayer::init() {
 	activeBomb = NULL;
 	azazel = NULL;
 	jefe2 = NULL;
+	bigHorn = NULL;
 	trapdoor = NULL;
 
 	chooseCharater();
@@ -145,6 +146,9 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		enemy->update(player);
 	}
+	for (auto const& enemy : fuegos) {
+		enemy->update(player);
+	}
 	for (auto const& enemy : horfEnemies) {
 		enemy->update(player);
 	}
@@ -190,6 +194,19 @@ void GameLayer::update() {
 			jefe2 = NULL;
 		}
 	}
+
+	if (bigHorn != NULL) {
+		Monoojo* enemyS = bigHorn->generateEnemy(bigHorn->x, bigHorn->y, game);
+		if (enemyS != NULL) {
+			//enemyS->y = enemyS->y - enemyS->height / 2;
+			enemies.push_back(enemyS);
+			monoojoEnemies.push_back(enemyS);
+			space->addDynamicActor(enemyS);
+		}
+		if (bigHorn->state == game->stateDead) {
+			bigHorn = NULL;
+		}
+	}
 	
 	
 	//Abrir puertas
@@ -222,8 +239,6 @@ void GameLayer::update() {
 				door->filename = "res/puerta_abajo_abierta.png";
 				door->texture = game->getTexture(door->filename);
 			}
-			
-
 		}
 
 		////para que se pueda pasar por las puertas al estar abiertas
@@ -528,7 +543,7 @@ void GameLayer::update() {
 
 	for (auto const& projectile : projectiles) {
 		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0) || 
-			(projectile->x < 120 || projectile->x > 770 || projectile->y < 60 || projectile->y > 430)) {
+			(projectile->x < 120 || projectile->x > 770 || projectile->y < 60 || projectile->y > 450)) {
 
 			bool pInList = std::find(deleteProjectiles.begin(),
 				deleteProjectiles.end(),
@@ -639,7 +654,7 @@ void GameLayer::update() {
 	}
 
 	for (auto const& projectile : projectilesEnemy) {
-		if (projectile->isInRender() == false || ((projectile->x < 125 || projectile->x > 760 || projectile->y < 70 || projectile->y > 440))) {
+		if (projectile->isInRender() == false || ((projectile->x < 125 || projectile->x > 760 || projectile->y < 70 || projectile->y > 450))) {
 
 			bool pInList = std::find(deleteEnemyProjectiles.begin(),
 				deleteEnemyProjectiles.end(),
@@ -730,7 +745,7 @@ void GameLayer::update() {
 		}
 	}
 
-	if ((azazel == NULL && jefe2 == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
+	if ((azazel == NULL && jefe2 == NULL && bigHorn == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
 		floor++;
 		trapdoor = NULL;
 		deleteMap();
@@ -748,14 +763,13 @@ void GameLayer::update() {
 			textActivo->content = "Eres un crack!!!";
 			audioBackground->stop();
 			audioFinal->play();
-
 		}
 		habitacionVertical = 0;
 		habitacionHorizontal = 0;
 		loadMap(nameFile);
 		return;
 	}
-	 
+	
 	cout << "update GameLayer " << endl;
 }
 /*
@@ -821,7 +835,10 @@ void GameLayer::draw() {
 	for (auto const& tile : pills) {
 		tile->draw();
 	}
-
+	for (auto const& tile : fuegos) {
+		tile->state = game->stateMoving;
+		tile->draw();
+	}
 	for (auto const& tile : objetos) {
 		tile->draw();
 	}
@@ -1075,10 +1092,18 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '*': {
-		Tile* tile = new Tile("res/fondos/fuego.png", x, y, 51, 51, game);
+		Enemy* tile = new Enemy("res/fondos/fuego.png", x, y, game);
+		tile->state = game->stateMoving;
+		tile->aDying = new Animation("res/fondos/fuego_movimiento.png", 51, 51,
+			105, 51, 6, 2, false, game);
+		tile->aMoving = new Animation("res/fondos/fuego_movimiento.png", 51, 51,
+			105, 51, 6, 2, true, game);
+		tile->animation = tile->aMoving;
+		tile->vx = 0;
+		tile->vy = 0;
+		tile->enemySpeed = 0;
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
-		tiles.push_back(tile);
 		fuegos.push_back(tile);
 		space->addDynamicActor(tile);
 		break;
@@ -1162,7 +1187,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '-': {
-		Tile* door = new Tile("res/door_boss_cerrada2.png", x - 15, y + 20, 64, 40, game);
+		Tile* door = new Tile("res/door_boss_cerrada2.png", x - 15, y + 8, 64, 40, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
@@ -1171,7 +1196,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case 'A': {
-		Tile* door = new Tile("res/puerta_amarilla_cerrada.png", x - 15, y + 8, 49, 38, game);
+		Tile* door = new Tile("res/puerta_amarilla_cerrada.png", x - 15, y + 12, 49, 38, game);
 		// modificación para empezar a contar desde el suelo.
 		door->y = door->y - door->height / 2;
 		//tiles.push_back(door);
@@ -1246,6 +1271,14 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		jefe2->y = jefe2->y - jefe2->height / 2;
 		enemies.push_back(jefe2);
 		space->addDynamicActor(jefe2);
+		break;
+	}
+	case 'G': {
+		bigHorn = new BigHorn(x, y, game);
+		// modificación para empezar a contar desde el suelo.
+		bigHorn->y = bigHorn->y - bigHorn->height / 2;
+		enemies.push_back(bigHorn);
+		space->addDynamicActor(bigHorn);
 		break;
 	}
 	}
