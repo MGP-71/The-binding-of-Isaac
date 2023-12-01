@@ -9,7 +9,7 @@ Game::Game() {
 	if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer) < 0) {
 		cout << "Error Window y Renderer" << SDL_GetError() << endl;
 	}
-	SDL_SetWindowTitle(window, "The binding of Isaac");
+	SDL_SetWindowTitle(window, "The binding of Laura and Miguel");
 	// Escalado de imágenes de calidad 
 	// https://wiki.libsdl.org/SDL_HINT_RENDER_SCALE_QUALITY
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");

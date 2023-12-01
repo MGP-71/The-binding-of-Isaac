@@ -56,7 +56,7 @@ void GameLayer::init() {
 	textKeys = new Text("hola", WIDTH * 0.05, HEIGHT * 0.1, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
-	textActivo = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
+	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.95, game);
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
