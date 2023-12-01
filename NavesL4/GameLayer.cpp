@@ -17,7 +17,7 @@ GameLayer::GameLayer(Game* game, int personaje)
 	: Layer(game) {
 	//llama al constructor del padre : Layer(renderer)
 	this->personaje = personaje;
-	audioPill = new Audio("res/pill.wav", false);
+	
 
 	init();
 
@@ -38,7 +38,7 @@ void GameLayer::init() {
 	corazones.clear();
 	objetos.clear();
 	roomsCleared.clear();
-	pills.clear(); //por que no funcionaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	pills.clear();
 	objetosTotales = { 1, 2, 3 };
 
 	habitacionVertical = 0;
@@ -46,8 +46,13 @@ void GameLayer::init() {
 
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	audioFinal = new Audio("res/final.wav", true);
+	audioPill = new Audio("res/pill.wav", false);
+	audioBomb = new Audio("res/Pestilence_headexplode.wav", false);
+	audioObject = new Audio("res/Mom_Evil_laugh.wav", false); 
+	audioKillEnemy = new Audio("res/Hitting_wall.wav", false);
+	audioChangeFloor = new Audio("res/Mom.wav", false);
 
-	//audioBackground->play();
+	audioBackground->play();
 
 
 	background = new Background("res/fondos/habitacion.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -75,17 +80,19 @@ void GameLayer::init() {
 
 	chooseCharater();
 
-	nameFile = "res/fondos/3_0_0.txt";
+	nameFile = "res/fondos/1_0_0.txt";
 	
 	loadMap(nameFile);
 	
 	nKeys = 0;
 	nBombs = 0;
-	floor = 3;
+	floor = 1;
 	actualizarVidas();
 	actualizarBombas();
 	actualizarLlaves();
 	actualizarPills();
+
+	reproduccionesBomba = 1;
 
 	srand(static_cast<unsigned int>(time(0)));
 }
@@ -568,7 +575,7 @@ void GameLayer::update() {
 				if (!pInList) {
 					deleteProjectiles.push_back(projectile);
 				}
-
+				audioKillEnemy->play();
 				enemy->impacted(player->character->damage);
 
 			}
@@ -623,6 +630,7 @@ void GameLayer::update() {
 	}
 
 	for (auto const& delEnemy : deleteEnemies) {
+		audioKillEnemy->stop();
 		enemies.remove(delEnemy);
 		space->removeDynamicActor(delEnemy);
 	}
@@ -715,6 +723,12 @@ void GameLayer::update() {
 	if ((endBomb - startBomb) > 2 && activeBomb != NULL) {
 		time(&timeExplosion);
 		activeBomb = new Tile("res/recolectables/explosion.png", activeBomb->x, activeBomb->y, 38, 38, game);
+
+		if (reproduccionesBomba == 1) {
+			audioBomb->play();
+			reproduccionesBomba = 0;
+		}
+		
 		for (auto const& tile : rocas) {
 			if (calculateDistance(activeBomb, tile) < 100) {
 				deleteRocas.push_back(tile);
@@ -746,10 +760,12 @@ void GameLayer::update() {
 		
 		if ((endBomb - startBomb) > 3) {
 			activeBomb = NULL;
+			reproduccionesBomba = 1;
 		}
 	}
 
 	if ((azazel == NULL && jefe2 == NULL && bigHorn == NULL) && trapdoor != NULL && player->isOverlap(trapdoor)) {
+		audioChangeFloor->play();
 		floor++;
 		trapdoor = NULL;
 		deleteMap();
@@ -761,12 +777,6 @@ void GameLayer::update() {
 		}
 		else if (floor == 3) {
 			nameFile = "res/fondos/3_0_0.txt";
-		}
-		else {
-			//esto hacerlo cuando se mate al ultimo boss y quitar la trampilla porque no es necesariaaaaa
-			textActivo->content = "Eres un crack!!!";
-			audioBackground->stop();
-			audioFinal->play();
 		}
 		habitacionVertical = 0;
 		habitacionHorizontal = 0;
@@ -1328,7 +1338,7 @@ void GameLayer::actualizarPills() {
 }
 
 void GameLayer::objetoConseguido(Tile* t) {
-
+	audioObject->play();
 	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
 		objConseguido->content = "+ daño";
 		player->character->damage = 2;

@@ -137,11 +137,17 @@ public:
 	BigHorn* bigHorn;
 
 	Audio* audioPill;
+	Audio* audioBomb;
+	Audio* audioObject;
+	Audio* audioKillEnemy; 
+	Audio* audioChangeFloor;
 
 	Tile* trapdoor;
 	Tile* trofeo;
 
 	int floor = 1;
+
+	int reproduccionesBomba;
 
 	std::list<int> objetosTotales = { 1, 2, 3, 4, 5 };
 };

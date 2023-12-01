@@ -1,21 +1,21 @@
 #include "Jefe2.h"
 Jefe2::Jefe2(float x, float y, Game* game) : Enemy("res/enemigos/jefe2.png", x, y, game) {
 
-	width = 130;
-	height = 90;
+	width = 42;
+	height = 42;
 	state = game->stateMoving;
 
 	aDying = new Animation("res/enemigos/jefe2_muriendo.png", width, height,
-		176, 42, 6, 4, false, game);
+		167, 40, 6, 4, false, game);
 	aMoving = new Animation("res/enemigos/jefe2_corriendo.png", width, height,
-		169, 42, 6, 4, true, game);
+		166, 40, 6, 4, true, game);
 	animation = aMoving;
 
 	vx = 0;
 	vy = 0;
 
-	enemySpeed = 2;
-	vidas = 2;
+	enemySpeed = 3;
+	vidas = 8;
 
 
 }
