@@ -51,6 +51,9 @@ void GameLayer::init() {
 	audioObject = new Audio("res/Mom_Evil_laugh.wav", false); 
 	audioKillEnemy = new Audio("res/Hitting_wall.wav", false);
 	audioChangeFloor = new Audio("res/Mom.wav", false);
+	audioShoot = new Audio("res/shot.wav", false);
+	audioGolpeado = new Audio("res/hurt.wav", false);
+	audioMuerte = new Audio("res/muerte.wav", false);
 
 	audioBackground->play();
 
@@ -61,7 +64,7 @@ void GameLayer::init() {
 	textKeys = new Text("hola", WIDTH * 0.05, HEIGHT * 0.1, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
-	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.95, game);
+	textActivo = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -84,8 +87,6 @@ void GameLayer::init() {
 	
 	loadMap(nameFile);
 	
-	nKeys = 0;
-	nBombs = 0;
 	floor = 1;
 	actualizarVidas();
 	actualizarBombas();
@@ -109,6 +110,7 @@ void GameLayer::processControls() {
 	if (controlShoot) {
 		Projectile* newProjectile = player->shoot();
 		if (newProjectile != NULL) {
+			audioShoot->play();
 			space->addDynamicActor(newProjectile);
 			projectiles.push_back(newProjectile);
 		}
@@ -266,16 +268,17 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		if (player->isOverlap(enemy)) {
 			if (!playerCharacter->invencibilidad) {
+				audioGolpeado->play();
 				player->loseLife();
 				actualizarVidas();
 				if (player->character->lifes <= 0) {
+					audioMuerte->play();
 					init();
 					return;
 				}
 			}
 			else {
 				enemy->impacted(1);
-
 			}
 			
 			return; // Cortar el for
@@ -286,10 +289,11 @@ void GameLayer::update() {
 	for (auto const& fuego : fuegos) {
 		if (player->isOverlap(fuego)) {
 			if (!playerCharacter->invencibilidad) {
+				audioGolpeado->play();
 				player->loseLife();
 				actualizarVidas();
 				if (player->character->lifes <= 0) {
-					actualizarVidas();
+					audioMuerte->play();
 					init();
 					return;
 				}
@@ -342,7 +346,6 @@ void GameLayer::update() {
 
 			if (!pInList) {
 				objetoConseguido(obj);
-
 				deleteObjetos.push_back(obj);
 				for (auto const& b : deleteObjetos) {
 					objetos.remove(b);
@@ -434,7 +437,7 @@ void GameLayer::update() {
 	list<Tile*> deletePills;
 	//Colisiones jugador-pildora
 	for (auto const& pill : pills) {
-		if (player->isOverlap(pill)) {
+		if (player->isOverlap(pill) && pillsActor == NULL) {
 			bool pInList = std::find(deletePills.begin(),
 				deletePills.end(),
 				pill) != deletePills.end();
@@ -577,7 +580,6 @@ void GameLayer::update() {
 				}
 				audioKillEnemy->play();
 				enemy->impacted(player->character->damage);
-
 			}
 		}
 	}
@@ -687,10 +689,13 @@ void GameLayer::update() {
 			}
 
 			if (!playerCharacter->invencibilidad) {
+				audioGolpeado->play();
 				player->loseLife();
 				actualizarVidas();
 				if (player->character->lifes <= 0) {
+					audioMuerte->play();
 					init();
+					return;
 				}
 			}
 			
@@ -748,9 +753,11 @@ void GameLayer::update() {
 		if (personaje != 4) {
 			if (calculateDistance(activeBomb, player) < 100) {
 				if (!playerCharacter->invencibilidad) {
+					audioGolpeado->play();
 					player->loseLife();
 					actualizarVidas();
 					if (player->character->lifes <= 0) {
+						audioMuerte->play();
 						init();
 						return;
 					}
@@ -878,7 +885,8 @@ void GameLayer::draw() {
 
 	bombsActor->draw();
 	keysActor->draw();
-	pillsActor->draw();
+	if (pillsActor != NULL)
+		pillsActor->draw();
 	if (activeBomb != NULL)
 		activeBomb->draw();
 	
@@ -906,8 +914,8 @@ void GameLayer::keysToControls(SDL_Event event) {
 
 			}
 			if (personaje == 2) {
-					playerCharacter->rompeRocas = true;
-					textActivo->content = "Puedes romper rocas!!";
+				playerCharacter->rompeRocas = true;
+				textActivo->content = "Puedes romper rocas!!";
 			}
 			if (personaje == 3) {
 				if (vecesInvencible == 0) {
@@ -951,10 +959,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			if (nPills == 1) {
 				nPills = 0;
 				actualizarPills();
-				player->character->playerSpeed += 1;
-				audioPill->play();
-				textActivo->content = "Más velocidad!";
-
+				cogerPill();
 			}
 			break;
 		case SDLK_d: // derecha
@@ -1007,10 +1012,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			}
 			break;
 		case SDLK_q:
-		
-				textActivo->content = " ";
-
-			
+			textActivo->content = " ";
 			break;
 		case SDLK_a: // izquierda
 			if (controlMoveX == -1) {
@@ -1313,6 +1315,89 @@ void GameLayer::loadMapObject(char character, float x, float y)
 	}
 }
 
+void GameLayer::cogerPill()
+{
+	int max = 12;
+	int min = 1;
+	int d = rand() % (max - min + 1) + min;
+	if (d == 1) {
+		audioPill->play();
+		textActivo->content = "+ velocidad";
+		player->character->playerSpeed += 1.0;
+	} else if (d == 2) {
+		audioPill->play();
+		textActivo->content = "+ vida";
+		if (hearts.size() < 5) {
+			player->character->lifes++;
+			actualizarVidas();
+		}
+	}
+	else if (d == 3) {
+		audioPill->play();
+		textActivo->content = "+ daño";
+		player->character->damage++;
+	}
+	else if (d == 4) {
+		audioPill->play();
+		textActivo->content = "+ cadencia";
+		if (player->character->shootCadence > 0)
+			player->character->shootCadence -= 3;
+	}
+	else if (d == 5) {
+		audioPill->play();
+		textActivo->content = "+ llaves";
+		nKeys++;
+		actualizarLlaves();
+	} else if (d == 6) {
+		audioPill->play();
+		textActivo->content = "+ bombas";
+		nBombs++;
+		actualizarBombas();
+	} else if (d == 7) {
+		audioPill->play();
+		textActivo->content = "- velocidad";
+		if (player->character->playerSpeed > 0)
+			player->character->playerSpeed -= 1.0;
+	}
+	else if (d == 8) {
+		audioPill->play();
+		textActivo->content = "- vida";
+		audioGolpeado->play();
+		player->loseLife();
+		actualizarVidas();
+		if (player->character->lifes <= 0) {
+			audioMuerte->play();
+			init();
+			return;
+		}
+	}
+	else if (d == 9) {
+		audioPill->play();
+		textActivo->content = "- daño";
+		if (player->character->damage > 0)
+			player->character->damage--;
+	}
+	else if (d == 10) {
+		audioPill->play();
+		textActivo->content = "- cadencia";
+		player->character->shootCadence += 3;
+	}
+	else if (d == 11) {
+		audioPill->play();
+		textActivo->content = "- llaves";
+		if (nKeys > 0)
+			nKeys--;
+		actualizarLlaves();
+	}
+	else if (d == 12) {
+		audioPill->play();
+		textActivo->content = "- bombas";
+		if (nBombs > 0)
+			nBombs--;
+		actualizarBombas();
+	}
+}
+
 void GameLayer::actualizarVidas() {
 	hearts.clear();
 	for (int i = 0; i < player->character->lifes; i++) {
@@ -1331,23 +1416,23 @@ void GameLayer::actualizarLlaves() {
 }
 
 void GameLayer::actualizarPills() {
-	if(nPills == 1)
-		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 16, 18, game);
+	if (nPills == 1)
+		pillsActor = new Actor("res/pills/pillActor.png", WIDTH * 0.95, HEIGHT * 0.95, 50, 50, game);
 	else
-		pillsActor = new Actor("res/pills/pill.png", WIDTH * 0.95, HEIGHT * 0.95, 0, 0, game); //esto es una chapuza que funciona
+		pillsActor = NULL;
 }
 
 void GameLayer::objetoConseguido(Tile* t) {
 	audioObject->play();
 	if (t->filename.compare("res/objetos/crickets_head.png") == 0) {
 		objConseguido->content = "+ daño";
-		player->character->damage = 2;
+		player->character->damage += 3;
 	} else if (t->filename.compare("res/objetos/crickets_body.png") == 0) {
 		objConseguido->content = "+ velocidad";
-		player->character->playerSpeed = player->character->playerSpeed + 3.0;
+		player->character->playerSpeed += 3.0;
 	} else if (t->filename.compare("res/objetos/cuchara.png") == 0) {
 		objConseguido->content = "+ cadencia";
-		player->character->shootCadence = 15;
+		player->character->shootCadence -= 10;
 	}
 }
 

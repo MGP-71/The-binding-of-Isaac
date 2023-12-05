@@ -12,7 +12,7 @@ Fatty::Fatty(float x, float y, Game* game)
 
 	enemySpeed = 1;
 	vx = enemySpeed;
-	vidas = 5;
+	vidas = 15;
 	/*
 	* vxIntelligence = -1;
 	vx = vxIntelligence;

@@ -18,9 +18,9 @@ public:
 	void setAnimations();
 	Animation* animation; // Referencia a la animación mostrada
 	int orientation;
-	Audio* audioShoot;
+	/*Audio* audioShoot;
 	Audio* audioGolpeado;
-	Audio* audioMuerte;
+	Audio* audioMuerte;*/
 
 	int shootTime = 0;
 	int invulnerableTime = 0;

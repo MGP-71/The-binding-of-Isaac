@@ -114,6 +114,9 @@
     <ClCompile Include="Jefe2.cpp">
       <Filter>Archivos de origen\actores</Filter>
     </ClCompile>
+    <ClCompile Include="BigHorn.cpp">
+      <Filter>Archivos de origen\actores</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -198,6 +201,9 @@
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
     <ClInclude Include="Jefe2.h">
+      <Filter>Archivos de encabezado\actores</Filter>
+    </ClInclude>
+    <ClInclude Include="BigHorn.h">
       <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
   </ItemGroup>

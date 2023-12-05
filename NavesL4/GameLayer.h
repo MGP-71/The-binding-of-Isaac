@@ -62,6 +62,7 @@ public:
 	int habitacionVertical;
 	int habitacionHorizontal;
 	void loadMapObject(char character, float x, float y);
+	void cogerPill();
 
 	int mapWidth;
 	int mapHeight;
@@ -141,6 +142,9 @@ public:
 	Audio* audioObject;
 	Audio* audioKillEnemy; 
 	Audio* audioChangeFloor;
+	Audio* audioShoot;
+	Audio* audioGolpeado;
+	Audio* audioMuerte;
 
 	Tile* trapdoor;
 	Tile* trofeo;

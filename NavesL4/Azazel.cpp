@@ -15,7 +15,7 @@ Azazel::Azazel(float x, float y, Game* game): Enemy("res/enemigos/azazel_singula
 	vy = 0;
 
 	enemySpeed = 1;
-	vidas = 2;
+	vidas = 30;
 
 
 }

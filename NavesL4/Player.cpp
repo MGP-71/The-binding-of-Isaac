@@ -4,9 +4,10 @@ Player::Player(float x, float y, Game* game, Character* cha) : Actor("", x, y, 4
 	orientation = game->orientationDown;
 	state = game->stateMoving;
 
-	audioShoot = new Audio("res/shot.wav", false);
+
+	/*audioShoot = new Audio("res/shot.wav", false);
 	audioGolpeado = new Audio("res/hurt.wav", false);
-	audioMuerte = new Audio("res/muerte.wav", false);
+	audioMuerte = new Audio("res/muerte.wav", false);*/
 
 
 	character = cha;
@@ -143,13 +144,13 @@ void Player::moveY(float axis) {
 void Player::loseLife() {
 	if (invulnerableTime <= 0) {
 		if (character->lifes > 0) {
-			audioGolpeado->play();
+			//audioGolpeado->play();
 			character->lifes--;
 			invulnerableTime = 100;
 			// 100 actualizaciones 
 		}
 		if (character->lifes == 0) {
-			audioMuerte->play();
+			//audioMuerte->play();
 			character->lifes--;
 			invulnerableTime = 100;
 		}
@@ -160,7 +161,7 @@ Projectile* Player::shoot() {
 
 	if (shootTime == 0) {
 		state = game->stateShooting;
-		audioShoot->play();
+		//audioShoot->play();
 		shootTime = character->shootCadence;
 		character->aShootingLeft->currentFrame = 0; //"Rebobinar" animación
 		character->aShootingRight->currentFrame = 0; //"Rebobinar" 

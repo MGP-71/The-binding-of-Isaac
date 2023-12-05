@@ -15,7 +15,7 @@ Horf::Horf(float x, float y, Game* game)
 	vy = 0;
 
 	enemySpeed = 0;
-	vidas = 2;
+	vidas = 12;
 
 
 }

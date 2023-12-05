@@ -16,7 +16,7 @@ BigHorn::BigHorn(float x, float y, Game* game) : Enemy("res/enemigos/horn.png", 
 	vy = 0;
 
 	enemySpeed = 0;
-	vidas = 2;
+	vidas = 50;
 
 
 }

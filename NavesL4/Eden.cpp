@@ -31,5 +31,5 @@ Eden::Eden(Game* game) : Character(game) {
 	shootCadence = 30;
 	playerSpeed = 6.0;
 	lifes = 3;
-	damage = 1;
+	damage = 5;
 }

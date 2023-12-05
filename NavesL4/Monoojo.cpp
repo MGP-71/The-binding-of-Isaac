@@ -13,7 +13,7 @@ Monoojo::Monoojo(float x, float y, Game* game)
 
 	vx = enemySpeed;
 
-	vidas = 3;
+	vidas = 10;
 
 }
 
