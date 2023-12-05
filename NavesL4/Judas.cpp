@@ -35,7 +35,7 @@ Judas::Judas(Game* game) : Character(game) {
 		138, 44, 20000, 4, true, game);
 
 	shootCadence = 30;
-	playerSpeed = 6.0;
-	lifes = 3;
-	damage = 5;
+	playerSpeed = 4.0;
+	lifes = 1;
+	damage = 8;
 }

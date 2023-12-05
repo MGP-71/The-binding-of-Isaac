@@ -154,4 +154,13 @@ public:
 	int reproduccionesBomba;
 
 	std::list<int> objetosTotales = { 1, 2, 3, 4, 5 };
+
+	Actor* speedActor;
+	Text* textSpeed;
+	Actor* damageActor;
+	Text* textDamage;
+	Actor* tearsActor;
+	Text* textTears;
+
+	bool won;
 };

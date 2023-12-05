@@ -28,8 +28,8 @@ Eden::Eden(Game* game) : Character(game) {
 	aRunningUp = new Animation("res/eden_up_movimiento.png", width, height,
 		124, 40, 6, 4, true, game);
 
-	shootCadence = 30;
-	playerSpeed = 6.0;
-	lifes = 3;
-	damage = 5;
+	shootCadence = 25;
+	playerSpeed = 8.0;
+	lifes = 5;
+	damage = 7;
 }

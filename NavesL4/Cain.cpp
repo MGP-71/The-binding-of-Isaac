@@ -33,6 +33,6 @@ Cain::Cain(Game* game) : Character(game) {
 
 	shootCadence = 30;
 	playerSpeed = 6.0;
-	lifes = 3;
-	damage = 5;
+	lifes = 4;
+	damage = 3;
 }

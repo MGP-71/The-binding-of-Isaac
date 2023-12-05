@@ -31,8 +31,8 @@ Eve::Eve(Game* game) : Character(game) {
 	aRunningUp = new Animation("res/eve_up_movimiento.png", width, height,
 		126, 40, 6, 4, true, game);
 
-	shootCadence = 30;
-	playerSpeed = 6.0;
+	shootCadence = 25;
+	playerSpeed = 8.0;
 	lifes = 3;
-	damage = 5;
+	damage = 3;
 }

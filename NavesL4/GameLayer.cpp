@@ -64,7 +64,17 @@ void GameLayer::init() {
 	textKeys = new Text("hola", WIDTH * 0.05, HEIGHT * 0.1, game);
 	textKeys->content = to_string(0);
 	objConseguido = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
-	textActivo = new Text(" ", WIDTH * 0.1, HEIGHT * 0.95, game);
+	textActivo = new Text(" ", WIDTH * 0.5, HEIGHT * 0.95, game);
+
+	speedActor = new Actor("res/Speed_Stat_Icon.png", WIDTH * 0.02, HEIGHT * 0.25, 19, 12, game);
+	textSpeed = new Text("hola", WIDTH * 0.06, HEIGHT * 0.25, game);
+	textSpeed->content = to_string(0);
+	damageActor = new Actor("res/Damage_Stat_Icon.png", WIDTH * 0.02, HEIGHT * 0.30, 13, 13, game);
+	textDamage = new Text("hola", WIDTH * 0.06, HEIGHT * 0.30, game);
+	textDamage->content = to_string(0);
+	tearsActor = new Actor("res/Tears_Stat_Icon.png", WIDTH * 0.02, HEIGHT * 0.35, 23, 13, game);
+	textTears = new Text("hola", WIDTH * 0.06, HEIGHT * 0.35, game);
+	textTears->content = to_string(0);
 
 	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
@@ -94,6 +104,7 @@ void GameLayer::init() {
 	actualizarPills();
 
 	reproduccionesBomba = 1;
+	won = false;
 
 	srand(static_cast<unsigned int>(time(0)));
 }
@@ -790,11 +801,19 @@ void GameLayer::update() {
 		loadMap(nameFile);
 		return;
 	}
+	if (bigHorn == NULL && trofeo != NULL && nameFile == "res/fondos/3_0_4.txt" && !won) {
+		won = true;
+		tiles.push_back(trofeo);
+		space->addDynamicActor(trofeo);
+	}
 	if (bigHorn == NULL && trofeo != NULL && player->isOverlap(trofeo)) {
 		//esto hacerlo cuando se mate al ultimo boss y quitar la trampilla porque no es necesariaaaaa
 		textActivo->content = "Eres un crack!!!";
 		return;
 	}
+	textSpeed->content = to_string((int)player->character->playerSpeed);
+	textDamage->content = to_string(player->character->damage);
+	textTears->content = to_string(player->character->shootCadence);
 	
 	cout << "update GameLayer " << endl;
 }
@@ -890,15 +909,22 @@ void GameLayer::draw() {
 	if (activeBomb != NULL)
 		activeBomb->draw();
 	
+	speedActor->draw();
+	textSpeed->draw();
+	damageActor->draw();
+	textDamage->draw();
+	tearsActor->draw();
+	textTears->draw();
 	//creo que no hace falta porque ya se pinta en enemies
 	/*for (auto const& enemy : horfEnemies) {
 		enemy->draw(scrollX, scrollY);
 	}*/
 	SDL_RenderPresent(game->renderer); // Renderiza
-}
+}	bool aux = false;;
+
 
 void GameLayer::keysToControls(SDL_Event event) {
-
+	float s  = playerCharacter->playerSpeed;
 	if (event.type == SDL_KEYDOWN) {
 		int code = event.key.keysym.sym;
 
@@ -908,9 +934,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 			game->loopActive = false;
 			break;
 		case SDLK_SPACE:
-			if (personaje == 1) {
-				playerCharacter->playerSpeed = playerCharacter->playerSpeed + 5;
+			if (personaje == 1 && (player->vx != 0 ||  player->vy!=0)) {
+				playerCharacter->playerSpeed = s + 5;
 				textActivo->content = "Tienes supervelocidad!!";
+				aux = true;
 
 			}
 			if (personaje == 2) {
@@ -1012,7 +1039,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			}
 			break;
 		case SDLK_q:
-			textActivo->content = " ";
+			objConseguido->content = " ";
 			break;
 		case SDLK_a: // izquierda
 			if (controlMoveX == -1) {
@@ -1020,9 +1047,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 			}
 			break;
 		case SDLK_SPACE:
-			if (personaje == 1) {
-				playerCharacter->playerSpeed = playerCharacter->playerSpeed - 5;
+			if (personaje == 1 && aux ==true) {
+				playerCharacter->playerSpeed = s - 5;
 				textActivo->content = " ";
+				aux = false;
 			}
 			if (personaje == 2) {
 				playerCharacter->rompeRocas = false;
@@ -1308,8 +1336,8 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		trofeo = new Tile("res/trophy.png", x - 12, y + 12, 64, 64, game);
 		// modificación para empezar a contar desde el suelo.
 		trofeo->y = trofeo->y - trofeo->height / 2;
-		tiles.push_back(trofeo);
-		space->addDynamicActor(trofeo);
+		/*tiles.push_back(trofeo);
+		space->addDynamicActor(trofeo);*/
 		break;
 	}
 	}
@@ -1322,11 +1350,11 @@ void GameLayer::cogerPill()
 	int d = rand() % (max - min + 1) + min;
 	if (d == 1) {
 		audioPill->play();
-		textActivo->content = "+ velocidad";
+		objConseguido->content = "+ velocidad";
 		player->character->playerSpeed += 1.0;
 	} else if (d == 2) {
 		audioPill->play();
-		textActivo->content = "+ vida";
+		objConseguido->content = "+ vida";
 		if (hearts.size() < 5) {
 			player->character->lifes++;
 			actualizarVidas();
@@ -1334,34 +1362,34 @@ void GameLayer::cogerPill()
 	}
 	else if (d == 3) {
 		audioPill->play();
-		textActivo->content = "+ daño";
+		objConseguido->content = "+ daño";
 		player->character->damage++;
 	}
 	else if (d == 4) {
 		audioPill->play();
-		textActivo->content = "+ cadencia";
-		if (player->character->shootCadence > 0)
+		objConseguido->content = "+ cadencia";
+		if (player->character->shootCadence > 5)
 			player->character->shootCadence -= 3;
 	}
 	else if (d == 5) {
 		audioPill->play();
-		textActivo->content = "+ llaves";
+		objConseguido->content = "+ llaves";
 		nKeys++;
 		actualizarLlaves();
 	} else if (d == 6) {
 		audioPill->play();
-		textActivo->content = "+ bombas";
+		objConseguido->content = "+ bombas";
 		nBombs++;
 		actualizarBombas();
 	} else if (d == 7) {
 		audioPill->play();
-		textActivo->content = "- velocidad";
-		if (player->character->playerSpeed > 0)
+		objConseguido->content = "- velocidad";
+		if (player->character->playerSpeed > 2)
 			player->character->playerSpeed -= 1.0;
 	}
 	else if (d == 8) {
 		audioPill->play();
-		textActivo->content = "- vida";
+		objConseguido->content = "- vida";
 		audioGolpeado->play();
 		player->loseLife();
 		actualizarVidas();
@@ -1373,25 +1401,25 @@ void GameLayer::cogerPill()
 	}
 	else if (d == 9) {
 		audioPill->play();
-		textActivo->content = "- daño";
-		if (player->character->damage > 0)
+		objConseguido->content = "- daño";
+		if (player->character->damage > 2)
 			player->character->damage--;
 	}
 	else if (d == 10) {
 		audioPill->play();
-		textActivo->content = "- cadencia";
+		objConseguido->content = "- cadencia";
 		player->character->shootCadence += 3;
 	}
 	else if (d == 11) {
 		audioPill->play();
-		textActivo->content = "- llaves";
+		objConseguido->content = "- llaves";
 		if (nKeys > 0)
 			nKeys--;
 		actualizarLlaves();
 	}
 	else if (d == 12) {
 		audioPill->play();
-		textActivo->content = "- bombas";
+		objConseguido->content = "- bombas";
 		if (nBombs > 0)
 			nBombs--;
 		actualizarBombas();
